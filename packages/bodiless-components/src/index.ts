@@ -25,6 +25,7 @@ import {
 } from './List/types';
 import withListTitle from './List/withListTitle';
 import asEditableList from './List/asEditableList';
+import asBasicSublist from './List/asBasicSublist';
 import withSublist, { withDeleteSublistOnUnwrap } from './List/withSublist';
 import {
   withMeta, withMetaTitle, withMetaHtml, asBodilessHelmet,
@@ -47,6 +48,7 @@ export {
   List,
   ListDesignableComponents,
   asEditableList,
+  asBasicSublist,
   withSublist,
   withDeleteSublistOnUnwrap,
   ListProps,

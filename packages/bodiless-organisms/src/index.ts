@@ -39,6 +39,12 @@ export {
   withSubmenu,
 } from './components/MainMenu/index';
 
+
+import asRCMenuSublist from './components/MainMenu/asRCMenuSublist';
+export {
+  asRCMenuSublist
+}
+
 export {
   Tout,
   ToutClean,

@@ -15,7 +15,11 @@
 import React, { ComponentType as CT, FC, PropsWithChildren } from 'react';
 import { withDesign } from '@bodiless/fclasses';
 import { withToggleButton, withToggleTo } from '../Toggle';
-import { FinalProps as ListProps, ListDesignableComponents } from './types';
+import {
+  FinalProps as ListProps,
+  ListDesignableComponents,
+  UseItemWithSublist,
+} from './types';
 import { useItemsMutators } from './model';
 
 /**
@@ -24,17 +28,12 @@ import { useItemsMutators } from './model';
  *
  * @param Item The item to which the toggle should be added.
  */
-const withSublistToggle = (Sublist: CT<ListProps>) => (
+const withSublistToggle = (useItemWithSublist: UseItemWithSublist) => (
   (Item: CT<PropsWithChildren<{}>> | string) => {
-    const ItemWithSublist: FC<ListProps> = ({ children, ...rest }) => (
-      <Item>
-        {children}
-        <Sublist {...rest} />
-      </Item>
-    );
     const ItemWithoutSublist: FC<ListProps> = ({ wrap, nodeKey, ...rest }) => (
       <Item {...rest} />
     );
+    const ItemWithSublist = useItemWithSublist(Item);
     return withToggleTo(ItemWithoutSublist)(ItemWithSublist);
   }
 );
@@ -55,15 +54,19 @@ const withDeleteSublistOnUnwrap = <T extends ListProps>(Sublist: CT<T>) => (prop
   return <Sublist {...props} unwrap={unwrap$} nodeKey="sublist" />;
 };
 
+type SublistListDesignableComponents = ListDesignableComponents & {
+  ItemWithSublist: CT<any>,
+}
+
 /**
  * Takes a sublist component and returns a HOC which, when applied to a list,
  * adds a toggled version of the sublist to each item in the list.
  *
  * @param Sublist The sublist component to add to each item.
  */
-const withSublist = (Sublist: CT<ListProps>) => withDesign<ListDesignableComponents>({
+const withSublist = (ItemWithSublist: UseItemWithSublist) => withDesign<SublistListDesignableComponents>({
   ItemMenuOptionsProvider: withToggleButton({ icon: 'playlist_add' }),
-  Item: withSublistToggle(withDeleteSublistOnUnwrap(Sublist)),
+  Item: withSublistToggle(ItemWithSublist),
 });
 
 export default withSublist;

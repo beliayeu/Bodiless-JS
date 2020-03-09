@@ -17,7 +17,7 @@ import { graphql } from 'gatsby';
 import { flow } from 'lodash';
 import { Page } from '@bodiless/gatsby-theme-bodiless';
 import {
-  List, Editable, asEditableList, withSublist, Link,
+  List, Editable, asEditableList, withSublist, Link, asBasicSublist,
 } from '@bodiless/components';
 import {
   withDesign, replaceWith, addClasses, stylable,
@@ -63,12 +63,22 @@ const withLessPadding = withDesign({
   Wrapper: addClasses('pl-4').removeClasses('pl-10'),
 });
 
-const InnerList = withLessPadding(EditableList);
-const MiddleList = withSublist(InnerList)(EditableList);
+const InnerList = flow(
+  withLessPadding,
+  asBasicSublist,
+)(EditableList);
+const MiddleList = asBasicSublist(
+  withSublist(InnerList)(EditableList),
+);
 const OuterList = withSublist(MiddleList)(EditableList);
 
-const InnerLinkList = withLessPadding(EditableLinkList);
-const MiddleLinkList = withSublist(InnerLinkList)(EditableLinkList);
+const InnerLinkList = flow(
+  withLessPadding,
+  asBasicSublist,
+)(EditableLinkList);
+const MiddleLinkList = asBasicSublist(
+  withSublist(InnerLinkList)(EditableLinkList),
+);
 const OuterLinkList = withSublist(MiddleLinkList)(EditableLinkList);
 
 export default (props: any) => (

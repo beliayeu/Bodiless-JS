@@ -1,5 +1,5 @@
 /**
- * Copyright © 2019 Johnson & Johnson
+ * Copyright © 2020 Johnson & Johnson
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,14 +12,19 @@
  * limitations under the License.
  */
 
-import {
-  withSublist,
-} from '@bodiless/components';
+import React, { ComponentType as CT, FC, PropsWithChildren } from 'react';
+import { FinalProps as ListProps } from './types';
 
-/**
- * HOC, adds the local context menu to the given component
- * @param Sublist
- */
-const withSubmenu = withSublist;
+const asBasicSublist = (Sublist: CT<ListProps>) => (
+  (Item: CT<PropsWithChildren<{}>> | string) => {
+    const ItemWithSublist: FC<ListProps> = ({ children, ...rest }) => (
+      <Item>
+        {children}
+        <Sublist {...rest} />
+      </Item>
+    );
+    return ItemWithSublist;
+  }
+);
 
-export default withSubmenu;
+export default asBasicSublist;

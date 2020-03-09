@@ -33,12 +33,13 @@ type Props = ListProps & {
  * wraps the title with current node, otherwise the title will read data from list node
  * passes the title as a prop according to rc-menu <SubMenu /> api
  */
-const asRCMenuSublist = (Sublist: ComponentType<Props>) => ({ children, ...rest }: Props) => {
-  const { node } = useNode();
-  const children$ = <NodeProvider node={node}>{children}</NodeProvider>;
-  return (
-    <Sublist title={children$} {...rest as any} />
-  );
-};
+const asRCMenuSublist = (Sublist: ComponentType<Props>) => 
+  (Item: ComponentType<any>) => ({ children, ...rest }: Props) => {
+    const { node } = useNode();
+    const children$ = <NodeProvider node={node}>{children}</NodeProvider>;
+    return (
+      <Sublist title={children$} {...rest as any} />
+    );
+  };
 
 export default asRCMenuSublist;

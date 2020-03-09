@@ -18,6 +18,7 @@ import {
   addProps,
   removeClasses,
   withDesign,
+  stylable,
 } from '@bodiless/fclasses';
 import {
   asEditable,
@@ -29,10 +30,9 @@ import {
   asHorizontalSubMenu,
   asEditableMainMenu,
   asEditableMainSubMenu,
-  withSubmenu,
-  asRCMenuSublist,
 } from '@bodiless/organisms';
 import { asExceptMobile } from '../Elements.token';
+import asColumnSubList  from './asColumnSubList';
 
 const asWhiteColoredLink = flow(
   removeClasses('bl-text-primary hover:bl-underline'),
@@ -43,6 +43,7 @@ const withLinkStyles = withDesign({
   ActiveLink: flow(asWhiteColoredLink, withActivePageStyles),
   Link: asWhiteColoredLink,
 });
+
 const withMenuStyles = addClasses('hover:bg-teal-500 text-white text-left min-w-100 leading-loose text-sm px-2');
 const withTealBackground = addClasses('bg-teal-600');
 const withLimitedHeightStyles = addClasses('overflow-y-hidden max-h-menu-row');
@@ -64,6 +65,17 @@ const MenuSubList = flow(
   }),
 )(List);
 
+const ColumnSubList = flow(
+  withDesign({
+    Wrapper: flow(stylable, addClasses('pl-5')),
+    // @ts-ignore
+    Title: withLinkStyles,
+  }),
+)(List);
+
+// @ts-ignore
+const CompoundMenuSubList = withSublist(asColumnSubList(ColumnSubList))(MenuSubList);
+
 const MenuList = flow(
   asEditableMainMenu(asEditable),
   asHorizontalMenu,
@@ -82,4 +94,4 @@ const MenuList = flow(
   asExceptMobile,
 )(List);
 
-export default withSublist(asRCMenuSublist(MenuSubList))(MenuList);
+export default withSublist(asColumnSubList(CompoundMenuSubList))(MenuList);
