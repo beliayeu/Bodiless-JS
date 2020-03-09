@@ -20,7 +20,6 @@ import {
   replaceWith,
 } from '@bodiless/fclasses';
 import asMainMenu from './asMainMenu';
-import asRCMenuSublist from './asRCMenuSublist';
 /**
  * HOC, that incorporate the given component (usually based on <List /> component)
  * with rc-menu <Submenu /> component

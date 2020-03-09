@@ -44,4 +44,4 @@ export type Data = {
   items?: string[],
 };
 
-export type UseItemWithSublist = (Item: ComponentType<PropsWithChildren<{}>> | string) => ComponentType<FinalProps>
+export type UseItemWithSublist = (Item: ComponentType<FinalProps>) => ComponentType<FinalProps>

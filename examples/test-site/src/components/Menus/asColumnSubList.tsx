@@ -24,6 +24,9 @@ import {
   asBasicSublist,
 } from '@bodiless/components';
 import {
+  asRCMenuSublist,
+} from '@bodiless/organisms';
+import {
   addClasses,
 } from '@bodiless/fclasses';
 
@@ -46,12 +49,10 @@ const pickProps = (propsToPick?: string[]) => (
 );
 
 // The sublist that will go in each column.
-/*const asColumnSubList = flow(
+const asColumnSubList = flow(
   pickProps(sublistPropsToKeep),
-  asBasicSublist,
   addClasses('inline-block'),
-);*/
-
-const asColumnSubList = asBasicSublist;
+  asBasicSublist,
+);
 
 export default asColumnSubList;

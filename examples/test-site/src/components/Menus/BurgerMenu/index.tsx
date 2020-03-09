@@ -29,7 +29,7 @@ import {
   SingleAccordionClean,
   withSubmenu,
 } from '@bodiless/organisms';
-import { asEditable, List } from '@bodiless/components';
+import { asEditable, List, asBasicSublist } from '@bodiless/components';
 import { asMobileOnly } from '../../Elements.token';
 import './burger-menu.css';
 
@@ -53,7 +53,7 @@ const BurgerSubMenu = flow(
   }),
 )(SingleAccordionClean);
 
-const Body = withSubmenu(BurgerSubMenu)(EditableLinkList);
+const Body = withSubmenu(asBasicSublist(BurgerSubMenu))(EditableLinkList);
 
 const HeaderContents: FunctionComponent = () => (
   <A href="/">

@@ -40,9 +40,9 @@ export {
 } from './components/MainMenu/index';
 
 
-import asRCMenuSublist from './components/MainMenu/asRCMenuSublist';
+import asMenuSublist from './components/MainMenu/asRCMenuSublist';
 export {
-  asRCMenuSublist
+  asMenuSublist
 }
 
 export {

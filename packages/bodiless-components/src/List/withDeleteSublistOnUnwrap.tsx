@@ -14,15 +14,22 @@
 
 import React, { ComponentType as CT } from 'react';
 import { FinalProps as ListProps } from './types';
+import { useItemsMutators } from './model';
 
-const asBasicSublist = (Item: CT<ListProps>) => ( { components, children, ...rest } ) => {
-  const { Sublist } = components;
-  return (
-    <Item>
-      {children}
-      <Sublist />
-    </Item>
-  );
-}
+/**
+ * Takes a component
+ * returns a new component with sublist node key and sublist deletion on unwrap
+ */
+const withDeleteSublistOnUnwrap = <T extends ListProps>(Sublist: CT<T>) => (props: T) => {
+  const { deleteSublist } = useItemsMutators();
+  const { unwrap } = props;
+  const unwrap$ = () => {
+    deleteSublist();
+    if (unwrap) {
+      unwrap();
+    }
+  };
+  return <Sublist {...props} unwrap={unwrap$} nodeKey="sublist" />;
+};
 
-export default asBasicSublist;
+export default withDeleteSublistOnUnwrap;

@@ -12,15 +12,16 @@
  * limitations under the License.
  */
 
-import React, { ComponentType as CT, FC, PropsWithChildren } from 'react';
-import { withDesign } from '@bodiless/fclasses';
+import React, { ComponentType as CT, FC, PropsWithChildren, Fragment } from 'react';
+import { withDesign, replaceWith, designable } from '@bodiless/fclasses';
+import { flow } from 'lodash';
+import List from './index';
 import { withToggleButton, withToggleTo } from '../Toggle';
 import {
   FinalProps as ListProps,
   ListDesignableComponents,
   UseItemWithSublist,
 } from './types';
-import { useItemsMutators } from './model';
 
 /**
  * Takes a sublist component and return=s a HOC to add a toggled version
@@ -28,8 +29,9 @@ import { useItemsMutators } from './model';
  *
  * @param Item The item to which the toggle should be added.
  */
+
 const withSublistToggle = (useItemWithSublist: UseItemWithSublist) => (
-  (Item: CT<PropsWithChildren<{}>> | string) => {
+  (Item: CT<ListProps>) => {
     const ItemWithoutSublist: FC<ListProps> = ({ wrap, nodeKey, ...rest }) => (
       <Item {...rest} />
     );
@@ -38,24 +40,12 @@ const withSublistToggle = (useItemWithSublist: UseItemWithSublist) => (
   }
 );
 
-/**
- * Takes a component
- * returns a new component with sublist node key and sublist deletion on unwrap
- */
-const withDeleteSublistOnUnwrap = <T extends ListProps>(Sublist: CT<T>) => (props: T) => {
-  const { deleteSublist } = useItemsMutators();
-  const { unwrap } = props;
-  const unwrap$ = () => {
-    deleteSublist();
-    if (unwrap) {
-      unwrap();
-    }
-  };
-  return <Sublist {...props} unwrap={unwrap$} nodeKey="sublist" />;
-};
+type SublistListDesignableComponents = {
+  Sublist: CT<any>,
+}
 
-type SublistListDesignableComponents = ListDesignableComponents & {
-  ItemWithSublist: CT<any>,
+const SublistComponentsStart: SublistListDesignableComponents = {
+  Sublist: List,
 }
 
 /**
@@ -64,10 +54,12 @@ type SublistListDesignableComponents = ListDesignableComponents & {
  *
  * @param Sublist The sublist component to add to each item.
  */
-const withSublist = (useItemWithSublist: UseItemWithSublist) => withDesign<SublistListDesignableComponents>({
+const withSublist = (useItemWithSublist: UseItemWithSublist) => withDesign<ListDesignableComponents>({
   ItemMenuOptionsProvider: withToggleButton({ icon: 'playlist_add' }),
-  Item: withSublistToggle(useItemWithSublist),
+  Item: flow(
+    withSublistToggle(useItemWithSublist),
+    designable(SublistComponentsStart),
+  ),
 });
 
 export default withSublist;
-export { withDeleteSublistOnUnwrap };

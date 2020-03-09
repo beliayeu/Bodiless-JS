@@ -18,7 +18,7 @@ import {
   withDesign, replaceWith, addClasses, stylable,
 } from '@bodiless/fclasses';
 import {
-  List, Editable, asEditableList, withSublist, ListTitleProps,
+  asBasicSublist, List, Editable, asEditableList, withSublist, ListTitleProps,
 } from '..';
 
 /**
@@ -44,11 +44,11 @@ const PaddedList = withDesign({
 
 
 const InnerList = PaddedList;
-const MiddleList = withSublist(InnerList)(PaddedList);
+const MiddleList = withSublist(asBasicSublist(InnerList))(PaddedList);
 
 /**
  * A compound editable list with 3 levels.
  */
-const CompoundList = withSublist(MiddleList)(SimpleList);
+const CompoundList = withSublist(asBasicSublist(MiddleList))(SimpleList);
 
 export { SimpleList, CompoundList };
