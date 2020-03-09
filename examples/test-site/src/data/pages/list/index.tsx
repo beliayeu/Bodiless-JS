@@ -63,23 +63,13 @@ const withLessPadding = withDesign({
   Wrapper: addClasses('pl-4').removeClasses('pl-10'),
 });
 
-const InnerList = flow(
-  withLessPadding,
-  asBasicSublist,
-)(EditableList);
-const MiddleList = asBasicSublist(
-  withSublist(InnerList)(EditableList),
-);
-const OuterList = withSublist(MiddleList)(EditableList);
+const InnerList = withLessPadding(EditableList);
+const MiddleList = withSublist(asBasicSublist(InnerList))(EditableList)
+const OuterList = withSublist(asBasicSublist(MiddleList))(EditableList);
 
-const InnerLinkList = flow(
-  withLessPadding,
-  asBasicSublist,
-)(EditableLinkList);
-const MiddleLinkList = asBasicSublist(
-  withSublist(InnerLinkList)(EditableLinkList),
-);
-const OuterLinkList = withSublist(MiddleLinkList)(EditableLinkList);
+const InnerLinkList = withLessPadding(EditableLinkList);
+const MiddleLinkList = withSublist(asBasicSublist(InnerLinkList))(EditableLinkList)
+const OuterLinkList = withSublist(asBasicSublist(MiddleLinkList))(EditableLinkList);
 
 export default (props: any) => (
   <Page {...props}>

@@ -64,9 +64,9 @@ type SublistListDesignableComponents = ListDesignableComponents & {
  *
  * @param Sublist The sublist component to add to each item.
  */
-const withSublist = (ItemWithSublist: UseItemWithSublist) => withDesign<SublistListDesignableComponents>({
+const withSublist = (useItemWithSublist: UseItemWithSublist) => withDesign<SublistListDesignableComponents>({
   ItemMenuOptionsProvider: withToggleButton({ icon: 'playlist_add' }),
-  Item: withSublistToggle(ItemWithSublist),
+  Item: withSublistToggle(useItemWithSublist),
 });
 
 export default withSublist;
