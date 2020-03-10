@@ -12,17 +12,25 @@
  * limitations under the License.
  */
 
-import React, { ComponentType as CT } from 'react';
+import React, { ComponentType as CT, PropsWithChildren } from 'react';
 import { FinalProps as ListProps } from './types';
 
-const asBasicSublist = (Item: CT<ListProps>) => ( { components, children, ...rest } ) => {
-  const { Sublist } = components;
-  return (
-    <Item>
-      {children}
-      <Sublist />
-    </Item>
-  );
-}
+const asBasicSublist = (Sublist: CT<ListProps>) => (
+  (Item: CT<PropsWithChildren<{}>> | string) => {
+    const ItemWithSublist: CT<ListProps> = ({ children, ...rest }) => (
+      <Item>
+        {children}
+        <Sublist {...rest} />
+      </Item>
+    );
+    const ItemWithoutSublist: CT<ListProps> = ({ wrap, nodeKey, ...rest }) => (
+      <Item {...rest} />
+    );
+    return {
+      ItemWithSublist,
+      ItemWithoutSublist,
+    };
+  }
+);
 
 export default asBasicSublist;

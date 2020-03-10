@@ -18,6 +18,7 @@ import {
   asBurgerSubMenu,
   asEditableBurgerSubMenu,
   BurgerMenuClean,
+  withBurgerSubmenu,
 } from './components/BurgerMenu';
 
 export {
@@ -39,11 +40,6 @@ export {
   withSubmenu,
 } from './components/MainMenu/index';
 
-
-import asMenuSublist from './components/MainMenu/asRCMenuSublist';
-export {
-  asMenuSublist
-}
 
 export {
   Tout,
@@ -73,6 +69,7 @@ export {
   asBurgerSubMenu,
   asEditableBurgerSubMenu,
   BurgerMenuClean,
+  withBurgerSubmenu,
 };
 
 export { Slider };

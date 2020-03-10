@@ -24,14 +24,13 @@ import {
   asEditable,
   List,
   withSublist,
-  asBasicSublist,
 } from '@bodiless/components';
 import {
   asHorizontalMenu,
   asHorizontalSubMenu,
   asEditableMainMenu,
   asEditableMainSubMenu,
-  asMenuSublist,
+  withSubmenu,
 } from '@bodiless/organisms';
 import { asExceptMobile } from '../Elements.token';
 import asColumnSubList  from './asColumnSubList';
@@ -96,4 +95,4 @@ const MenuList = flow(
   asExceptMobile,
 )(List);
 
-export default withSublist(asMenuSublist(CompoundMenuSubList))(MenuList);
+export default withSubmenu(CompoundMenuSubList)(MenuList);
