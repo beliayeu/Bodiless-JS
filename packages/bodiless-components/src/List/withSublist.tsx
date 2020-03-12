@@ -12,28 +12,27 @@
  * limitations under the License.
  */
 
-import React, { ComponentType, FC, PropsWithChildren } from 'react';
-import { withDesign } from '@bodiless/fclasses';
-import { withToggleButton, withToggleTo } from '../Toggle';
-import { FinalProps as ListProps, ListDesignableComponents } from './types';
+import { ComponentType as CT} from 'react';
+import { withDesign, designable } from '@bodiless/fclasses';
+import { flowRight } from 'lodash';
+import { withToggleButton, withToggleFromDesign } from '../Toggle';
+import {
+  FinalProps as ListProps,
+  ListDesignableComponents,
+} from './types';
+import asBasicSublist from './asBasicSublist';
 
-/**
- * Takes a sublist component and return=s a HOC to add a toggled version
- * of it to a list item.
- *
- * @param Item The item to which the toggle should be added.
- */
-const withSublistToggle = (Sublist: ComponentType<ListProps>) => (
-  (Item: ComponentType<PropsWithChildren<{}>> | string) => {
-    const ItemWithSublist: FC<ListProps> = ({ children, unwrap }) => (
-      <Item>
-        {children}
-        <Sublist unwrap={unwrap} nodeKey="sublist" />
-      </Item>
-    );
-    return withToggleTo(Item)(ItemWithSublist);
-  }
-);
+type SublistListDesignableComponents = {
+  ItemWithSublist: CT<any>,
+  ItemWithoutSublist: CT<any>,
+}
+
+const withSublistComponentsStart = Item => {
+  return designable({
+    ItemWithSublist: Item,
+    ItemWithoutSublist: Item,
+  })(Item);
+}
 
 /**
  * Takes a sublist component and returns a HOC which, when applied to a list,
@@ -41,9 +40,13 @@ const withSublistToggle = (Sublist: ComponentType<ListProps>) => (
  *
  * @param Sublist The sublist component to add to each item.
  */
-const withSublist = (Sublist: ComponentType<ListProps>) => withDesign<ListDesignableComponents>({
+const withSublist = (Sublist: CT<ListProps>) => withDesign<ListDesignableComponents>({
   ItemMenuOptionsProvider: withToggleButton({ icon: 'playlist_add' }),
-  Item: withSublistToggle(Sublist),
+  Item: flowRight(
+    asBasicSublist(Sublist),
+    withSublistComponentsStart,
+    withToggleFromDesign('ItemWithoutSublist')('ItemWithSublist'),
+  ),
 });
 
 export default withSublist;

@@ -64,7 +64,21 @@ const withLessPadding = withDesign({
 });
 
 const InnerList = withLessPadding(EditableList);
-const MiddleList = withSublist(InnerList)(EditableList);
+const MiddleList = flow(
+  withSublist(InnerList),
+  withDesign({
+    Item: withDesign({
+      ItemWithSublist: flow(
+        stylable,
+        addClasses('test-item-with-sublist')
+      ),
+      ItemWithoutSublist: flow(
+        stylable,
+        addClasses('test-item-without-sublist')
+      ),
+    }),
+  }),
+)(EditableList);
 const OuterList = withSublist(MiddleList)(EditableList);
 
 const InnerLinkList = withLessPadding(EditableLinkList);

@@ -45,6 +45,22 @@ const withToggleTo = <Q extends object>(OffComp: ComponentType<Q> | string) => (
   )
 );
 
+const withToggleFromDesign = (OffCompName: string) => (OnCompName: string) => (Component: ComponentType) => observer(( {components, ...rest} ) => {
+  // the component may render itself
+  if (components === undefined) {
+    return <Component {...rest} />
+  }
+  const OffComp = components[OffCompName];
+  const OnComp = components[OnCompName];
+  // TODO: code duplication. reuse what we have in withToggleTo.  
+  const { isOn, setOn } = useAccessors();
+  const unwrap = () => setOn(false);
+  const wrap = () => setOn(true);
+  return isOn()
+    ? <OnComp {...rest as any} unwrap={unwrap} nodeKey="component" />
+    : <OffComp {...rest as any} wrap={wrap} nodeKey="component" />;
+})
+
 const withToggle = withToggleTo(Fragment);
 
 type TMenuOptionGetter = () => TMenuOption[];
@@ -101,6 +117,7 @@ const withWrapOnSubmit = <P extends object>(Component: ComponentType<P & OnSubmi
 export {
   withToggleTo,
   withToggle,
+  withToggleFromDesign,
   withToggleButton,
   withWrapOnSubmit,
 };
