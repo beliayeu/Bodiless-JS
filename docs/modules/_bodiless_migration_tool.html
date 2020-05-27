@@ -1,0 +1,1957 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@bodiless/migration-tool | bodilessjs</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">bodilessjs</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="_bodiless_migration_tool.html">@bodiless/migration-tool</a>
+				</li>
+			</ul>
+			<h1>Module @bodiless/migration-tool</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<a href="#site-migration-tool" id="site-migration-tool" style="color: inherit; text-decoration: none;">
+						<h1>Site Migration tool</h1>
+					</a>
+					<p>The goal of this tool is to take an existing site (independent of its technology) and convert it static flattened html site. A flattened html site is non-editable site that can be served with no databases with minimal platform requirements. The tool automates this flattening to reduce the cost of migration of these sites off other technology.</p>
+					<p>The tool is given URL that will crawl the existing site finding all pages, generates the html, pulls the assets of the sites and outputs the static html site. The tool is provided as part of the BodilessJS project and is incorporated into migration process. The output works in coordination with the BodilessJS Starter Kit to use the same tooling/infrastructure.</p>
+					<a href="#features" id="features" style="color: inherit; text-decoration: none;">
+						<h3>Features</h3>
+					</a>
+					<ol>
+						<li><p>Crawls the website and gets a list of website pages</p>
+						</li>
+						<li><p>Scrapes website&#39;s page html</p>
+						</li>
+						<li><p>Scrapes website&#39;s assets:</p>
+							<ol>
+								<li>Scripts</li>
+								<li>Css styles</li>
+								<li>Images</li>
+							</ol>
+						</li>
+						<li><p>Scrapes website&#39;s meta tags</p>
+						</li>
+						<li><p>Provide html transformation rules</p>
+							<ul>
+								<li>rules to remove html elements from dom</li>
+								<li>rules to replace html elements with html snippet</li>
+							</ul>
+						</li>
+						<li><p>Generate BodilessJS pages</p>
+						</li>
+						<li><p>Converts html into jsx (jsx is a React extension that allows us to write JavaScript that <em>looks like</em> HTML.)</p>
+						</li>
+						<li><p>Breaks monolithic html into pieces</p>
+						</li>
+					</ol>
+					<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+						<h2>Getting Started</h2>
+					</a>
+					<a href="#prerequisites" id="prerequisites" style="color: inherit; text-decoration: none;">
+						<h3>Prerequisites</h3>
+					</a>
+					<ul>
+						<li><a href="https://nodejs.org/en/">Node.js</a> version &gt;= 10</li>
+						<li><a href="https://docs.npmjs.com/">NPM</a> version 6.13.1+ is required.</li>
+					</ul>
+					<a href="#installation-amp-run" id="installation-amp-run" style="color: inherit; text-decoration: none;">
+						<h3>Installation &amp; Run</h3>
+					</a>
+					<ol>
+						<li><p>Clone this repository: <a href="https://github.com/johnsonandjohnson/Bodiless-JS.git">https://github.com/johnsonandjohnson/Bodiless-JS.git</a></p>
+							<pre><code class="language-sh"> git <span class="hljs-built_in">clone</span> https://github.com/johnsonandjohnson/Bodiless-JS.git
+ <span class="hljs-built_in">cd</span> Bodiless-JS</code></pre>
+						</li>
+						<li><p>Let&#39;s create a site to migrate the files to.</p>
+							<p> The full directions can be found <a href="/About/GettingStarted?id=creating-a-new-site">here</a>
+							We recommend this path is outside the repository root.  In the code example, we used <code>../NEW_MIGRATED_SITE</code>.</p>
+							<pre><code class="language-sh"> npm ci
+ npm run new ../NEW_MIGRATED_SITE
+ <span class="hljs-built_in">cd</span> ../NEW_MIGRATED_SITE
+</code></pre>
+						</li>
+						<li><p>Prepare the migration-settings.json. All settings can be found in Configuration section</p>
+						</li>
+						<li><p>Execute the command to flatten the site</p>
+							<pre><code class="language-sh">
+ npm run migrate
+</code></pre>
+						</li>
+					</ol>
+					<a href="#configuration" id="configuration" style="color: inherit; text-decoration: none;">
+						<h3>Configuration</h3>
+					</a>
+					<p>Using the requirements of the flattened site, prepare a build plan by adjusting <code>migration-settings.json</code></p>
+					<p>The following options control how the the site will be flattened.</p>
+					<p>Options:</p>
+					<ul>
+						<li><p><code>url</code></p>
+							<ul>
+								<li><p><strong>Description</strong>: Url of website that should be flattened</p>
+								</li>
+								<li><p><strong>Accepted Formats:</strong>: Preface the url with http:// or https:// syntax</p>
+								</li>
+								<li><p><strong>Examples:</strong>: &quot;<a href="http://pariet10.ru/&quot;">http://pariet10.ru/&quot;</a> or &quot;<a href="https://pariet10.ru/&quot;">https://pariet10.ru/&quot;</a></p>
+								</li>
+								<li><p><strong>Restrictions:</strong>: None</p>
+								</li>
+							</ul>
+						</li>
+						<li><p><code>isPage404Disabled</code></p>
+							<ul>
+								<li><p><strong>Description</strong>: When this option is <code>false</code> (by default), all non-existing pages will not be scraped
+									and will redirect to the default 404 page instead.</p>
+								</li>
+								<li><p><strong>Accepted Formats:</strong>: <code>true</code>, <code>false</code></p>
+								</li>
+							</ul>
+						</li>
+						<li><p><code>page404Url</code></p>
+							<ul>
+								<li><p><strong>Description</strong>: A specific url from where the default &quot;page not found&quot; page should be flattened.
+									When this option is not specified - a default /404 page will be used.</p>
+								</li>
+								<li><p><strong>Accepted Formats:</strong>: Absolute url to the page.</p>
+								</li>
+								<li><p><strong>Examples:</strong>: &quot;<a href="https://pariet10.ru/404-custom-page&quot;">https://pariet10.ru/404-custom-page&quot;</a></p>
+								</li>
+								<li><p><strong>Restrictions:</strong>: <code>isPage404Disabled</code> option should be set to false.</p>
+								</li>
+							</ul>
+						</li>
+						<li><p><code>steps</code></p>
+							<ul>
+								<li><p><strong>Description</strong>: Specify a list of steps that should be executed by the tool</p>
+								</li>
+								<li><p><strong>Recommendation</strong>: Specify all steps and set as true.</p>
+								</li>
+							</ul>
+						</li>
+						<li><p><code>setup</code></p>
+							<pre><code>  *  *<span class="hljs-number">*De</span>scription**: Enable/<span class="hljs-builtin-name">disable</span> cloning <span class="hljs-keyword">and</span> setting up BodilessJS app locally
+
+  *  *<span class="hljs-number">*Acce</span>pted Formats:**: <span class="hljs-string">"true"</span> <span class="hljs-keyword">or</span> <span class="hljs-string">"false"</span></code></pre><ul>
+								<li><p><code>scrape</code></p>
+									<ul>
+										<li><p><strong>Description</strong>: Enable/disable site scraping and BodilessJS pages generation</p>
+										</li>
+										<li><p><strong>Accepted Formats:</strong>: &quot;true&quot; or &quot;false&quot;</p>
+										</li>
+									</ul>
+								</li>
+								<li><p><code>build</code></p>
+									<ul>
+										<li><p><strong>Description</strong>: Enable/disable building of static site</p>
+										</li>
+										<li><p><strong>Accepted Formats:</strong>: &quot;true&quot; or &quot;false&quot;</p>
+										</li>
+									</ul>
+								</li>
+								<li><p><code>serve</code></p>
+									<ul>
+										<li><p><strong>Description</strong>: Enable/disable serving of static site</p>
+										</li>
+										<li><p><strong>Accepted Formats:</strong>: &quot;true&quot; or &quot;false&quot;</p>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li><p><code>crawler</code></p>
+							<ul>
+								<li><p><strong>Description</strong>: Specify configuration for the crawler</p>
+								</li>
+								<li><p><code>maxDepth</code></p>
+									<ul>
+										<li><p><strong>Description</strong>: Maximum depth for the crawler to follow links automatically</p>
+										</li>
+										<li><p><strong>Accepted Formats:</strong>: Number &gt; 0</p>
+										</li>
+										<li><p><strong>Recommendation:</strong>: 100, unless there is specific reason to limit. A higher number will allow tool to crawl the entire site.</p>
+										</li>
+									</ul>
+								</li>
+								<li><p><code>maxConcurrency</code></p>
+									<ul>
+										<li><p><strong>Description</strong>: Maximum number of pages to open concurrently</p>
+										</li>
+										<li><p><strong>Accepted Formats:</strong>: Number &gt; 0</p>
+										</li>
+										<li><p><strong>Recommendation:</strong>: Recommend to use 1 to not impact production sites</p>
+										</li>
+									</ul>
+								</li>
+								<li><p><code>ignoreRobotsTxt</code></p>
+									<ul>
+										<li><p><strong>Description</strong>: Whether <a href="https://developers.google.com/search/reference/robots_txt">robots.txt</a> should be ignored and whether urls disallowed in robots.txt should be scraped, default to false.</p>
+										</li>
+										<li><p><strong>Accepted Formats</strong>: Boolean (true or false)</p>
+										</li>
+										<li><p><strong>Recommendation</strong>: Recommend to use default value when the whole website is scraped, set this option to true once a disallowed page should be scraped individually.</p>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li><p><code>htmltojsx</code></p>
+							<ul>
+								<li><p><strong>Description</strong>: Enable/disable transforming html to jsx</p>
+								</li>
+								<li><p><strong>Accepted Formats:</strong>: &quot;true&quot; or &quot;false&quot;</p>
+								</li>
+								<li><p><strong>Recommendation:</strong>: &quot;true&quot;</p>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<ul>
+						<li><p><code>transformers</code></p>
+							<ul>
+								<li><strong>Description</strong>: Specify rules that should be applied to the scraped page html</li>
+							</ul>
+						</li>
+						<li><p><code>rule</code></p>
+							<ul>
+								<li><p><strong>Description</strong>: The following rules allow you to manipulate the output and either remove or replace html selector components.</p>
+								</li>
+								<li><p><code>replace</code></p>
+									<ul>
+										<li><strong>Description</strong>: Replace each element in the set of matched elements with the provided new content and return the set of elements that was removed.</li>
+									</ul>
+								</li>
+								<li><p><code>replaceString</code></p>
+									<ul>
+										<li><strong>Description</strong>: Replace string (or regex pattern) in the source html code before parsing.</li>
+									</ul>
+								</li>
+								<li><p><code>tojsx</code></p>
+									<ul>
+										<li><p><strong>Description</strong>: Extract matched elements into React components as separate modules</p>
+										</li>
+										<li><p><strong>Note</strong>: this option is not implemented yet. If you want to convert html into jsx please follow &quot;Convert html into jsx&quot; section</p>
+										</li>
+										<li><p>Specific configuration parameters for each rule type:</p>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li><p><code>selector</code></p>
+							<ul>
+								<li><p><strong>Description</strong>: Selector for the element(s) that should be processed</p>
+								</li>
+								<li><p><strong>Accepted Formats:</strong>: string</p>
+								</li>
+							</ul>
+						</li>
+						<li><p><code>replacement</code></p>
+							<ul>
+								<li><p><strong>Description</strong>: New html content in <code>replace</code> mode. Name of React component in <code>tojsx</code> mode</p>
+								</li>
+								<li><p><strong>Accepted Formats:</strong>: string</p>
+								</li>
+								<li><p><strong>Restrictions:</strong>: Escape special characters, such as &quot; with <code>\&quot;</code></p>
+								</li>
+							</ul>
+						</li>
+						<li><p><code>disableTailwind</code></p>
+							<ul>
+								<li><p><strong>Description</strong>: Disables site tailwind theme. The site tailwind theme is disabled by default, set this variable to <code>false</code> to enable site tailwind theme. You may want to enable the tailwind theme if the migrated site will add new bodiless JS components. Note that enabling the tailwind theme in some cases may interfere with the migrated site&#39;s styling.</p>
+								</li>
+								<li><p><strong>Accepted Formats:</strong> <code>true</code> or <code>false</code></p>
+								</li>
+								<li><p><strong>Default Value:</strong> <code>true</code></p>
+								</li>
+							</ul>
+						</li>
+						<li><p><code>allowFallbackHtml</code></p>
+							<ul>
+								<li><p><strong>Description</strong>: Optional setting to push original html body into the page component file and report a message in the output when migration encounters an error from body section of html. If disabled with value <code>false</code>, migration skips generation of JSX on page parsing errors.</p>
+								</li>
+								<li><p><strong>Accepted Formats</strong>: Boolean (true or false)</p>
+								</li>
+								<li><p><strong>Default Value:</strong> <code>true</code></p>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<ul>
+						<li><p><code>context</code></p>
+							<ul>
+								<li><p><strong>Description</strong>: A list of pages in which the rule should be applied.</p>
+								</li>
+								<li><p><strong>Accepted Formats:</strong>: Please follow <a href="https://github.com/isaacs/minimatch">minimatch</a> syntax to compose url pattern</p>
+								</li>
+							</ul>
+						</li>
+						<li><p><strong>Examples:</strong></p>
+						</li>
+					</ul>
+					<pre><code class="language-json">{
+
+<span class="hljs-attr">"rule"</span>:  <span class="hljs-string">"replace"</span>,
+
+<span class="hljs-attr">"selector"</span>:  <span class="hljs-string">"script[src*='cdn.cookielaw.org/consent']"</span>,
+
+<span class="hljs-attr">"replacement"</span>:  <span class="hljs-string">"&lt;script charset=\"UTF-8\" src=\"https://optanon.blob.core.windows.net/consent/086a2433-54aa-4112-8ba6-331eb1d2fda7-test.js\"&gt;&lt;/script&gt;"</span>,
+
+<span class="hljs-attr">"context"</span>:  <span class="hljs-string">"**"</span>
+
+}</code></pre>
+					<a href="#rehydration-convert-html-elements-into-react-components-during-site-migration" id="rehydration-convert-html-elements-into-react-components-during-site-migration" style="color: inherit; text-decoration: none;">
+						<h4>Rehydration (convert html elements into React Components) during Site Migration</h4>
+					</a>
+					<p>The following process will rehydrate (or replace specific html element components with React named components.)</p>
+					<p>In the <code>packages/bodiless-migration-tool/conf/settings.json</code></p>
+					<p>Specify <code>replace</code> Rules</p>
+					<ol>
+						<li><p><code>selector</code></p>
+							<ul>
+								<li><strong>Description:</strong> selector for the element(s) that should be extracted into React components</li>
+							</ul>
+							<ol>
+								<li><code>component</code> name of the React component<ul>
+										<li><strong>Description:</strong> selector for the element(s) that should be extracted into React components</li>
+									</ul>
+								</li>
+							</ol>
+						</li>
+					</ol>
+					<a href="#example" id="example" style="color: inherit; text-decoration: none;">
+						<h5>Example</h5>
+					</a>
+					<p>View <a href="conf/settings.json">conf/settings.json</a></p>
+					<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+						<h3>Usage</h3>
+					</a>
+					<p>To flatten a website using the tool, run:</p>
+					<pre><code class="language-sh">
+npm run migrate
+</code></pre>
+					<a href="#migration-output" id="migration-output" style="color: inherit; text-decoration: none;">
+						<h4>Migration Output</h4>
+					</a>
+					<a href="#flattened-amp-build-filesassets" id="flattened-amp-build-filesassets" style="color: inherit; text-decoration: none;">
+						<h5>Flattened &amp; Build files/assets</h5>
+					</a>
+					<ul>
+						<li>The individual pages of the site can found in
+						<code>examples\test-site\src\data\pages</code></li>
+					</ul>
+					<p>After performing of <code>npm run build</code>:</p>
+					<ul>
+						<li>The output of the build site can be found in the
+						<code>examples\test-site\public</code></li>
+						<li>The assets of the site can be found in the
+						<code>examples\test-site\static</code></li>
+					</ul>
+					<a href="#view-migrated-site" id="view-migrated-site" style="color: inherit; text-decoration: none;">
+						<h5>View Migrated Site</h5>
+					</a>
+					<ul>
+						<li>The flattened &amp; generated built site will be viewable at <a href="http://0.0.0.0:9000/">http://0.0.0.0:9000/</a> OR if on windows <a href="http://localhost:9000">http://localhost:9000</a>.</li>
+					</ul>
+					<a href="#full-settingsjson-examples" id="full-settingsjson-examples" style="color: inherit; text-decoration: none;">
+						<h3>Full settings.json Examples</h3>
+					</a>
+					<p>Full examples can be found in <a href="examples/settings">examples/settings</a>.</p>
+					<a href="#configure-no-scroll-for-selected-anchor-element" id="configure-no-scroll-for-selected-anchor-element" style="color: inherit; text-decoration: none;">
+						<h3>Configure no-scroll for selected anchor element.</h3>
+					</a>
+					<p>Sites, undergoing flattening, may have foldable accordion elements that are implemented with anchor fragment. By default, GatsbyJS navigation compares the change in url and scrolls the page to the location based on the given url hash.</p>
+					<p>If this is not the desired behavior for migrated page, a user might override scrolling by configure <code>no-scroll-settings.json</code> and place it under <code>[site]/src/@bodiless/gatsby-theme-bodiless/</code> folder. Behind the scenes, it shadows Gatsby theme packages/gatsby-theme-bodiless/src/no-scroll-settings.json configuration file.</p>
+					<p>Here&#39;s an example of no-scroll-settings.json usages:</p>
+					<pre><code>{
+  <span class="hljs-attr">"parentSelectors"</span>: [
+    <span class="hljs-string">".container-classname-1"</span>,
+    <span class="hljs-string">".container-classname-2"</span>
+  ],
+  <span class="hljs-attr">"elementSelectors"</span>: [
+    <span class="hljs-string">".container-classname .fieldset .field__item &gt; a"</span>
+  ],
+  <span class="hljs-attr">"excludeHashes"</span>: [
+    <span class="hljs-string">"hash-to-be-excluded-from-no-scrolling"</span>
+  ]
+}
+</code></pre><p>Explanation of options:,</p>
+					<ul>
+						<li><p><code>parentSelectors</code>: Contains a list of selectors that within the selected container element, clicking anchor will disable the page scrolling.</p>
+						</li>
+						<li><p><code>elementSelectors</code>: Contains a list of anchor selectors that clicking on these anchors will disable the page scrolling.</p>
+						</li>
+						<li><p><code>excludeHashes</code>: Used to define a custom list of hash strings (without &quot;#&quot; character) to be excluded from no-scrolling feature.</p>
+						</li>
+					</ul>
+					<a href="#technical-notes" id="technical-notes" style="color: inherit; text-decoration: none;">
+						<h3>Technical Notes</h3>
+					</a>
+					<a href="#chosen-libraries" id="chosen-libraries" style="color: inherit; text-decoration: none;">
+						<h4>Chosen libraries</h4>
+					</a>
+					<ul>
+						<li><p><a href="https://github.com/GoogleChrome/puppeteer">Puppeteer</a> is used to generate pre-rendered content during website crawling</p>
+						</li>
+						<li><p><a href="https://github.com/yujiosaka/headless-chrome-crawler">Headless Chrome Crawler</a> is used to crawl website</p>
+						</li>
+						<li><p><a href="https://github.com/cheeriojs/cheerio">Cheerio</a> is used to traverse and manipulate scraped html</p>
+						</li>
+						<li><p><a href="https://github.com/isaacs/minimatch">Minimatch</a> is leveraged to implement url matching functionality</p>
+						</li>
+						<li><p><a href="https://github.com/roman01la/html-to-react-components">html to react components</a> is used to convert HTML into React components</p>
+						</li>
+						<li><p><a href="https://github.com/oclif/oclif">oclif</a> is leveraged for building the CLI tool</p>
+						</li>
+					</ul>
+					<a href="#troubleshooting" id="troubleshooting" style="color: inherit; text-decoration: none;">
+						<h3>Troubleshooting</h3>
+					</a>
+					<ul>
+						<li>issues with puppeteer (headless chrome) - <a href="https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md">https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md</a></li>
+					</ul>
+				</div>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Enumerations</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-enum tsd-parent-kind-module"><a href="../enums/_bodiless_migration_tool.attrtransformerdirecton.html" class="tsd-kind-icon">Attr<wbr>Transformer<wbr>Directon</a></li>
+								<li class="tsd-kind-enum tsd-parent-kind-module tsd-is-not-exported"><a href="../enums/_bodiless_migration_tool.commandtype.html" class="tsd-kind-icon">Command<wbr>Type</a></li>
+								<li class="tsd-kind-enum tsd-parent-kind-module"><a href="../enums/_bodiless_migration_tool.componentscope.html" class="tsd-kind-icon">Component<wbr>Scope</a></li>
+								<li class="tsd-kind-enum tsd-parent-kind-module"><a href="../enums/_bodiless_migration_tool.trailingslash.html" class="tsd-kind-icon">Trailing<wbr>Slash</a></li>
+								<li class="tsd-kind-enum tsd-parent-kind-module"><a href="../enums/_bodiless_migration_tool.transformerrule.html" class="tsd-kind-icon">Transformer<wbr>Rule</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Classes</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_bodiless_migration_tool.canvasx.html" class="tsd-kind-icon">CanvasX</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_bodiless_migration_tool.downloader.html" class="tsd-kind-icon">Downloader</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_bodiless_migration_tool.htmlparser.html" class="tsd-kind-icon">Html<wbr>Parser</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_bodiless_migration_tool.htmltocomponents.html" class="tsd-kind-icon">Html<wbr>ToComponents</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_bodiless_migration_tool.migrationtool.html" class="tsd-kind-icon">Migration<wbr>Tool</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_bodiless_migration_tool.pagecreator.html" class="tsd-kind-icon">Page<wbr>Creator</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_bodiless_migration_tool.resourcesfromcssextractor.html" class="tsd-kind-icon">Resources<wbr>From<wbr>Css<wbr>Extractor</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_bodiless_migration_tool.scraper.html" class="tsd-kind-icon">Scraper</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/_bodiless_migration_tool.siteflattener.html" class="tsd-kind-icon">Site<wbr>Flattener</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported"><a href="../interfaces/_bodiless_migration_tool.events.html" class="tsd-kind-icon">Events</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_bodiless_migration_tool.htmlattrs.html" class="tsd-kind-icon">Html<wbr>Attrs</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported"><a href="../interfaces/_bodiless_migration_tool.htmlparserinterface.html" class="tsd-kind-icon">Html<wbr>Parser<wbr>Interface</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_bodiless_migration_tool.htmltocomponentsrule.html" class="tsd-kind-icon">Html<wbr>ToComponents<wbr>Rule</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_bodiless_migration_tool.htmltocomponentssettings.html" class="tsd-kind-icon">Html<wbr>ToComponents<wbr>Settings</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_bodiless_migration_tool.jamstackapp.html" class="tsd-kind-icon">Jam<wbr>Stack<wbr>App</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_bodiless_migration_tool.jamstackappparams.html" class="tsd-kind-icon">Jam<wbr>Stack<wbr>App<wbr>Params</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_bodiless_migration_tool.metatag.html" class="tsd-kind-icon">Meta<wbr>Tag</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_bodiless_migration_tool.page404params.html" class="tsd-kind-icon">Page404<wbr>Params</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_bodiless_migration_tool.page404initialsettings.html" class="tsd-kind-icon">Page404initial<wbr>Settings</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_bodiless_migration_tool.pagecreatorparams.html" class="tsd-kind-icon">Page<wbr>Creator<wbr>Params</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_bodiless_migration_tool.scrapedpage.html" class="tsd-kind-icon">Scraped<wbr>Page</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_bodiless_migration_tool.scraperparams.html" class="tsd-kind-icon">Scraper<wbr>Params</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_bodiless_migration_tool.siteflattenerparams.html" class="tsd-kind-icon">Site<wbr>Flattener<wbr>Params</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/_bodiless_migration_tool.transformer.html" class="tsd-kind-icon">Transformer</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-not-exported">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_migration_tool.html#attrtransformerconfig" class="tsd-kind-icon">Attr<wbr>Transformer<wbr>Config</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_migration_tool.html#transformertype" class="tsd-kind-icon">Transformer<wbr>Type</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_migration_tool.html#component_label" class="tsd-kind-icon">COMPONENT_<wbr>LABEL</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_migration_tool.html#hccrawler" class="tsd-kind-icon">HCCrawler</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#debug" class="tsd-kind-icon">debug</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#addtrailingslashtourl" class="tsd-kind-icon">add<wbr>Trailing<wbr>Slash<wbr>ToUrl</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#cfdecodeemail" class="tsd-kind-icon">cf<wbr>Decode<wbr>Email</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#deletefolderrecursive" class="tsd-kind-icon">delete<wbr>Folder<wbr>Recursive</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#ensuredirectoryexistence" class="tsd-kind-icon">ensure<wbr>Directory<wbr>Existence</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#evaluatepage" class="tsd-kind-icon">evaluate<wbr>Page</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#formatjsx" class="tsd-kind-icon">format<wbr>Jsx</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#gethostnamewithoutwww" class="tsd-kind-icon">get<wbr>Host<wbr>Name<wbr>WithoutWWW</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="_bodiless_migration_tool.html#getjsxelementname" class="tsd-kind-icon">getJSXElement<wbr>Name</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#getpage404defaulturl" class="tsd-kind-icon">get<wbr>Page404<wbr>Default<wbr>Url</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_migration_tool.html#getparams" class="tsd-kind-icon">get<wbr>Params</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#geturltolocaldirectorymapper" class="tsd-kind-icon">get<wbr>Url<wbr>ToLocal<wbr>Directory<wbr>Mapper</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#iscurrentpage404" class="tsd-kind-icon">is<wbr>Current<wbr>Page404</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_migration_tool.html#isfragmentonly" class="tsd-kind-icon">is<wbr>Fragment<wbr>Only</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_migration_tool.html#isjavascriptprotocolurl" class="tsd-kind-icon">is<wbr>Javascript<wbr>Protocol<wbr>Url</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#isurlexternal" class="tsd-kind-icon">is<wbr>Url<wbr>External</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#isurlrelative" class="tsd-kind-icon">is<wbr>Url<wbr>Relative</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#isurlwithextension" class="tsd-kind-icon">is<wbr>Url<wbr>With<wbr>Extension</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#mapurltofilepath" class="tsd-kind-icon">map<wbr>Url<wbr>ToFile<wbr>Path</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#postbuild" class="tsd-kind-icon">post<wbr>Build</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#prependprotocoltobareurl" class="tsd-kind-icon">prepend<wbr>Protocol<wbr>ToBare<wbr>Url</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_migration_tool.html#processscrapedpage" class="tsd-kind-icon">process<wbr>Scraped<wbr>Page</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#removeallfilesfromdir" class="tsd-kind-icon">remove<wbr>All<wbr>Files<wbr>From<wbr>Dir</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#removetrailingslashfromurl" class="tsd-kind-icon">remove<wbr>Trailing<wbr>Slash<wbr>From<wbr>Url</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#renamejsxelement" class="tsd-kind-icon">rename<wbr>Jsx<wbr>Element</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#replaceattributes" class="tsd-kind-icon">replace<wbr>Attributes</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_migration_tool.html#replaceattributes-1" class="tsd-kind-icon">replace<wbr>Attributes</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="_bodiless_migration_tool.html#replacejsxelementname" class="tsd-kind-icon">replaceJSXElement<wbr>Name</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#replacerootjsxelement" class="tsd-kind-icon">replace<wbr>Root<wbr>Jsx<wbr>Element</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_migration_tool.html#stripwww" class="tsd-kind-icon">stripWWW</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#transformabsoluteurltorelative" class="tsd-kind-icon">transform<wbr>Absolute<wbr>Url<wbr>ToRelative</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#transformrelativeurltointernal" class="tsd-kind-icon">transform<wbr>Relative<wbr>Url<wbr>ToInternal</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#trimqueryparamsfromurl" class="tsd-kind-icon">trim<wbr>Query<wbr>Params<wbr>From<wbr>Url</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Object literals</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-object-literal tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_migration_tool.html#attrtransformerrules" class="tsd-kind-icon">attr<wbr>Transformer<wbr>Rules</a></li>
+								<li class="tsd-kind-object-literal tsd-parent-kind-module"><a href="_bodiless_migration_tool.html#page404handler" class="tsd-kind-icon">page404<wbr>Handler</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
+					<a name="attrtransformerconfig" class="tsd-anchor"></a>
+					<h3>Attr<wbr>Transformer<wbr>Config</h3>
+					<div class="tsd-signature tsd-kind-icon">Attr<wbr>Transformer<wbr>Config<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>attributes<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>namespaces<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/attr-transformer.ts#L17">packages/bodiless-migration-tool/src/attr-transformer.ts:17</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>attributes<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-index-signature">
+										<h5><span class="tsd-signature-symbol">[</span>attr: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">string</span></h5>
+									</li>
+								</ul>
+							</li>
+							<li class="tsd-parameter">
+								<h5>namespaces<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-index-signature">
+										<h5><span class="tsd-signature-symbol">[</span>attr: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">string</span></h5>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
+					<a name="transformertype" class="tsd-anchor"></a>
+					<h3>Transformer<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">Transformer<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>attrValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CheerioElement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/html-parser.ts#L52">packages/bodiless-migration-tool/src/html-parser.ts:52</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-siganture">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>attrValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, element<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CheerioElement</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>attrValue: <span class="tsd-signature-type">string</span></h5>
+											</li>
+											<li>
+												<h5>element: <span class="tsd-signature-type">CheerioElement</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+					<a name="component_label" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> COMPONENT_<wbr>LABEL</h3>
+					<div class="tsd-signature tsd-kind-icon">COMPONENT_<wbr>LABEL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"data-bl-component"</span><span class="tsd-signature-symbol"> = &quot;data-bl-component&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/html-to-components.ts#L20">packages/bodiless-migration-tool/src/html-to-components.ts:20</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+					<a name="hccrawler" class="tsd-anchor"></a>
+					<h3>HCCrawler</h3>
+					<div class="tsd-signature tsd-kind-icon">HCCrawler<span class="tsd-signature-symbol">:</span> <a href="_bodiless_migration_tool.html#hccrawler" class="tsd-signature-type">HCCrawler</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/scraper.ts#L27">packages/bodiless-migration-tool/src/scraper.ts:27</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="debug" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> debug</h3>
+					<div class="tsd-signature tsd-kind-icon">debug<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = require(&#x27;debug&#x27;)(&#x27;migration_tool&#x27;)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/debug.ts#L15">packages/bodiless-migration-tool/src/debug.ts:15</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Copyright © 2019 Johnson &amp; Johnson</p>
+						</div>
+						<p>Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+							you may not use this file except in compliance with the License.
+							You may obtain a copy of the License at
+							<a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a>
+							Unless required by applicable law or agreed to in writing, software
+							distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+							WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+							See the License for the specific language governing permissions and
+						limitations under the License.</p>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="addtrailingslashtourl" class="tsd-anchor"></a>
+					<h3>add<wbr>Trailing<wbr>Slash<wbr>ToUrl</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Trailing<wbr>Slash<wbr>ToUrl<span class="tsd-signature-symbol">(</span>pageUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L124">packages/bodiless-migration-tool/src/helpers.ts:124</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>pageUrl: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="cfdecodeemail" class="tsd-anchor"></a>
+					<h3>cf<wbr>Decode<wbr>Email</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">cf<wbr>Decode<wbr>Email<span class="tsd-signature-symbol">(</span>encodedString<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L168">packages/bodiless-migration-tool/src/helpers.ts:168</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>encodedString: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="deletefolderrecursive" class="tsd-anchor"></a>
+					<h3>delete<wbr>Folder<wbr>Recursive</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>Folder<wbr>Recursive<span class="tsd-signature-symbol">(</span>path1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L140">packages/bodiless-migration-tool/src/helpers.ts:140</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>path1: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="ensuredirectoryexistence" class="tsd-anchor"></a>
+					<h3>ensure<wbr>Directory<wbr>Existence</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">ensure<wbr>Directory<wbr>Existence<span class="tsd-signature-symbol">(</span>filePath<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L25">packages/bodiless-migration-tool/src/helpers.ts:25</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>filePath: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="evaluatepage" class="tsd-anchor"></a>
+					<h3>evaluate<wbr>Page</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">evaluate<wbr>Page<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>images<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>inlineScripts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>inlineStyles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>jsonLd<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>links<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>metatags<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>pictures<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>processedHtml<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>scripts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>styles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>videos<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/evaluate-page.ts#L15">packages/bodiless-migration-tool/src/evaluate-page.ts:15</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Copyright © 2019 Johnson &amp; Johnson</p>
+								</div>
+								<p>Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+									you may not use this file except in compliance with the License.
+									You may obtain a copy of the License at
+									<a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a>
+									Unless required by applicable law or agreed to in writing, software
+									distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+									WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+									See the License for the specific language governing permissions and
+								limitations under the License.</p>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span>images<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>inlineScripts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>inlineStyles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>jsonLd<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>links<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>metatags<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>pictures<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>processedHtml<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>scripts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>styles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>videos<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>images<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>inline<wbr>Scripts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>inline<wbr>Styles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>json<wbr>Ld<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>links<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>metatags<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>pictures<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>processed<wbr>Html<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>scripts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>styles<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>videos<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="formatjsx" class="tsd-anchor"></a>
+					<h3>format<wbr>Jsx</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">format<wbr>Jsx<span class="tsd-signature-symbol">(</span>jsx<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/jsx-parser.ts#L90">packages/bodiless-migration-tool/src/jsx-parser.ts:90</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>jsx: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="gethostnamewithoutwww" class="tsd-anchor"></a>
+					<h3>get<wbr>Host<wbr>Name<wbr>WithoutWWW</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Host<wbr>Name<wbr>WithoutWWW<span class="tsd-signature-symbol">(</span>host<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L71">packages/bodiless-migration-tool/src/helpers.ts:71</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>host: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+					<a name="getjsxelementname" class="tsd-anchor"></a>
+					<h3>getJSXElement<wbr>Name</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">getJSXElement<wbr>Name&lt;T&gt;<span class="tsd-signature-symbol">(</span>jsxElement<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/jsx-parser.ts#L26">packages/bodiless-migration-tool/src/jsx-parser.ts:26</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JSXOpeningElement</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">JSXClosingElement</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>jsxElement: <span class="tsd-signature-type">T</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="getpage404defaulturl" class="tsd-anchor"></a>
+					<h3>get<wbr>Page404<wbr>Default<wbr>Url</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Page404<wbr>Default<wbr>Url<span class="tsd-signature-symbol">(</span>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/page404-handler.ts#L19">packages/bodiless-migration-tool/src/page404-handler.ts:19</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>url: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="getparams" class="tsd-anchor"></a>
+					<h3>get<wbr>Params</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Params<span class="tsd-signature-symbol">(</span>settings<span class="tsd-signature-symbol">: </span><a href="../interfaces/_bodiless_migration_tool.page404initialsettings.html" class="tsd-signature-type">Page404initialSettings</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_bodiless_migration_tool.page404params.html" class="tsd-signature-type">Page404Params</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/page404-handler.ts#L23">packages/bodiless-migration-tool/src/page404-handler.ts:23</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>settings: <a href="../interfaces/_bodiless_migration_tool.page404initialsettings.html" class="tsd-signature-type">Page404initialSettings</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_bodiless_migration_tool.page404params.html" class="tsd-signature-type">Page404Params</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="geturltolocaldirectorymapper" class="tsd-anchor"></a>
+					<h3>get<wbr>Url<wbr>ToLocal<wbr>Directory<wbr>Mapper</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Url<wbr>ToLocal<wbr>Directory<wbr>Mapper<span class="tsd-signature-symbol">(</span>targetDir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L40">packages/bodiless-migration-tool/src/helpers.ts:40</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>targetDir: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Function</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="iscurrentpage404" class="tsd-anchor"></a>
+					<h3>is<wbr>Current<wbr>Page404</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Current<wbr>Page404<span class="tsd-signature-symbol">(</span>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, page404Url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/page404-handler.ts#L15">packages/bodiless-migration-tool/src/page404-handler.ts:15</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>url: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>page404Url: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="isfragmentonly" class="tsd-anchor"></a>
+					<h3>is<wbr>Fragment<wbr>Only</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Fragment<wbr>Only<span class="tsd-signature-symbol">(</span>url1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L67">packages/bodiless-migration-tool/src/helpers.ts:67</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>url1: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="isjavascriptprotocolurl" class="tsd-anchor"></a>
+					<h3>is<wbr>Javascript<wbr>Protocol<wbr>Url</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Javascript<wbr>Protocol<wbr>Url<span class="tsd-signature-symbol">(</span>url1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L62">packages/bodiless-migration-tool/src/helpers.ts:62</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>url1: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="isurlexternal" class="tsd-anchor"></a>
+					<h3>is<wbr>Url<wbr>External</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Url<wbr>External<span class="tsd-signature-symbol">(</span>baseUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, targetUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L50">packages/bodiless-migration-tool/src/helpers.ts:50</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>baseUrl: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>targetUrl: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="isurlrelative" class="tsd-anchor"></a>
+					<h3>is<wbr>Url<wbr>Relative</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Url<wbr>Relative<span class="tsd-signature-symbol">(</span>path1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L58">packages/bodiless-migration-tool/src/helpers.ts:58</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>path1: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="isurlwithextension" class="tsd-anchor"></a>
+					<h3>is<wbr>Url<wbr>With<wbr>Extension</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Url<wbr>With<wbr>Extension<span class="tsd-signature-symbol">(</span>url1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L120">packages/bodiless-migration-tool/src/helpers.ts:120</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>url1: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="mapurltofilepath" class="tsd-anchor"></a>
+					<h3>map<wbr>Url<wbr>ToFile<wbr>Path</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">map<wbr>Url<wbr>ToFile<wbr>Path<span class="tsd-signature-symbol">(</span>inputUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, targetDir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L35">packages/bodiless-migration-tool/src/helpers.ts:35</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>inputUrl: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>targetDir: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="postbuild" class="tsd-anchor"></a>
+					<h3>post<wbr>Build</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">post<wbr>Build<span class="tsd-signature-symbol">(</span>staticDir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/post-build.ts#L30">packages/bodiless-migration-tool/src/post-build.ts:30</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>staticDir: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="prependprotocoltobareurl" class="tsd-anchor"></a>
+					<h3>prepend<wbr>Protocol<wbr>ToBare<wbr>Url</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">prepend<wbr>Protocol<wbr>ToBare<wbr>Url<span class="tsd-signature-symbol">(</span>url$<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, protocol<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L182">packages/bodiless-migration-tool/src/helpers.ts:182</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>url$: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> protocol: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;https://&quot;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="processscrapedpage" class="tsd-anchor"></a>
+					<h3>process<wbr>Scraped<wbr>Page</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">process<wbr>Scraped<wbr>Page<span class="tsd-signature-symbol">(</span>result<span class="tsd-signature-symbol">: </span><a href="../interfaces/_bodiless_migration_tool.scrapedpage.html" class="tsd-signature-type">ScrapedPage</a>, page404Params<span class="tsd-signature-symbol">: </span><a href="../interfaces/_bodiless_migration_tool.page404params.html" class="tsd-signature-type">Page404Params</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_bodiless_migration_tool.scrapedpage.html" class="tsd-signature-type">ScrapedPage</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/page404-handler.ts#L39">packages/bodiless-migration-tool/src/page404-handler.ts:39</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>result: <a href="../interfaces/_bodiless_migration_tool.scrapedpage.html" class="tsd-signature-type">ScrapedPage</a></h5>
+								</li>
+								<li>
+									<h5>page404Params: <a href="../interfaces/_bodiless_migration_tool.page404params.html" class="tsd-signature-type">Page404Params</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_bodiless_migration_tool.scrapedpage.html" class="tsd-signature-type">ScrapedPage</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="removeallfilesfromdir" class="tsd-anchor"></a>
+					<h3>remove<wbr>All<wbr>Files<wbr>From<wbr>Dir</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">remove<wbr>All<wbr>Files<wbr>From<wbr>Dir<span class="tsd-signature-symbol">(</span>directory<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L154">packages/bodiless-migration-tool/src/helpers.ts:154</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>directory: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="removetrailingslashfromurl" class="tsd-anchor"></a>
+					<h3>remove<wbr>Trailing<wbr>Slash<wbr>From<wbr>Url</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">remove<wbr>Trailing<wbr>Slash<wbr>From<wbr>Url<span class="tsd-signature-symbol">(</span>pageUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L104">packages/bodiless-migration-tool/src/helpers.ts:104</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>pageUrl: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="renamejsxelement" class="tsd-anchor"></a>
+					<h3>rename<wbr>Jsx<wbr>Element</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">rename<wbr>Jsx<wbr>Element<span class="tsd-signature-symbol">(</span>jsx<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, elementName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, newElementName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/jsx-parser.ts#L64">packages/bodiless-migration-tool/src/jsx-parser.ts:64</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>jsx: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>elementName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>newElementName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="replaceattributes" class="tsd-anchor"></a>
+					<h3>replace<wbr>Attributes</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">replace<wbr>Attributes<span class="tsd-signature-symbol">(</span>input<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, direction<span class="tsd-signature-symbol">: </span><a href="../enums/_bodiless_migration_tool.attrtransformerdirecton.html" class="tsd-signature-type">AttrTransformerDirecton</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/attr-transformer.ts#L36">packages/bodiless-migration-tool/src/attr-transformer.ts:36</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>input: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>direction: <a href="../enums/_bodiless_migration_tool.attrtransformerdirecton.html" class="tsd-signature-type">AttrTransformerDirecton</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="replaceattributes-1" class="tsd-anchor"></a>
+					<h3>replace<wbr>Attributes</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">replace<wbr>Attributes<span class="tsd-signature-symbol">(</span>pagePath<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/post-build.ts#L24">packages/bodiless-migration-tool/src/post-build.ts:24</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>pagePath: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+					<a name="replacejsxelementname" class="tsd-anchor"></a>
+					<h3>replaceJSXElement<wbr>Name</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">replaceJSXElement<wbr>Name&lt;T&gt;<span class="tsd-signature-symbol">(</span>jsxElement<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, newElement<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/jsx-parser.ts#L31">packages/bodiless-migration-tool/src/jsx-parser.ts:31</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JSXOpeningElement</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">JSXClosingElement</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>jsxElement: <span class="tsd-signature-type">T</span></h5>
+								</li>
+								<li>
+									<h5>newElement: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="replacerootjsxelement" class="tsd-anchor"></a>
+					<h3>replace<wbr>Root<wbr>Jsx<wbr>Element</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">replace<wbr>Root<wbr>Jsx<wbr>Element<span class="tsd-signature-symbol">(</span>jsx<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, newElement<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/jsx-parser.ts#L42">packages/bodiless-migration-tool/src/jsx-parser.ts:42</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>jsx: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>newElement: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="stripwww" class="tsd-anchor"></a>
+					<h3>stripWWW</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">stripWWW<span class="tsd-signature-symbol">(</span>host<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L46">packages/bodiless-migration-tool/src/helpers.ts:46</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>host: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="transformabsoluteurltorelative" class="tsd-anchor"></a>
+					<h3>transform<wbr>Absolute<wbr>Url<wbr>ToRelative</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">transform<wbr>Absolute<wbr>Url<wbr>ToRelative<span class="tsd-signature-symbol">(</span>absoluteUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, pageUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L87">packages/bodiless-migration-tool/src/helpers.ts:87</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>absoluteUrl: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>pageUrl: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="transformrelativeurltointernal" class="tsd-anchor"></a>
+					<h3>transform<wbr>Relative<wbr>Url<wbr>ToInternal</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">transform<wbr>Relative<wbr>Url<wbr>ToInternal<span class="tsd-signature-symbol">(</span>relativeUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, pageUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L76">packages/bodiless-migration-tool/src/helpers.ts:76</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>relativeUrl: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>pageUrl: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="trimqueryparamsfromurl" class="tsd-anchor"></a>
+					<h3>trim<wbr>Query<wbr>Params<wbr>From<wbr>Url</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">trim<wbr>Query<wbr>Params<wbr>From<wbr>Url<span class="tsd-signature-symbol">(</span>sourceUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/helpers.ts#L19">packages/bodiless-migration-tool/src/helpers.ts:19</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>sourceUrl: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Object literals</h2>
+				<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-module tsd-is-not-exported">
+					<a name="attrtransformerrules" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> attr<wbr>Transformer<wbr>Rules</h3>
+					<div class="tsd-signature tsd-kind-icon">attr<wbr>Transformer<wbr>Rules<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/attr-transformer.ts#L27">packages/bodiless-migration-tool/src/attr-transformer.ts:27</a></li>
+						</ul>
+					</aside>
+					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal tsd-is-not-exported">
+						<a name="attrtransformerrules.attributes-1" class="tsd-anchor"></a>
+						<h3>attributes</h3>
+						<div class="tsd-signature tsd-kind-icon">attributes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/attr-transformer.ts#L31">packages/bodiless-migration-tool/src/attr-transformer.ts:31</a></li>
+							</ul>
+						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal tsd-is-not-exported">
+							<a name="attrtransformerrules.attributes-1.onclick" class="tsd-anchor"></a>
+							<h3>onclick</h3>
+							<div class="tsd-signature tsd-kind-icon">onclick<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;fakeonclick&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/attr-transformer.ts#L32">packages/bodiless-migration-tool/src/attr-transformer.ts:32</a></li>
+								</ul>
+							</aside>
+						</section>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal tsd-is-not-exported">
+						<a name="attrtransformerrules.namespaces-1" class="tsd-anchor"></a>
+						<h3>namespaces</h3>
+						<div class="tsd-signature tsd-kind-icon">namespaces<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/attr-transformer.ts#L28">packages/bodiless-migration-tool/src/attr-transformer.ts:28</a></li>
+							</ul>
+						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal tsd-is-not-exported">
+							<a name="attrtransformerrules.namespaces-1.xmlns_" class="tsd-anchor"></a>
+							<h3>xmlns:</h3>
+							<div class="tsd-signature tsd-kind-icon">xmlns:<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;fakexmlns&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/attr-transformer.ts#L29">packages/bodiless-migration-tool/src/attr-transformer.ts:29</a></li>
+								</ul>
+							</aside>
+						</section>
+					</section>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-module">
+					<a name="page404handler" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> page404<wbr>Handler</h3>
+					<div class="tsd-signature tsd-kind-icon">page404<wbr>Handler<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/page404-handler.ts#L59">packages/bodiless-migration-tool/src/page404-handler.ts:59</a></li>
+						</ul>
+					</aside>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="page404handler.getparams-1" class="tsd-anchor"></a>
+						<h3>get<wbr>Params</h3>
+						<div class="tsd-signature tsd-kind-icon">get<wbr>Params<span class="tsd-signature-symbol">:</span> <a href="_bodiless_migration_tool.html#getparams" class="tsd-signature-type">getParams</a></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/page404-handler.ts#L60">packages/bodiless-migration-tool/src/page404-handler.ts:60</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="page404handler.processscrapedpage-1" class="tsd-anchor"></a>
+						<h3>process<wbr>Scraped<wbr>Page</h3>
+						<div class="tsd-signature tsd-kind-icon">process<wbr>Scraped<wbr>Page<span class="tsd-signature-symbol">:</span> <a href="_bodiless_migration_tool.html#processscrapedpage" class="tsd-signature-type">processScrapedPage</a></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-migration-tool/src/page404-handler.ts#L61">packages/bodiless-migration-tool/src/page404-handler.ts:61</a></li>
+							</ul>
+						</aside>
+					</section>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_accessibility.html">@bodiless/accessibility</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_backend.html">@bodiless/backend</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_bv.html">@bodiless/bv</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_components.html">@bodiless/components</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_core.html">@bodiless/core</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_core_ui.html">@bodiless/core-<wbr>ui</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_documentation.html">@bodiless/documentation</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_fclasses.html">@bodiless/fclasses</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_gatsby_plugin_ssi.html">@bodiless/gatsby-<wbr>plugin-<wbr>ssi</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_gatsby_starter_bodiless.html">@bodiless/gatsby-<wbr>starter-<wbr>bodiless</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_gatsby_theme_bodiless.html">@bodiless/gatsby-<wbr>theme-<wbr>bodiless</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_headless_chrome_crawler.html">@bodiless/headless-<wbr>chrome-<wbr>crawler</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_layouts.html">@bodiless/layouts</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_layouts_ui.html">@bodiless/layouts-<wbr>ui</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="_bodiless_migration_tool.html">@bodiless/migration-<wbr>tool</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_organisms.html">@bodiless/organisms</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_psh.html">@bodiless/psh</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_richtext.html">@bodiless/richtext</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_richtext_ui.html">@bodiless/richtext-<wbr>ui</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_ui.html">@bodiless/ui</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-enum tsd-parent-kind-module">
+						<a href="../enums/_bodiless_migration_tool.attrtransformerdirecton.html" class="tsd-kind-icon">Attr<wbr>Transformer<wbr>Directon</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../enums/_bodiless_migration_tool.commandtype.html" class="tsd-kind-icon">Command<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-parent-kind-module">
+						<a href="../enums/_bodiless_migration_tool.componentscope.html" class="tsd-kind-icon">Component<wbr>Scope</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-parent-kind-module">
+						<a href="../enums/_bodiless_migration_tool.trailingslash.html" class="tsd-kind-icon">Trailing<wbr>Slash</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-parent-kind-module">
+						<a href="../enums/_bodiless_migration_tool.transformerrule.html" class="tsd-kind-icon">Transformer<wbr>Rule</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_bodiless_migration_tool.canvasx.html" class="tsd-kind-icon">CanvasX</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_bodiless_migration_tool.downloader.html" class="tsd-kind-icon">Downloader</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_bodiless_migration_tool.htmlparser.html" class="tsd-kind-icon">Html<wbr>Parser</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_bodiless_migration_tool.htmltocomponents.html" class="tsd-kind-icon">Html<wbr>ToComponents</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_bodiless_migration_tool.migrationtool.html" class="tsd-kind-icon">Migration<wbr>Tool</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_bodiless_migration_tool.pagecreator.html" class="tsd-kind-icon">Page<wbr>Creator</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_bodiless_migration_tool.resourcesfromcssextractor.html" class="tsd-kind-icon">Resources<wbr>From<wbr>Css<wbr>Extractor</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_bodiless_migration_tool.scraper.html" class="tsd-kind-icon">Scraper</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/_bodiless_migration_tool.siteflattener.html" class="tsd-kind-icon">Site<wbr>Flattener</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../interfaces/_bodiless_migration_tool.events.html" class="tsd-kind-icon">Events</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_bodiless_migration_tool.htmlattrs.html" class="tsd-kind-icon">Html<wbr>Attrs</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../interfaces/_bodiless_migration_tool.htmlparserinterface.html" class="tsd-kind-icon">Html<wbr>Parser<wbr>Interface</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_bodiless_migration_tool.htmltocomponentsrule.html" class="tsd-kind-icon">Html<wbr>ToComponents<wbr>Rule</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_bodiless_migration_tool.htmltocomponentssettings.html" class="tsd-kind-icon">Html<wbr>ToComponents<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_bodiless_migration_tool.jamstackapp.html" class="tsd-kind-icon">Jam<wbr>Stack<wbr>App</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_bodiless_migration_tool.jamstackappparams.html" class="tsd-kind-icon">Jam<wbr>Stack<wbr>App<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_bodiless_migration_tool.metatag.html" class="tsd-kind-icon">Meta<wbr>Tag</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_bodiless_migration_tool.page404params.html" class="tsd-kind-icon">Page404<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_bodiless_migration_tool.page404initialsettings.html" class="tsd-kind-icon">Page404initial<wbr>Settings</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_bodiless_migration_tool.pagecreatorparams.html" class="tsd-kind-icon">Page<wbr>Creator<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_bodiless_migration_tool.scrapedpage.html" class="tsd-kind-icon">Scraped<wbr>Page</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_bodiless_migration_tool.scraperparams.html" class="tsd-kind-icon">Scraper<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_bodiless_migration_tool.siteflattenerparams.html" class="tsd-kind-icon">Site<wbr>Flattener<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/_bodiless_migration_tool.transformer.html" class="tsd-kind-icon">Transformer</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_migration_tool.html#attrtransformerconfig" class="tsd-kind-icon">Attr<wbr>Transformer<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_migration_tool.html#transformertype" class="tsd-kind-icon">Transformer<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_migration_tool.html#component_label" class="tsd-kind-icon">COMPONENT_<wbr>LABEL</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_migration_tool.html#hccrawler" class="tsd-kind-icon">HCCrawler</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#debug" class="tsd-kind-icon">debug</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#addtrailingslashtourl" class="tsd-kind-icon">add<wbr>Trailing<wbr>Slash<wbr>ToUrl</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#cfdecodeemail" class="tsd-kind-icon">cf<wbr>Decode<wbr>Email</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#deletefolderrecursive" class="tsd-kind-icon">delete<wbr>Folder<wbr>Recursive</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#ensuredirectoryexistence" class="tsd-kind-icon">ensure<wbr>Directory<wbr>Existence</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#evaluatepage" class="tsd-kind-icon">evaluate<wbr>Page</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#formatjsx" class="tsd-kind-icon">format<wbr>Jsx</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#gethostnamewithoutwww" class="tsd-kind-icon">get<wbr>Host<wbr>Name<wbr>WithoutWWW</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="_bodiless_migration_tool.html#getjsxelementname" class="tsd-kind-icon">getJSXElement<wbr>Name</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#getpage404defaulturl" class="tsd-kind-icon">get<wbr>Page404<wbr>Default<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_migration_tool.html#getparams" class="tsd-kind-icon">get<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#geturltolocaldirectorymapper" class="tsd-kind-icon">get<wbr>Url<wbr>ToLocal<wbr>Directory<wbr>Mapper</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#iscurrentpage404" class="tsd-kind-icon">is<wbr>Current<wbr>Page404</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_migration_tool.html#isfragmentonly" class="tsd-kind-icon">is<wbr>Fragment<wbr>Only</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_migration_tool.html#isjavascriptprotocolurl" class="tsd-kind-icon">is<wbr>Javascript<wbr>Protocol<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#isurlexternal" class="tsd-kind-icon">is<wbr>Url<wbr>External</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#isurlrelative" class="tsd-kind-icon">is<wbr>Url<wbr>Relative</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#isurlwithextension" class="tsd-kind-icon">is<wbr>Url<wbr>With<wbr>Extension</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#mapurltofilepath" class="tsd-kind-icon">map<wbr>Url<wbr>ToFile<wbr>Path</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#postbuild" class="tsd-kind-icon">post<wbr>Build</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#prependprotocoltobareurl" class="tsd-kind-icon">prepend<wbr>Protocol<wbr>ToBare<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_migration_tool.html#processscrapedpage" class="tsd-kind-icon">process<wbr>Scraped<wbr>Page</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#removeallfilesfromdir" class="tsd-kind-icon">remove<wbr>All<wbr>Files<wbr>From<wbr>Dir</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#removetrailingslashfromurl" class="tsd-kind-icon">remove<wbr>Trailing<wbr>Slash<wbr>From<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#renamejsxelement" class="tsd-kind-icon">rename<wbr>Jsx<wbr>Element</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#replaceattributes" class="tsd-kind-icon">replace<wbr>Attributes</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_migration_tool.html#replaceattributes-1" class="tsd-kind-icon">replace<wbr>Attributes</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="_bodiless_migration_tool.html#replacejsxelementname" class="tsd-kind-icon">replaceJSXElement<wbr>Name</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#replacerootjsxelement" class="tsd-kind-icon">replace<wbr>Root<wbr>Jsx<wbr>Element</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_migration_tool.html#stripwww" class="tsd-kind-icon">stripWWW</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#transformabsoluteurltorelative" class="tsd-kind-icon">transform<wbr>Absolute<wbr>Url<wbr>ToRelative</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#transformrelativeurltointernal" class="tsd-kind-icon">transform<wbr>Relative<wbr>Url<wbr>ToInternal</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#trimqueryparamsfromurl" class="tsd-kind-icon">trim<wbr>Query<wbr>Params<wbr>From<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_migration_tool.html#attrtransformerrules" class="tsd-kind-icon">attr<wbr>Transformer<wbr>Rules</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-parent-kind-module">
+						<a href="_bodiless_migration_tool.html#page404handler" class="tsd-kind-icon">page404<wbr>Handler</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

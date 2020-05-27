@@ -41,7 +41,8 @@
     "start": "npm run build:watch",
     "test": "jest",
     "test:ci": "start-server-and-test sites:launch-test http://localhost:8005 cy:run",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "docs": "rm -rf docs && typedoc"
   },
   "husky": {
     "hooks": {
@@ -112,7 +113,11 @@
     "ts-jest": "^24.0.2",
     "tslint": "^5.12.1",
     "tslint-config-airbnb": "^5.11.1",
-    "typescript": "^3.4.5"
+    "typescript": "^3.4.5",
+    "jsdoc": "^3.6.4",
+    "@microsoft/tsdoc": "^0.12.20",
+    "typedoc": "~0.16",
+    "typedoc-plugin-lerna-packages": "^0.3.0"
   },
   "repository": {
     "type": "git",

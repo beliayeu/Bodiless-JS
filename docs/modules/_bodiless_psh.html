@@ -1,0 +1,1648 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@bodiless/psh | bodilessjs</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">bodilessjs</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="_bodiless_psh.html">@bodiless/psh</a>
+				</li>
+			</ul>
+			<h1>Module @bodiless/psh</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<a href="#bodiless-integration-with-platformsh" id="bodiless-integration-with-platformsh" style="color: inherit; text-decoration: none;">
+						<h1>Bodiless integration with platform.sh</h1>
+					</a>
+					<p>This package provides standard configuration files and helpe<a href="https://github.com/johnsonandjohnson/Bodiless-JS/issues/65https://github.com/johnsonandjohnson/Bodiless-JS/issues/65r">https://github.com/johnsonandjohnson/Bodiless-JS/issues/65https://github.com/johnsonandjohnson/Bodiless-JS/issues/65r</a> scripts which
+					make it easy for a bodiless site to be deployed to platform.sh.</p>
+					<a href="#setting-up-your-project" id="setting-up-your-project" style="color: inherit; text-decoration: none;">
+						<h2>Setting up your project</h2>
+					</a>
+					<a href="#pre-requisites" id="pre-requisites" style="color: inherit; text-decoration: none;">
+						<h3>Pre-requisites</h3>
+					</a>
+					<ul>
+						<li>Admin access to a <a href="https://platform.sh/">platform.sh</a> project.</li>
+						<li>A service user with <em>admin access</em> to a repository in a Bitbucket Server instance.</li>
+						<li>The <a href="https://docs.platform.sh/gettingstarted/cli.html">platform.sh cli</a></li>
+					</ul>
+					<a href="#step-1-gather-required-information" id="step-1-gather-required-information" style="color: inherit; text-decoration: none;">
+						<h3>Step 1. Gather required information</h3>
+					</a>
+					<p>To continue, you will need the following:</p>
+					<a href="#the-platformsh-project-key" id="the-platformsh-project-key" style="color: inherit; text-decoration: none;">
+						<h4>The platform.sh project key</h4>
+					</a>
+					<ul>
+						<li>Log in via the platform.sh cli.  From your local machine execute:<pre><code><span class="hljs-keyword">platform</span> login</code></pre>You will directed to log in via a web browser</li>
+						<li>Execute<pre><code>platform <span class="hljs-keyword">project</span>:<span class="hljs-keyword">list</span></code></pre>You should see a list of all projects you have access to, something like:<pre><code><span class="hljs-section">  Your projects are:
++---------------+-------------------------+-----------------------------------------------------+</span>
+<span class="hljs-section">| ID            | Title                   | URL                                                 |
++---------------+-------------------------+-----------------------------------------------------+</span>
+| abcdefghijklm | project<span class="hljs-emphasis">_a               | https://console.platform.sh/webalerts/abcdefghijklm |
+| lmnopqrstuvwx | project_</span>b               | https://console.platform.sh/webalerts/lmnopqrstuvwx |
+<span class="hljs-code">+---------------+</span>-------------------------<span class="hljs-code">+-----------------------------------------------------+</span>`</code></pre></li>
+						<li>Take note of the project ID for your project. This is the value you will use below.</li>
+					</ul>
+					<a href="#step-2-initialize-your-project-configuration-files" id="step-2-initialize-your-project-configuration-files" style="color: inherit; text-decoration: none;">
+						<h3>Step 2. Initialize your project configuration files</h3>
+					</a>
+					<p>Platform.sh requires several configuration files to be in place
+						in your repository. This package contains default versions of these
+					files for a BodilessJS.  To install or update them:</p>
+					<ol>
+						<li><p>Add this package as a dependency of your project:</p>
+						<pre><code><span class="hljs-built_in">npm</span> i --save-dev @bodiless/psh</code></pre></li>
+						<li><p>Add the following to your <code>package.json</code> scripts:</p>
+						<pre><code><span class="hljs-string">"init-psh"</span>: <span class="hljs-string">"bodiless-psh-init"</span></code></pre></li>
+						<li><p>Install or update the configuration files:</p>
+							<pre><code>npm <span class="hljs-keyword">run</span><span class="bash"> init-psh</span></code></pre><blockquote>
+								<p>When <code>@bodiless/psh</code> is installing its&#39; files it will try to merge <code>static</code> and <code>edit</code> <code>*.platform.app.yaml</code> files based on the whitelisted keys from <code>packages/bodiless-psh/resources/.platform/platform.whitelist.yaml</code>. Only the keys that are specified in <code>platform.whitelist.yaml</code> will be merged. Merging will be performed by using the recursive algorithm to preserve any keys that are not in default <code>.platform.app.yaml</code>. Non-whitelisted keys will be ignored, and a warning message will be printed to the console.</p>
+							</blockquote>
+						</li>
+						<li><p>Commit the added configuration files to your repository.  These include</p>
+							<pre><code><span class="hljs-selector-tag">static</span><span class="hljs-selector-class">.platform</span><span class="hljs-selector-class">.sh</span>
+<span class="hljs-selector-class">.platform</span><span class="hljs-selector-class">.app</span><span class="hljs-selector-class">.yaml</span>
+<span class="hljs-selector-class">.platform</span><span class="hljs-comment">/*
+edit/*</span></code></pre></li>
+					</ol>
+					<a href="#step-3-create-platformsh-environment-variables" id="step-3-create-platformsh-environment-variables" style="color: inherit; text-decoration: none;">
+						<h3>Step 3. Create platform.sh environment variables.</h3>
+					</a>
+					<p>First, configure your local install to connect to your platform.sh project. From
+					within your project root, execute</p>
+					<pre><code>platform <span class="hljs-keyword">project</span>:<span class="hljs-keyword">set</span>-remote {<span class="hljs-keyword">project</span> id}</code></pre><p>where {project id} is the platform.sh project id you acquired above.</p>
+					<p>All variables below should be set at the project level using the platform.sh command
+					line, as described in <a href="https://docs.platform.sh/development/variables.html#project-variables">the platform.sh documentation</a>, and all should be visible at both build time and run time.</p>
+					<p>Add the following variables:</p>
+					<ul>
+						<li>env:APP_GIT_REMOTE_URL -- The URL of your upstream Git repository</li>
+						<li>env:APP_GIT_USER -- The user to access your upstream Git repository.</li>
+						<li>env:APP_GIT_USER_EMAIL -- THe user email for your upstream Git repository.</li>
+						<li>env:APP_GIT_PW -- The user password for your upstream Git repository.<pre><code></code></pre></li>
+					</ul>
+					<blockquote>
+						<p>Be sure to specify <code>--sensitive true</code> for all credentials.</p>
+					</blockquote>
+					<p>Example:</p>
+					<pre><code>$ platform variable:<span class="hljs-keyword">create</span>
+* <span class="hljs-keyword">Level</span> (<span class="hljs-comment">--level)</span>
+The <span class="hljs-keyword">level</span> <span class="hljs-keyword">at</span> which <span class="hljs-keyword">to</span> <span class="hljs-keyword">set</span> the <span class="hljs-keyword">variable</span>
+  [<span class="hljs-keyword">project</span>    ] <span class="hljs-keyword">Project</span>-wide
+  [environment] Environment-specific
+&gt; <span class="hljs-keyword">project</span>
+
+* <span class="hljs-keyword">Name</span> (<span class="hljs-comment">--name)</span>
+The <span class="hljs-keyword">variable</span> <span class="hljs-keyword">name</span>
+&gt; APP_GIT_USER_EMAIL
+
+* <span class="hljs-keyword">Value</span> (<span class="hljs-comment">--value)</span>
+The <span class="hljs-keyword">variable</span><span class="hljs-string">'s value
+&gt; email@your.service.account
+
+JSON (--json)
+Is the value JSON-formatted? [y|N] N
+
+Sensitive (--sensitive)
+Is the value sensitive? [y|N] N
+
+Prefix (--prefix)
+The variable name'</span>s prefix
+<span class="hljs-keyword">Default</span>: <span class="hljs-keyword">none</span>
+  [<span class="hljs-keyword">none</span>] <span class="hljs-keyword">No</span> prefix: The <span class="hljs-keyword">variable</span> will be part <span class="hljs-keyword">of</span> $PLATFORM_VARIABLES.
+  [env:] env: The <span class="hljs-keyword">variable</span> will be exposed directly, e.g. <span class="hljs-keyword">as</span> $APP_GIT_USER_EMAIL.
+&gt; env:
+
+<span class="hljs-keyword">Visible</span> <span class="hljs-keyword">at</span> <span class="hljs-keyword">build</span> <span class="hljs-built_in">time</span> (<span class="hljs-comment">--visible-build)</span>
+Should the <span class="hljs-keyword">variable</span> be available <span class="hljs-keyword">at</span> <span class="hljs-keyword">build</span> <span class="hljs-built_in">time</span>? [Y|n] Y
+
+<span class="hljs-keyword">Visible</span> <span class="hljs-keyword">at</span> runtime (<span class="hljs-comment">--visible-runtime)</span>
+Should the <span class="hljs-keyword">variable</span> be available <span class="hljs-keyword">at</span> runtime? [Y|n] Y
+
+Creating <span class="hljs-keyword">variable</span> env:APP_GIT_USER_EMAIL <span class="hljs-keyword">on</span> the project...</code></pre><p>You can verify that the variable was created properly by executing, eg:</p>
+					<pre><code>  <span class="hljs-built_in">platform</span> <span class="hljs-built_in">variable</span>:<span class="hljs-built_in">get</span> env:APP_GIT_USER_EMAIL</code></pre><p>  You should see something like:</p>
+					<pre><code>  $ platform variable:get env:APP_NPM_AUTH
+  +-----------------+---------------------------+
+  |<span class="hljs-string"> Property        </span>|<span class="hljs-string"> Value                     </span>|
+  +-----------------+---------------------------+
+  |<span class="hljs-string"> id              </span>|<span class="hljs-string"> env:APP_GIT_USER_EMAL     </span>|
+  |<span class="hljs-string"> created_at      </span>|<span class="hljs-string"> 2019-08-09T06:48:52-04:00 </span>|
+  |<span class="hljs-string"> updated_at      </span>|<span class="hljs-string"> 2019-08-09T06:48:52-04:00 </span>|
+  |<span class="hljs-string"> name            </span>|<span class="hljs-string"> env:APP_GIT_USER_EMAIL    </span>|
+  |<span class="hljs-string"> attributes      </span>|<span class="hljs-string"> {  }                      </span>|
+  |<span class="hljs-string"> is_json         </span>|<span class="hljs-string"> false                     </span>|
+  |<span class="hljs-string"> is_sensitive    </span>|<span class="hljs-string"> false                     </span>|
+  |<span class="hljs-string"> visible_build   </span>|<span class="hljs-string"> true                      </span>|
+  |<span class="hljs-string"> visible_runtime </span>|<span class="hljs-string"> true                      </span>|
+  |<span class="hljs-string"> level           </span>|<span class="hljs-string"> project                   </span>|
+  +-----------------+---------------------------+</code></pre>
+					<a href="#optional-configure-an-npm-private-registry" id="optional-configure-an-npm-private-registry" style="color: inherit; text-decoration: none;">
+						<h4>Optional: Configure an NPM Private Registry</h4>
+					</a>
+					<p>If you wish to install packages from a private registry, you may do so. The
+						packages to be installed must be namespaced. Set the following 3 environment
+					variables on p.sh. All variables should be visible at both build and run time:</p>
+					<ul>
+						<li><p><code>env:APP_NPM_REGISTRY</code>: the full path to your registry, eg
+							<code>//my-artifactory.com/api/npm/my-registry/</code>.</p>
+						</li>
+						<li><p><code>env:APP_NPM_AUTH</code>: Ypur NPM authentication token. This should be marked as sensitive.
+							To obtain your token:</p>
+							<ol>
+								<li>Login to your registry:<pre><code>npm login --registry=https:<span class="hljs-regexp">//u</span>rl<span class="hljs-regexp">/of/y</span>our<span class="hljs-regexp">/private/</span>registry</code></pre>Follow the prompts with the username/password/email of the account you wish
+								to use for p.sh automation.</li>
+								<li>Examine your <code>.npmrc</code> file (usually located in your home directory). You
+								should see something like<pre><code><span class="hljs-regexp">//u</span>rl<span class="hljs-regexp">/of/y</span>our<span class="hljs-regexp">/privateregistry/</span>:_authToken={token}</code></pre></li>
+								<li>Copy the token value to the <code>env:APP_NPM_AUTH</code> variable in your p.sh project.</li>
+							</ol>
+						</li>
+						<li><p><code>env:APP_NPM_NAMESPACE</code>: The namespace of the packages in your private
+							regsitry, eg <code>@mynamespace</code>.</p>
+						</li>
+					</ul>
+					<a href="#step-4-configure-the-platformsh-git-service-integration" id="step-4-configure-the-platformsh-git-service-integration" style="color: inherit; text-decoration: none;">
+						<h3>Step 4. Configure the platform.sh Git Service integration.</h3>
+					</a>
+					<p>Platform.sh provides out-of-the-box integrations with many popular Git service providers.
+					We have tested with Bitbucket Server and GitHub.</p>
+					<p>Note that you must have admin access to the repository in order to configure the integration.</p>
+					<a href="#github" id="github" style="color: inherit; text-decoration: none;">
+						<h4>GitHub</h4>
+					</a>
+					<p>From your project root, execute <code>platform integration:add</code> and follow
+					the prompts, as:</p>
+					<pre><code>$ platform integration:add
+<span class="hljs-symbol">*</span> Integration type (--type)
+Enter a number to choose:
+  [0] bitbucket
+  [1] bitbucket_server
+  [2] github
+  [3] gitlab
+  [4] hipchat
+  [5] webhook
+  [6] health.email
+  [7] health.pagerduty
+  [8] health.slack
+  [9] health.webhook
+&gt; 2
+
+<span class="hljs-symbol">*</span> Token (--token)
+An access token for the integration
+&gt; {your GitHub personal access token}
+
+<span class="hljs-symbol">*</span> Repository (--repository)
+The repository (e.g. 'foo/bar')
+&gt; johnsonandjohnson/Bodiless-JS
+
+Build pull requests (--build-pull-requests)
+Build every pull request as an environment? [Y|<span class="hljs-string">n] Y
+
+Build pull requests post-merge (--build-pull-requests-post-merge)
+Build pull requests based on their post-merge state? [y</span>|<span class="hljs-string">N] y
+
+Clone data for pull requests (--pull-requests-clone-parent-data)
+Clone the parent environment's data for pull requests? [Y</span>|<span class="hljs-string">n] n
+
+Fetch branches (--fetch-branches)
+Fetch all branches from the remote (as inactive environments)? [Y</span>|<span class="hljs-string">n] y
+
+Prune branches (--prune-branches)
+Delete branches that do not exist on the remote? [Y</span>|<span class="hljs-string">n] y
+
+Warning: adding a 'github' integration will automatically synchronize code from the external Git repository.
+This means it can overwrite all the code in your project.
+
+Are you sure you want to continue? [y/N] y
+Checking webhook configuration on the repository: johnsonandjohnson/Bodiless-JS
+  Creating new webhook
+  Webhook created successfully
+Created integration xxxxxxxx (type: github)
++---------------------------+--------------------------------------------------------------------+
+</span>|<span class="hljs-string"> Property                  </span>|<span class="hljs-string"> Value                                                              </span>|
++---------------------------+--------------------------------------------------------------------+
+|<span class="hljs-string"> id                        </span>|<span class="hljs-string"> xxxxxxx                                                            </span>|
+|<span class="hljs-string"> type                      </span>|<span class="hljs-string"> github                                                             </span>|
+|<span class="hljs-string"> token                     </span>|<span class="hljs-string"> ******                                                             </span>|
+|<span class="hljs-string"> base_url                  </span>|<span class="hljs-string">                                                                    </span>|
+|<span class="hljs-string"> repository                </span>|<span class="hljs-string"> foo/bar                                                            </span>|
+|<span class="hljs-string"> fetch_branches            </span>|<span class="hljs-string"> true                                                               </span>|
+|<span class="hljs-string"> prune_branches            </span>|<span class="hljs-string"> true                                                               </span>|
+|<span class="hljs-string"> build_pull_requests       </span>|<span class="hljs-string"> true                                                               </span>|
+|<span class="hljs-string"> build_pull_requests_post_ </span>|<span class="hljs-string"> true                                                               </span>|
+|<span class="hljs-string"> merge                     </span>|<span class="hljs-string">                                                                    </span>|
+|<span class="hljs-string"> pull_requests_clone_paren </span>|<span class="hljs-string"> false                                                              </span>|
+|<span class="hljs-string"> t_data                    </span>|<span class="hljs-string">                                                                    </span>|
+|<span class="hljs-string"> hook_url                  </span>|<span class="hljs-string"> https://us-2.platform.sh/api/projects/jvaff4bu65vgm/integrations/4 </span>|
+|<span class="hljs-string">                           </span>|<span class="hljs-string"> 4zqv2kqqfcgq/hook                                                  </span>|
++---------------------------+--------------------------------------------------------------------+</code></pre>
+					<a href="#bitbucket-server" id="bitbucket-server" style="color: inherit; text-decoration: none;">
+						<h4>Bitbucket Server</h4>
+					</a>
+					<p>From your project root, execute <code>platform integration:add</code> and follow
+					the prompts, as:</p>
+					<pre><code class="language-bash">$ platform integration:add
+* Integration <span class="hljs-built_in">type</span> (--<span class="hljs-built_in">type</span>)
+Enter a number to choose:
+  [0] bitbucket
+  [1] bitbucket_server
+  [2] github
+  [3] gitlab
+  [4] hipchat
+  [5] webhook
+  [6] health.email
+  [7] health.pagerduty
+  [8] health.slack
+&gt; 1
+
+* Username (--username)
+The Bitbucket Server username
+&gt; {bitbukcet service username}
+
+* Token (--token)
+An access token <span class="hljs-keyword">for</span> the integration
+&gt; {bitbucket service user password}
+
+* Repository (--repository)
+The repository (e.g. <span class="hljs-string">'foo/bar'</span>)
+&gt; {project/repository, eg: foo/bar}
+
+Build pull requests (--build-pull-requests)
+Build every pull request as an environment? [Y|n] N
+
+Clone data <span class="hljs-keyword">for</span> pull requests (--pull-requests-clone-parent-data)
+Clone the parent environments data <span class="hljs-keyword">for</span> pull requests? [Y|n] Y
+
+Fetch branches (--fetch-branches)
+Fetch all branches from the remote (as inactive environments)? [Y|n] Y
+
+Prune branches (--prune-branches)
+Delete branches that <span class="hljs-keyword">do</span> not exist on the remote? [Y|n] Y
+
+Warning: adding a <span class="hljs-string">'bitbucket_server'</span> integration will automatically synchronize code from the external Git repository.
+This means it can overwrite all the code <span class="hljs-keyword">in</span> your project.
+
+Are you sure you want to <span class="hljs-built_in">continue</span>? [y/N] y</code></pre>
+					<a href="#verify-the-integration" id="verify-the-integration" style="color: inherit; text-decoration: none;">
+						<h5>Verify the integration</h5>
+					</a>
+					<a href="#github-1" id="github-1" style="color: inherit; text-decoration: none;">
+						<h5>GitHub</h5>
+					</a>
+					<ul>
+						<li>Visit the &quot;webhooks&quot; section of your bitbucket repository settings, eg<pre><code>https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/project/</span>repo<span class="hljs-regexp">/settings/</span>hooks</code></pre>and verify that a webhook to platform.sh has been added. Note you will need admin access
+						to the project in order to view the webhooks.</li>
+						<li>Activate a branch in your project (as described below) and validate that an environment
+						is created and deployed to platform.sh. <em>Note you must first push the branch to bitbucket</em>.</li>
+						<li>Issue a PR to your repository and verify that the PR branch is deployed.</li>
+					</ul>
+					<a href="#bitbucket-server-1" id="bitbucket-server-1" style="color: inherit; text-decoration: none;">
+						<h5>Bitbucket Server</h5>
+					</a>
+					<ul>
+						<li>Visit the &quot;webhooks&quot; section of your bitbucket repository settings, eg<pre><code>https:<span class="hljs-regexp">//</span>domain<span class="hljs-regexp">/plugins/</span>servlet<span class="hljs-regexp">/webhooks/</span>projects<span class="hljs-regexp">/{project-key}/</span>repos<span class="hljs-regexp">/{repo-name}</span></code></pre>and verify that a webhook to platform.sh has been added. Note you will need admin access
+						to the project in order to view the webhooks.</li>
+						<li>Activate a branch in your project (as described below) and validate that an environment
+						is created and deployed to platform.sh. <em>Note you must first push the branch to bitbucket</em>.</li>
+						<li>Issue a PR to your repository and verify that the PR branch is deployed (note that only
+						the static environment will be build for PR&#39;s on Bitbucket).</li>
+					</ul>
+					<a href="#customizing-hook-implementations" id="customizing-hook-implementations" style="color: inherit; text-decoration: none;">
+						<h3>Customizing Hook Implementations</h3>
+					</a>
+					<p>This package includes default implementations of platform.sh
+						<a href="https://docs.platform.sh/configuration/app/build.html#hooks">build and deploy hooks</a> which
+						should work for most Bodiless sites.  However, should your site have special needs, you can
+						customize by creating a <code>platform.custom.sh</code> or <code>static.platform.custom.sh</code> script and placing
+						it alongside the appropriate <code>.platform.app.yaml</code> file (at the root of your repository for the
+						static site, or in the <code>/edit</code> directory for the edit app).  In this script, you can define for
+					each platform.sh hook one of the following functions:</p>
+					<ul>
+						<li><code>prepare_{hook} ()</code> - Run before the default implementation of the hook.</li>
+						<li><code>hook ()</code> - Replaces the default implementation of the hook.</li>
+						<li><code>finalize_{hook} ()</code> - Run after the default implementation of the hook.</li>
+					</ul>
+					<p>If you wish to extend the default implementation, you can do so by calling it from your function.
+						To do this safely (ie to avoid errors if the default implementation doesn&#39;t exist) always use the
+					<code>invoke</code> helper:</p>
+					<pre><code class="language-bash"><span class="hljs-function"><span class="hljs-title">prepare_deploy</span></span> () {
+  invoke default_prepare_deploy
+  <span class="hljs-comment"># Your custom logic here...</span>
+}</code></pre>
+					<a href="#building-and-deploying" id="building-and-deploying" style="color: inherit; text-decoration: none;">
+						<h2>Building and Deploying</h2>
+					</a>
+					<a href="#continuous-integration" id="continuous-integration" style="color: inherit; text-decoration: none;">
+						<h3>Continuous Integration</h3>
+					</a>
+					<p>If you configured platform.sh to build pull requests, then every PR to your repository will be
+					deployed to its own environment. Be aware of the following:</p>
+					<ul>
+						<li>It is easy to reach your quota of development environments with this enabled, so use cautiously.</li>
+						<li>Edit environments for pull requests are currently only supported on GitHub -- and pushing changes
+						from the edit environment is not supported even there.</li>
+						<li>On Bitbucket Server, pull requests from <em>forks</em> will not automatically rebuild when new commits
+						are added.  This limitation does not apply to GitHub.</li>
+						<li>On both GitHub and Bitbucket, changes pushed to code outside the <code>/edit</code> directory will
+							not automatically be deployed to the edit environment.  You must manually update the
+						edit environment as described under <a href="#pushing-changes">Pushing Changes</a> below.</li>
+						<li>Pull request environments will be automatically deleted when the PR is merged or declined.</li>
+						<li>If you manually delete a PR environment, it will not be recreated when the PR is
+						updated.</li>
+						<li>PR environments are named simply <code>pr-{pr#}</code> (eg <code>pr-123</code>).  You can easily run platform cli
+						commands against them using the <code>-e pr-xxx</code> option.</li>
+						<li>A link to the p.sh environment will be posted to the PR:<ul>
+								<li><strong>GitHub</strong>: Expand the &quot;Show All Checks&quot; link next to the section on the &quot;Conversations&quot;
+								tab, and click the &quot;details&quot; link next to the platform.sh build.</li>
+								<li><strong>Bitbucket Server</strong>: Click the build status icon next to the PR title, and then click the
+								&quot;platform.sh&quot; link.</li>
+							</ul>
+						</li>
+					</ul>
+					<a href="#manual-deployments" id="manual-deployments" style="color: inherit; text-decoration: none;">
+						<h3>Manual Deployments</h3>
+					</a>
+					<a href="#pre-requisites-1" id="pre-requisites-1" style="color: inherit; text-decoration: none;">
+						<h4>Pre-requisites</h4>
+					</a>
+					<ul>
+						<li>Access to a <a href="https://platform.sh/">platform.sh</a> project.</li>
+						<li>The <a href="https://docs.platform.sh/gettingstarted/cli.html">platform.sh cli</a></li>
+					</ul>
+					<a href="#local-setup" id="local-setup" style="color: inherit; text-decoration: none;">
+						<h4>Local setup</h4>
+					</a>
+					<ul>
+						<li>Obtain the project key of the project you wish to deploy: see
+						<a href="#the-platform.sh-project-key">The platform.sh project key</a>, above.</li>
+						<li>Connect your local repository to the correct platform.sh remote. From within the repository root:<pre><code>platform <span class="hljs-keyword">project</span>:<span class="hljs-keyword">set</span>-remote {<span class="hljs-keyword">project</span> id}</code></pre></li>
+					</ul>
+					<a href="#initial-deployment-of-a-new-branch" id="initial-deployment-of-a-new-branch" style="color: inherit; text-decoration: none;">
+						<h4>Initial deployment of a new branch</h4>
+					</a>
+					<ul>
+						<li>Ensure you are on the correct branch locally.</li>
+						<li>Push the branch to bitbucket.<pre><code>git <span class="hljs-built_in">push</span> <span class="hljs-built_in">origin</span> &lt;branch&gt;</code></pre></li>
+						<li>Execute<pre><code>  platform <span class="hljs-keyword">en</span><span class="hljs-variable">v:activate</span></code></pre>Note - you may have to wait a few moments after pushing the branch to
+							bitbucket before activating the environment, in order to allow the branch to
+							sync to p.sh. If, when you try to activate, you are asked for an &quot;Environment
+						ID&quot;, wait a bit and try again.</li>
+						<li>The public URL of the new environment will be printed to the console.</li>
+						<li>You can display (and open) the public URLs for your site by checking out the
+						corresponding branch and executing <code>platform url</code>.</li>
+					</ul>
+					<a href="#basic-authentication" id="basic-authentication" style="color: inherit; text-decoration: none;">
+						<h5>Basic Authentication</h5>
+					</a>
+					<p>Note that basic authentication may be configured for your environment by
+						default, and this may prevent access via your browser. To verify, use the
+					platform cli:</p>
+					<pre><code><span class="hljs-built_in">platform</span> env:<span class="hljs-keyword">http</span>-access</code></pre><p>You can also use this command to enable or disable authentication, and to
+					add/remove credentials.</p>
+					<pre><code>platform <span class="hljs-keyword">help</span> env:<span class="hljs-keyword">http</span>-<span class="hljs-keyword">access</span></code></pre><p>to learn more.</p>
+					<a href="#pushing-changes" id="pushing-changes" style="color: inherit; text-decoration: none;">
+						<h4>Pushing changes</h4>
+					</a>
+					<p>Once a new branch is created, changes pushed to Bitbucket will be automatically
+						deployed to the static site on platform.sh. You can run <code>platform activity:log</code>
+						to see the current build status, or visit <a href="https://console.platform.sh">console.platform.sh</a>,
+					locate your build, and click &quot;View Logs&quot;.</p>
+					<p>Changes are <em>not</em> automatically deployed to an edit environment; you must manually
+					trigger an update of the edit environment by executing:</p>
+					<pre><code>  <span class="hljs-keyword">platform</span> ssh -e &lt;env-id&gt; <span class="hljs-string">'bash platform.sh deploy'</span></code></pre><p>  You may omit the &quot;-e <env-id>&quot; if you have the active branch checked out locally.</p>
+					<a href="#deleting-an-environment" id="deleting-an-environment" style="color: inherit; text-decoration: none;">
+						<h4>Deleting an environment</h4>
+					</a>
+					<p>The platform.sh environment will be deleted when you remove the corresponding
+					branch from bitbucket. <em>Please delete obsolete branches</em>.</p>
+					<p>You can also remove an environment without deleting your branch by checking
+					out the branch locally and executing <code>platform env:delete -y</code>.</p>
+					<a href="#merging-to-master" id="merging-to-master" style="color: inherit; text-decoration: none;">
+						<h4>Merging to master</h4>
+					</a>
+					<p>When you merge a feature branch to master, the updated master branch will be automatically deployed
+					to the static environment on platform.sh.  To deploy changes to the edit environment, you must follow the same process as in <a href="#pushing-changes">Pushing Changes</a> above.</p>
+					<a href="#handling-redirect-with-routes" id="handling-redirect-with-routes" style="color: inherit; text-decoration: none;">
+						<h2>Handling Redirect with Routes</h2>
+					</a>
+					<a href="#overview" id="overview" style="color: inherit; text-decoration: none;">
+						<h3>Overview</h3>
+					</a>
+					<p>In HTTP, URL redirecting is a technique to forward one URL to a different URL. It is commonly used for handling cases like URL shortening, preventing broken links when pages removed, pointing multiple domain addresses to a single URL address, etc. It is also critical to preserve page SEO value when there are URL changes.</p>
+					<p>Redirection can be implemented on a client page with <a href="https://en.wikipedia.org/wiki/Meta_refresh">Refresh Meta Tag</a> or JavaScript, but the preferred way is to manage redirect rules with server configuration.</p>
+					<p>You can configure redirects on Platform.sh with route yaml in project environments. A route describes how an incoming HTTP request is processed by Platform.sh, which includes URL redirect. The routes are defined inside .platform/routes.yaml file.</p>
+					<p>An example of redirect using routes.yaml:</p>
+					<pre><code><span class="hljs-string">"https://www.{default}/"</span>:
+  <span class="hljs-class"><span class="hljs-keyword">type</span>: <span class="hljs-title">redirect</span></span>
+  <span class="hljs-keyword">to</span>: <span class="hljs-string">"https://my-host.{default}/"</span></code></pre><p>Here, the URL <a href="https://www.example.com/">https://www.example.com/</a> will be redirected to <a href="https://my-host.example.com/">https://my-host.example.com/</a></p>
+					<a href="#whole-route-vs-partial-redirects" id="whole-route-vs-partial-redirects" style="color: inherit; text-decoration: none;">
+						<h3>Whole-route vs Partial redirects</h3>
+					</a>
+					<p>Platform.sh offers two different ways to implement redirect rules, <strong>Whole-route redirects</strong> and <strong>Partial redirects</strong></p>
+					<ul>
+						<li><p>Whole-route redirects on host level. A typical use case for this kind of route is adding or removing a www. prefix to domain,</p>
+							<p>.platform/routes.yaml</p>
+							<pre><code><span class="hljs-title">https</span>://{<span class="hljs-keyword">default</span>}/:
+  <span class="hljs-class"><span class="hljs-keyword">type</span>: redirect</span>
+  to: https://www.{<span class="hljs-keyword">default</span>}/</code></pre><p>Here, <a href="https://example.com/">https://example.com/</a> will be redirected to <a href="https://www.example.com/">https://www.example.com/</a>. This approach can be used to redirect vanity domains to their destination URLs.</p>
+						</li>
+						<li><p>Partial redirects allows redirect rules to be added to existing routes,</p>
+							<p>.platform/routes.yaml</p>
+							<pre><code>    <span class="hljs-attribute">https</span>:<span class="hljs-comment">//{default}/:</span>
+      # [...]
+      <span class="hljs-attribute">redirects</span>:
+        <span class="hljs-attribute">expires</span>: <span class="hljs-number">1</span>d
+        <span class="hljs-attribute">paths</span>:
+          <span class="hljs-string">'/from'</span>:
+            <span class="hljs-attribute">to</span>: <span class="hljs-string">'https://example.com/'</span>
+            <span class="hljs-attribute">code</span>: <span class="hljs-number">301</span></code></pre><p>Here, &quot;https://[domain name]/from&quot; will be redirected to <a href="https://www.example.com/">https://www.example.com/</a>.</p>
+							<p>Note:</p>
+							<ul>
+								<li>the default response code is 302, in order to use a different response code, mostly commonly 301, add &quot;code: 301&quot; as configurable option.</li>
+								<li>&quot;expires&quot; param is optional, it specifies duration the redirect will be cached. Examples of valid values include 3600s, 1d, 2w, 3m.</li>
+							</ul>
+						</li>
+					</ul>
+					<p>  <strong>Examples</strong></p>
+					<p>  file .platform/routes.yaml</p>
+					<ol>
+						<li><p>Redirect path &quot;/foo/bar&quot; to a different site &quot;<a href="https://example.com/&quot;">https://example.com/&quot;</a>.</p>
+							<pre><code> <span class="hljs-attribute">https</span>:<span class="hljs-comment">//{default}/:</span>
+   <span class="hljs-attribute">type</span>: upstream
+   <span class="hljs-attribute">redirects</span>:
+     <span class="hljs-attribute">paths</span>:
+       <span class="hljs-string">'/foo/bar'</span>:
+         <span class="hljs-attribute">to</span>: <span class="hljs-string">'https://example.com/'</span></code></pre></li>
+						<li><p>Using Regular Expression to redirect path that matches &quot;/foo/(.*)/bar&quot; pattern.</p>
+							<pre><code><span class="hljs-attribute">https</span>:<span class="hljs-comment">//{default}/:</span>
+  <span class="hljs-attribute">type</span>: upstream
+  <span class="hljs-attribute">redirects</span>:
+    <span class="hljs-attribute">paths</span>:
+      <span class="hljs-string">'/foo/(.*)/bar'</span>:
+        <span class="hljs-attribute">to</span>: <span class="hljs-string">'/$1'</span>
+        <span class="hljs-attribute">regexp</span>: true</code></pre><p>In this case, path &quot;/foo/touts/bar&quot; will be redirected to &quot;/touts&quot;.</p>
+						</li>
+						<li><p>Redirect with prefix.</p>
+							<pre><code> <span class="hljs-attribute">https</span>:<span class="hljs-comment">//{default}/:</span>
+   <span class="hljs-attribute">type</span>: upstream
+   <span class="hljs-attribute">redirects</span>:
+     <span class="hljs-attribute">paths</span>:
+       <span class="hljs-string">'/foo/bar'</span>:
+         <span class="hljs-attribute">to</span>: <span class="hljs-string">'/new'</span>
+         <span class="hljs-attribute">prefix</span>: true
+</code></pre><p> Path &quot;/foo/bar&quot; will be redirected to &quot;/new&quot;. And path &quot;/foo/bar/to/my/path&quot; will be redirected to &quot;/new/to/my/path&quot; where both the path and all its children included. If &quot;prefix&quot; set to false, only &quot;/foo/bar&quot; will be redirected to &quot;/new&quot;.</p>
+						</li>
+					</ol>
+					<ol>
+						<li><p>Carry over suffix path with append_suffix option.</p>
+							<pre><code>   <span class="hljs-attribute">https</span>:<span class="hljs-comment">//{default}/:</span>
+     <span class="hljs-attribute">type</span>: upstream
+     <span class="hljs-attribute">redirects</span>:
+       <span class="hljs-attribute">paths</span>:
+         <span class="hljs-string">'/foo/bar'</span>:
+           <span class="hljs-attribute">to</span>: <span class="hljs-string">'https://{default}/new'</span>
+           <span class="hljs-attribute">append_suffix</span>: false
+</code></pre><p> If append_suffix is set to false, &quot;/foo/bar/to/my/path&quot; will be redirected to &quot;/new&quot;. Otherwise, &quot;/foo/bar/to/my/path&quot; will be redirects to &quot;/new/to/my/path&quot;. append_suffix is ignored if &#39;prefix&#39; is false or &#39;regexp&#39; is true.</p>
+						</li>
+					</ol>
+					<a href="#http-vs-https" id="http-vs-https" style="color: inherit; text-decoration: none;">
+						<h3>HTTP vs HTTPS</h3>
+					</a>
+					<p>Platform.sh recommends using HTTPS requests for all sites exclusively. Specifying HTTPS in route.yaml will automatically redirect any requests for an HTTP URL to HTTPS. While specifying only HTTP routes will result in duplicate HTTPS routes being created automatically, allowing the site to be served from both HTTP and HTTPS without redirects.</p>
+					<p>Although it is not recommended, HTTPS requests can be redirected to HTTP explicitly to serve the site over HTTP only using route.yaml:</p>
+					<pre><code><span class="hljs-string">"https://{default}/"</span>:
+  <span class="hljs-class"><span class="hljs-keyword">type</span>: <span class="hljs-title">redirect</span></span>
+  <span class="hljs-keyword">to</span>: <span class="hljs-string">"http://{default}/"</span></code></pre>
+					<a href="#avoid-redirect-chains" id="avoid-redirect-chains" style="color: inherit; text-decoration: none;">
+						<h3>Avoid redirect chains</h3>
+					</a>
+					<p>A redirect chain is a series of redirects between the initial URL and the destination URL. The redirect chain could be built over time of development or due to a combination of redirect between different protocol, host name or trailing slash processing etc. Redirect chain causes page loss authority value in search result. It also increases page load time and decreases the overall quality of site.</p>
+					<p>In order to avoid redirect chains, pay attention on destination path protocol and host name. For example, if the site is running under https and host www, specify destination &quot;to&quot; in route.yaml as:</p>
+					<pre><code>  <span class="hljs-keyword">to</span>: <span class="hljs-string">"https://www.{default}/path/to/destination/"</span></code></pre><p>The trailing slash should be appended to the configure item if platform environment adds trailing slash to url by default.
+					see <a href="https://docs.platform.sh/configuration/routes/redirects.html">Platform.sh Documentation Redirects</a></p>
+					<a href="#using-fastly-cdn" id="using-fastly-cdn" style="color: inherit; text-decoration: none;">
+						<h2>Using Fastly CDN</h2>
+					</a>
+					<p>Platform.sh integrates with Fastly via EZ platform for Fastly.  </p>
+					<ol>
+						<li>Obtain your Fastly Service ID &amp; Key from Fastly.   </li>
+						<li>Once Fastly Service ID &amp; Key is obtained, these variables can be set at Master environment.<pre><code> <span class="hljs-built_in">platform</span> <span class="hljs-built_in">variable</span>:<span class="hljs-built_in">create</span> -e master <span class="hljs-comment">--level environment env:HTTPCACHE_PURGE_TYPE --value 'fastly'</span>
+ <span class="hljs-built_in">platform</span> <span class="hljs-built_in">variable</span>:<span class="hljs-built_in">create</span> -e master <span class="hljs-comment">--level environment env:FASTLY_SERVICE_ID --value 'YOUR_ID_HERE'</span>
+ <span class="hljs-built_in">platform</span> <span class="hljs-built_in">variable</span>:<span class="hljs-built_in">create</span> -e master <span class="hljs-comment">--level environment env:FASTLY_KEY --value 'YOUR_ID_HERE'</span></code></pre></li>
+						<li>Verify or Update your <code>routes.yaml</code> to enable caching for your site by setting <code>enabled: true</code><pre><code>     <span class="hljs-attr">cache:</span>
+         <span class="hljs-attr">enabled:</span> <span class="hljs-literal">true</span>
+         <span class="hljs-attr">cookies:</span> <span class="hljs-string">[]</span></code></pre></li>
+						<li>Verify or Update your <code>.platform.app.yaml</code> expiration time for your files.<pre><code><span class="hljs-symbol"> web:</span>
+<span class="hljs-symbol">     locations:</span>
+         <span class="hljs-string">'/'</span>:
+<span class="hljs-symbol">             expires:</span> <span class="hljs-number">6</span>h  </code></pre></li>
+					</ol>
+					<p>Once completed, the master env deployed on Platform.sh should be on Fastly CDN.  You may have to fine tune the expires setting for your static resources and set certain ones (ones identify not to change often such as font files) to longer to leverage browser caching.</p>
+					<p>Platform.sh References:</p>
+					<ul>
+						<li><a href="https://docs.platform.sh/frameworks/ez/fastly.html#set-credentials-on-platformsh">Set Fastly Credentials on Platform.sh</a></li>
+						<li><a href="https://docs.platform.sh/configuration/routes/cache.html">HTTP Cache</a></li>
+						<li><a href="https://docs.platform.sh/languages/php/tuning.html#ensure-that-the-router-cache-is-properly-configured">Router Cache</a></li>
+						<li><a href="https://docs.platform.sh/configuration/app/web.html#locations">Expires</a></li>
+						<li><a href="https://community.platform.sh/t/how-to-configure-caching-for-static-assets/187">How to Guide: How to configure caching for static assets</a></li>
+					</ul>
+					<p>If there are issues or you need to troubleshoot, here are some good resources:</p>
+					<ul>
+						<li><p><a href="https://docs.fastly.com/en/guides/checking-cache">Checking Fastly Cache</a></p>
+							<p>  <code>curl -svo /dev/null -H &quot;Fastly-Debug:1&quot; www.example.com/index.html</code></p>
+						</li>
+						<li><p><a href="https://docs.fastly.com/api/purge">Purging Fastly Cache</a></p>
+							<p>  <code>curl -X PURGE www.example.com/index.html</code></p>
+						</li>
+					</ul>
+					<a href="#how-to-load-environment-specific-html-snippets" id="how-to-load-environment-specific-html-snippets" style="color: inherit; text-decoration: none;">
+						<h2>How to load environment specific html snippets</h2>
+					</a>
+					<p>When you want to inject different html snippets depending on your environment type, you can use Server Side Includes (SSI) mechanism.</p>
+					<a href="#activate-ssi" id="activate-ssi" style="color: inherit; text-decoration: none;">
+						<h3>Activate SSI</h3>
+					</a>
+					<ul>
+						<li>Activate SSI for your route(s) in your routes.yaml file. See: <a href="https://docs.platform.sh/configuration/routes/ssi.html">https://docs.platform.sh/configuration/routes/ssi.html</a></li>
+						<li>Use SSI_ENV enviroment variable to specify type of your environment. Default value is &#39;dev&#39;.</li>
+						<li>Ensure ssi configs are loaded to psh container and set SSI_CONF_PATH environment variable to path to json file containing SSI configs.</li>
+						<li>Ensure your .platform.app.yaml contains invocation of generate-ssi-files.js node scripts. The script should be invoked during build and deploy phases. PSH phase (build or deploy) should be passed as an argument to the script.</li>
+						<li>Ensure the files of you app, that will be served by psh, contain SSI directives.</li>
+						<li>Ensure a writable volume is mounted to your app.</li>
+					</ul>
+					<a href="#ssi-config-format" id="ssi-config-format" style="color: inherit; text-decoration: none;">
+						<h3>SSI config format</h3>
+					</a>
+					<p>SSI configuration file should be in json format.</p>
+					<pre><code>{
+  key1: {
+    pragma: "<span class="hljs-comment">&lt;!--# ssi data should go here --&gt;</span>",
+    env1: {
+      file: "key1.env1.html"
+    }
+    ...
+    envN: {
+      file: "key1.envN.html"
+    }
+  }
+  ...
+  keyN: {
+    pragma: "<span class="hljs-comment">&lt;!--# ssi data should go here --&gt;</span>",
+    ...
+    env1: {
+      file: "keyN.envN.html"
+    }
+    ...
+    envN: {
+      file: "keyN.envN.html"
+    }
+  }
+}</code></pre>
+					<a href="#how-it-works" id="how-it-works" style="color: inherit; text-decoration: none;">
+						<h3>How it works</h3>
+					</a>
+					<ul>
+						<li>during build phase, generate-ssi-files reads SSI configs and for each key it creates symlink from PLATFORM_DOCUMENT_ROOT/filename.html into APP_VOLUME/filename.html. Filename is generated based on key. There is an opportunity to improve this logic. We can read and parse pragma field, exract filename from it. But it makes the things more complicated and in addition, pragma may not have files at all.</li>
+						<li>during deploy phase, generate-ssi-files reads SSI configs and SSI_ENV and for each key it copies the file defined in conf.{key}.{env}.{file} to APP_VOLUME/filename.html that was created during build phase.</li>
+					</ul>
+					<a href="#how-to-replace-your-site-prod-url-with-psh-environment-url-in-a-public-file" id="how-to-replace-your-site-prod-url-with-psh-environment-url-in-a-public-file" style="color: inherit; text-decoration: none;">
+						<h2>How to replace your site prod url with psh environment url in a public file</h2>
+					</a>
+					<p>If you want to make urls in a particular public file match psh environment url, you can leverage psh-url-replacer node script. For instance, your site sitemap.xml, which is generated during build time, contains production urls and you want to replace the production url with psh environment url, to which your website is deployed to.</p>
+					<a href="#why" id="why" style="color: inherit; text-decoration: none;">
+						<h3>Why</h3>
+					</a>
+					<p>Platform.sh does not allow to expose environment level environment variables to the application build stage.</p>
+					<a href="#how-it-works-1" id="how-it-works-1" style="color: inherit; text-decoration: none;">
+						<h3>How it works</h3>
+					</a>
+					<p>on psh build stage:</p>
+					<ul>
+						<li>it moves your source file from public dir to a tmp directory</li>
+						<li>then it creates a symlink from a writable volume file to the source public file</li>
+					</ul>
+					<p>on psh deploy stage:</p>
+					<ul>
+						<li>it copies the file from the tmp directory to the writable volume file</li>
+						<li>then it replaces production url with psh environment url in the file</li>
+					</ul>
+					<a href="#how-to-activate-this-feature" id="how-to-activate-this-feature" style="color: inherit; text-decoration: none;">
+						<h3>How to activate this feature</h3>
+					</a>
+					<p>By default, the feature is activated for sitemap.xml and robots.txt. If you want to activate the feature for some other files or if you have custom installation of sitemap.xml or robots.txt, please follow the following steps:</p>
+					<ol>
+						<li><p>ensure writable volume mounting is configured for your app</p>
+						</li>
+						<li><p>export environment variables and invoke psh-url-replacer in build section of your psh app .platform.app.yaml</p>
+						</li>
+					</ol>
+					<pre><code class="language-bash">
+hooks:
+    build: |
+        <span class="hljs-built_in">export</span> PSH_URL_REPLACER_SRC_FILE=/path/to/your/src/public/file
+        <span class="hljs-built_in">export</span> PSH_URL_REPLACER_TMP_FILE=/path/to/a/tmp/file
+        <span class="hljs-built_in">export</span> PSH_URL_REPLACER_TARGET_FILE=/path/to/writable/volume/file
+        node /path/to/psh-url-replacer.js build
+</code></pre>
+					<ol>
+						<li>export environment variables and invoke psh-url-replacer in deploy section of your psh app .platform.app.yaml</li>
+					</ol>
+					<pre><code class="language-bash">
+hooks:
+    deploy: |
+        <span class="hljs-built_in">export</span> PSH_URL_REPLACER_TMP_FILE=/path/to/the/tmp/file/you/saved/during/build/phase
+        <span class="hljs-built_in">export</span> PSH_URL_REPLACER_TARGET_FILE=/path/to/writable/volume/file
+        <span class="hljs-built_in">export</span> PSH_URL_REPLACER_SRC_URL=https://your-site-production-url.com
+        <span class="hljs-built_in">export</span> PSH_URL_REPLACER_TARGET_URL=https://your-psh-env.url.site
+        <span class="hljs-built_in">export</span> PSH_URL_REPLACER_PROD_ENV=<span class="hljs-string">'0'</span> <span class="hljs-comment"># set to '1' if you want to disable the replacement</span>
+        node /path/to/psh-url-replacer.js deploy</code></pre>
+					<a href="#known-limitations" id="known-limitations" style="color: inherit; text-decoration: none;">
+						<h2>Known limitations</h2>
+					</a>
+					<ul>
+						<li>PR Branches and Feature branches created in bitbucket will always inherit from
+							master. This means that you must manually configure basic authentication for
+						these branches if you want them protected from the public internet.</li>
+						<li>There is a 64-character limit on hostnames for TLS, and platform.sh uses 43 of
+							them. Since hostnames are created based on branch names, and since the edit
+							environment uses an additional 5 (&quot;edit.&quot;), your branch names should be
+						limited to a maximum of 16 characters to avoid certificate warnings.</li>
+						<li>When you create a bitbucket integration, a webhook is added to your bitbucket
+							repository. However, deleting the integration does not remove the webhook, you
+						must do this manually.</li>
+					</ul>
+					<a href="#troubleshooting" id="troubleshooting" style="color: inherit; text-decoration: none;">
+						<h2>Troubleshooting</h2>
+					</a>
+					<a href="#viewing-logs" id="viewing-logs" style="color: inherit; text-decoration: none;">
+						<h3>Viewing Logs</h3>
+					</a>
+					<p>Build, deploy and application logs for an environment are available using the
+						platform cli. If you want logs for an environment other than the currently
+						checked-out branch (e.g. for a pull request), you must use the <code>-e</code> flag. You
+					can first get a list of all available environments by running</p>
+					<pre><code><span class="hljs-keyword">platform</span> env:<span class="hljs-keyword">list</span></code></pre><p>You can then use the identifier from the first column in the commands below.
+						If you want logs from the environment associated with your current local
+					branch, you can omit the <code>-e</code> flag.</p>
+					<ul>
+						<li>Tail/print most recent build log (this now includes deploy log):<pre><code>platform activity:<span class="hljs-built_in">log</span> -e &lt;env-<span class="hljs-built_in">id</span>&gt;</code></pre>Note that you may have to wait a few moments after performing
+						a git push in order for the new p.sh deployment to begin.</li>
+						<li>Print deploy logs for all builds to the edit environment:<pre><code>platform <span class="hljs-built_in">log</span> -e &lt;env-<span class="hljs-built_in">id</span>&gt; -A edit deploy &lt;<span class="hljs-comment">--lines n&gt;</span></code></pre>(where n is the number of lines.)</li>
+						<li>View or tail application logs for the edit environment<pre><code>platform <span class="hljs-keyword">log</span> -e <span class="hljs-variable">&lt;env-id&gt;</span> -A edit app <span class="hljs-variable">&lt;--lines n&gt;</span> <span class="hljs-variable">&lt;--tail&gt;</span></code></pre></li>
+					</ul>
+					<p>Alternatively, you can visit <a href="https://console.platform.sh/webalerts/abcdefghi">the platform.sh console</a> and locate
+						your build to view the build log (deployment and application logs
+					are only available from the command line).</p>
+					<a href="#hints" id="hints" style="color: inherit; text-decoration: none;">
+						<h3>Hints</h3>
+					</a>
+					<ul>
+						<li>If the <code>platform</code> command is not found, you probably have to run
+						<code>source .bashrc</code> to ensure it is in your path.</li>
+						<li>For all deployments in which the app is restarted, the environment may not be
+						fully available for up to a minute after the deployment is complete.</li>
+						<li>You may see errors in the application log relating to insufficient file
+							watchers. This is a known issue. Currently the only workaround is to reduce
+						the number of active environments.</li>
+						<li>Public URLs for an environment are available by running<pre><code>platform url -e &lt;env-<span class="hljs-built_in">id</span>&gt;</code></pre></li>
+						<li>There are many other useful platform cli subcommands.  Run <code>platform list</code>
+						to see them all.</li>
+					</ul>
+					<a href="#deploying-bodiless-packages-from-a-private-registry" id="deploying-bodiless-packages-from-a-private-registry" style="color: inherit; text-decoration: none;">
+						<h2>Deploying bodiless packages from a private registry</h2>
+					</a>
+					<p>By default the public regisry will be used to download bodiless packages: //registry.npmjs.org/</p>
+					<p>In order to switch to a private registry follow Step 3 (Create platform.sh environment variables.) of this doc.</p>
+				</div>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section tsd-is-not-exported">
+							<h3>Enumerations</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-enum tsd-parent-kind-module tsd-is-not-exported"><a href="../enums/_bodiless_psh.stage.html" class="tsd-kind-icon">Stage</a></li>
+								<li class="tsd-kind-enum tsd-parent-kind-module tsd-is-not-exported"><a href="../enums/_bodiless_psh.stage-1.html" class="tsd-kind-icon">Stage</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="_bodiless_psh.html#copyfiles" class="tsd-kind-icon">copyfiles</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#documentroot" class="tsd-kind-icon">document<wbr>Root</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="_bodiless_psh.html#fs" class="tsd-kind-icon">fs</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#isprodenv" class="tsd-kind-icon">is<wbr>Prod<wbr>Env</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="_bodiless_psh.html#jsyaml" class="tsd-kind-icon">js<wbr>Yaml</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="_bodiless_psh.html#path" class="tsd-kind-icon">path</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="_bodiless_psh.html#pshfolder" class="tsd-kind-icon">psh<wbr>Folder</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="_bodiless_psh.html#siterootfolder" class="tsd-kind-icon">site<wbr>Root<wbr>Folder</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#srcfile" class="tsd-kind-icon">src<wbr>File</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#srcurl" class="tsd-kind-icon">src<wbr>Url</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#ssiconfpath" class="tsd-kind-icon">ssi<wbr>Conf<wbr>Path</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#ssienv" class="tsd-kind-icon">ssi<wbr>Env</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#targetfile" class="tsd-kind-icon">target<wbr>File</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#targeturl" class="tsd-kind-icon">target<wbr>Url</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#tmpfile" class="tsd-kind-icon">tmp<wbr>File</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#writablevolumedir" class="tsd-kind-icon">writable<wbr>Volume<wbr>Dir</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#build" class="tsd-kind-icon">build</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#build-1" class="tsd-kind-icon">build</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#deploy" class="tsd-kind-icon">deploy</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#deploy-1" class="tsd-kind-icon">deploy</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_psh.html#generateedityaml" class="tsd-kind-icon">generate<wbr>Edit<wbr>Yaml</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_psh.html#generatestaticyaml" class="tsd-kind-icon">generate<wbr>Static<wbr>Yaml</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#getssientities" class="tsd-kind-icon">getSSIEntities</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#getssifile" class="tsd-kind-icon">getSSIFile</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#handleerror" class="tsd-kind-icon">handle<wbr>Error</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#handleerror-1" class="tsd-kind-icon">handle<wbr>Error</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#handlenotice" class="tsd-kind-icon">handle<wbr>Notice</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#handlenotice-1" class="tsd-kind-icon">handle<wbr>Notice</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_psh.html#init" class="tsd-kind-icon">init</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_psh.html#isobject" class="tsd-kind-icon">is<wbr>Object</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#main" class="tsd-kind-icon">main</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_bodiless_psh.html#main-1" class="tsd-kind-icon">main</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_psh.html#mergebykey" class="tsd-kind-icon">merge<wbr>ByKey</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_bodiless_psh.html#readyaml" class="tsd-kind-icon">read<wbr>Yaml</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="copyfiles" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> copyfiles</h3>
+					<div class="tsd-signature tsd-kind-icon">copyfiles<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = require(&#x27;copyfiles&#x27;)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/bodiless-psh-init.ts#L22">packages/bodiless-psh/src/bodiless-psh-init.ts:22</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+					<a name="documentroot" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> document<wbr>Root</h3>
+					<div class="tsd-signature tsd-kind-icon">document<wbr>Root<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = process.env.DOCUMENT_ROOT</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/generate-ssi-files.ts#L25">packages/bodiless-psh/src/generate-ssi-files.ts:25</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="fs" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> fs</h3>
+					<div class="tsd-signature tsd-kind-icon">fs<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = require(&#x27;fs&#x27;)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/bodiless-psh-init.ts#L19">packages/bodiless-psh/src/bodiless-psh-init.ts:19</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Copyright © 2020 Johnson &amp; Johnson</p>
+						</div>
+						<p>Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+							you may not use this file except in compliance with the License.
+							You may obtain a copy of the License at
+							<a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a>
+							Unless required by applicable law or agreed to in writing, software
+							distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+							WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+							See the License for the specific language governing permissions and
+						limitations under the License.</p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+					<a name="isprodenv" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> is<wbr>Prod<wbr>Env</h3>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Prod<wbr>Env<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = process.env.PSH_URL_REPLACER_PROD_ENV &#x3D;&#x3D;&#x3D; &#x27;1&#x27;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/psh-url-replacer.ts#L26">packages/bodiless-psh/src/psh-url-replacer.ts:26</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="jsyaml" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> js<wbr>Yaml</h3>
+					<div class="tsd-signature tsd-kind-icon">js<wbr>Yaml<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = require(&#x27;js-yaml&#x27;)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/bodiless-psh-init.ts#L21">packages/bodiless-psh/src/bodiless-psh-init.ts:21</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="path" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> path</h3>
+					<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = require(&#x27;path&#x27;)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/bodiless-psh-init.ts#L20">packages/bodiless-psh/src/bodiless-psh-init.ts:20</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="pshfolder" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> psh<wbr>Folder</h3>
+					<div class="tsd-signature tsd-kind-icon">psh<wbr>Folder<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = path.resolve(__dirname, &#x27;..&#x27;)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/bodiless-psh-init.ts#L25">packages/bodiless-psh/src/bodiless-psh-init.ts:25</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="siterootfolder" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> site<wbr>Root<wbr>Folder</h3>
+					<div class="tsd-signature tsd-kind-icon">site<wbr>Root<wbr>Folder<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = process.env.INIT_CWD || path.resolve()</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/bodiless-psh-init.ts#L24">packages/bodiless-psh/src/bodiless-psh-init.ts:24</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+					<a name="srcfile" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> src<wbr>File</h3>
+					<div class="tsd-signature tsd-kind-icon">src<wbr>File<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = process.env.PSH_URL_REPLACER_SRC_FILE</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/psh-url-replacer.ts#L21">packages/bodiless-psh/src/psh-url-replacer.ts:21</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+					<a name="srcurl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> src<wbr>Url</h3>
+					<div class="tsd-signature tsd-kind-icon">src<wbr>Url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = process.env.PSH_URL_REPLACER_SRC_URL</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/psh-url-replacer.ts#L24">packages/bodiless-psh/src/psh-url-replacer.ts:24</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+					<a name="ssiconfpath" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> ssi<wbr>Conf<wbr>Path</h3>
+					<div class="tsd-signature tsd-kind-icon">ssi<wbr>Conf<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = process.env.SSI_CONF_PATH</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/generate-ssi-files.ts#L23">packages/bodiless-psh/src/generate-ssi-files.ts:23</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+					<a name="ssienv" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> ssi<wbr>Env</h3>
+					<div class="tsd-signature tsd-kind-icon">ssi<wbr>Env<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = process.env.SSI_ENV || &#x27;dev&#x27;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/generate-ssi-files.ts#L24">packages/bodiless-psh/src/generate-ssi-files.ts:24</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+					<a name="targetfile" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> target<wbr>File</h3>
+					<div class="tsd-signature tsd-kind-icon">target<wbr>File<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = process.env.PSH_URL_REPLACER_TARGET_FILE</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/psh-url-replacer.ts#L23">packages/bodiless-psh/src/psh-url-replacer.ts:23</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+					<a name="targeturl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> target<wbr>Url</h3>
+					<div class="tsd-signature tsd-kind-icon">target<wbr>Url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = process.env.PSH_URL_REPLACER_TARGET_URL</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/psh-url-replacer.ts#L25">packages/bodiless-psh/src/psh-url-replacer.ts:25</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+					<a name="tmpfile" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> tmp<wbr>File</h3>
+					<div class="tsd-signature tsd-kind-icon">tmp<wbr>File<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = process.env.PSH_URL_REPLACER_TMP_FILE</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/psh-url-replacer.ts#L22">packages/bodiless-psh/src/psh-url-replacer.ts:22</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+					<a name="writablevolumedir" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> writable<wbr>Volume<wbr>Dir</h3>
+					<div class="tsd-signature tsd-kind-icon">writable<wbr>Volume<wbr>Dir<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = process.env.VOLUME_DIR</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/generate-ssi-files.ts#L26">packages/bodiless-psh/src/generate-ssi-files.ts:26</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="build" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> build</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">build<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/generate-ssi-files.ts#L47">packages/bodiless-psh/src/generate-ssi-files.ts:47</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="build-1" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> build</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">build<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/psh-url-replacer.ts#L37">packages/bodiless-psh/src/psh-url-replacer.ts:37</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="deploy" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> deploy</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">deploy<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/psh-url-replacer.ts#L67">packages/bodiless-psh/src/psh-url-replacer.ts:67</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="deploy-1" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> deploy</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">deploy<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/generate-ssi-files.ts#L80">packages/bodiless-psh/src/generate-ssi-files.ts:80</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="generateedityaml" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> generate<wbr>Edit<wbr>Yaml</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">generate<wbr>Edit<wbr>Yaml<span class="tsd-signature-symbol">(</span>whitelist<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/bodiless-psh-init.ts#L79">packages/bodiless-psh/src/bodiless-psh-init.ts:79</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>whitelist: <span class="tsd-signature-type">object</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="generatestaticyaml" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> generate<wbr>Static<wbr>Yaml</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">generate<wbr>Static<wbr>Yaml<span class="tsd-signature-symbol">(</span>whitelist<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/bodiless-psh-init.ts#L71">packages/bodiless-psh/src/bodiless-psh-init.ts:71</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>whitelist: <span class="tsd-signature-type">object</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="getssientities" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> getSSIEntities</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">getSSIEntities<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/generate-ssi-files.ts#L37">packages/bodiless-psh/src/generate-ssi-files.ts:37</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="getssifile" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> getSSIFile</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">getSSIFile<span class="tsd-signature-symbol">(</span>SSIkey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/generate-ssi-files.ts#L45">packages/bodiless-psh/src/generate-ssi-files.ts:45</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>SSIkey: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="handleerror" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> handle<wbr>Error</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">handle<wbr>Error<span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">never</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/psh-url-replacer.ts#L28">packages/bodiless-psh/src/psh-url-replacer.ts:28</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>err: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">never</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="handleerror-1" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> handle<wbr>Error</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">handle<wbr>Error<span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">never</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/generate-ssi-files.ts#L28">packages/bodiless-psh/src/generate-ssi-files.ts:28</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>err: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">never</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="handlenotice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> handle<wbr>Notice</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">handle<wbr>Notice<span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/psh-url-replacer.ts#L32">packages/bodiless-psh/src/psh-url-replacer.ts:32</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>msg: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="handlenotice-1" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> handle<wbr>Notice</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">handle<wbr>Notice<span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/generate-ssi-files.ts#L32">packages/bodiless-psh/src/generate-ssi-files.ts:32</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>msg: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="init" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> init</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">init<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/bodiless-psh-init.ts#L87">packages/bodiless-psh/src/bodiless-psh-init.ts:87</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="isobject" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> is<wbr>Object</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Object<span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/bodiless-psh-init.ts#L36">packages/bodiless-psh/src/bodiless-psh-init.ts:36</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>item: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="main" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> main</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">main<span class="tsd-signature-symbol">(</span>stage<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/generate-ssi-files.ts#L106">packages/bodiless-psh/src/generate-ssi-files.ts:106</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>stage: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+					<a name="main-1" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> main</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">main<span class="tsd-signature-symbol">(</span>stage<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/psh-url-replacer.ts#L106">packages/bodiless-psh/src/psh-url-replacer.ts:106</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>stage: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="mergebykey" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> merge<wbr>ByKey</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">merge<wbr>ByKey<span class="tsd-signature-symbol">(</span>Source<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, Destination<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, Whitelist<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/bodiless-psh-init.ts#L38">packages/bodiless-psh/src/bodiless-psh-init.ts:38</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>Source: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>Destination: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>Whitelist: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="readyaml" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> read<wbr>Yaml</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">read<wbr>Yaml<span class="tsd-signature-symbol">(</span>filePath<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/johnsonandjohnson/Bodiless-JS/blob/f8d5975/packages/bodiless-psh/src/bodiless-psh-init.ts#L27">packages/bodiless-psh/src/bodiless-psh-init.ts:27</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>filePath: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_accessibility.html">@bodiless/accessibility</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_backend.html">@bodiless/backend</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_bv.html">@bodiless/bv</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_components.html">@bodiless/components</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_core.html">@bodiless/core</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_core_ui.html">@bodiless/core-<wbr>ui</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_documentation.html">@bodiless/documentation</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_fclasses.html">@bodiless/fclasses</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_gatsby_plugin_ssi.html">@bodiless/gatsby-<wbr>plugin-<wbr>ssi</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_gatsby_starter_bodiless.html">@bodiless/gatsby-<wbr>starter-<wbr>bodiless</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_gatsby_theme_bodiless.html">@bodiless/gatsby-<wbr>theme-<wbr>bodiless</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_headless_chrome_crawler.html">@bodiless/headless-<wbr>chrome-<wbr>crawler</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_layouts.html">@bodiless/layouts</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_layouts_ui.html">@bodiless/layouts-<wbr>ui</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_migration_tool.html">@bodiless/migration-<wbr>tool</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_organisms.html">@bodiless/organisms</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="_bodiless_psh.html">@bodiless/psh</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_richtext.html">@bodiless/richtext</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_richtext_ui.html">@bodiless/richtext-<wbr>ui</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_ui.html">@bodiless/ui</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-enum tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../enums/_bodiless_psh.stage.html" class="tsd-kind-icon">Stage</a>
+					</li>
+					<li class=" tsd-kind-enum tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../enums/_bodiless_psh.stage-1.html" class="tsd-kind-icon">Stage</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="_bodiless_psh.html#copyfiles" class="tsd-kind-icon">copyfiles</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#documentroot" class="tsd-kind-icon">document<wbr>Root</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="_bodiless_psh.html#fs" class="tsd-kind-icon">fs</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#isprodenv" class="tsd-kind-icon">is<wbr>Prod<wbr>Env</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="_bodiless_psh.html#jsyaml" class="tsd-kind-icon">js<wbr>Yaml</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="_bodiless_psh.html#path" class="tsd-kind-icon">path</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="_bodiless_psh.html#pshfolder" class="tsd-kind-icon">psh<wbr>Folder</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="_bodiless_psh.html#siterootfolder" class="tsd-kind-icon">site<wbr>Root<wbr>Folder</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#srcfile" class="tsd-kind-icon">src<wbr>File</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#srcurl" class="tsd-kind-icon">src<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#ssiconfpath" class="tsd-kind-icon">ssi<wbr>Conf<wbr>Path</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#ssienv" class="tsd-kind-icon">ssi<wbr>Env</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#targetfile" class="tsd-kind-icon">target<wbr>File</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#targeturl" class="tsd-kind-icon">target<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#tmpfile" class="tsd-kind-icon">tmp<wbr>File</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#writablevolumedir" class="tsd-kind-icon">writable<wbr>Volume<wbr>Dir</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#build" class="tsd-kind-icon">build</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#build-1" class="tsd-kind-icon">build</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#deploy" class="tsd-kind-icon">deploy</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#deploy-1" class="tsd-kind-icon">deploy</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_psh.html#generateedityaml" class="tsd-kind-icon">generate<wbr>Edit<wbr>Yaml</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_psh.html#generatestaticyaml" class="tsd-kind-icon">generate<wbr>Static<wbr>Yaml</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#getssientities" class="tsd-kind-icon">getSSIEntities</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#getssifile" class="tsd-kind-icon">getSSIFile</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#handleerror" class="tsd-kind-icon">handle<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#handleerror-1" class="tsd-kind-icon">handle<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#handlenotice" class="tsd-kind-icon">handle<wbr>Notice</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#handlenotice-1" class="tsd-kind-icon">handle<wbr>Notice</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_psh.html#init" class="tsd-kind-icon">init</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_psh.html#isobject" class="tsd-kind-icon">is<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#main" class="tsd-kind-icon">main</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_bodiless_psh.html#main-1" class="tsd-kind-icon">main</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_psh.html#mergebykey" class="tsd-kind-icon">merge<wbr>ByKey</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_bodiless_psh.html#readyaml" class="tsd-kind-icon">read<wbr>Yaml</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@bodiless/headless-chrome-crawler | bodilessjs</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">bodilessjs</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="_bodiless_headless_chrome_crawler.html">@bodiless/headless-chrome-crawler</a>
+				</li>
+			</ul>
+			<h1>Module @bodiless/headless-chrome-crawler</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<a href="#headless-chrome-crawler---" id="headless-chrome-crawler---" style="color: inherit; text-decoration: none;">
+						<h1>Headless Chrome Crawler <a href="https://www.npmjs.com/package/headless-chrome-crawler"><img src="https://badge.fury.io/js/headless-chrome-crawler.svg" alt="npm"></a> <a href="https://circleci.com/gh/yujiosaka/headless-chrome-crawler/tree/master"><img src="https://circleci.com/gh/yujiosaka/headless-chrome-crawler/tree/master.svg?style=shield&circle-token=ba45f930aed7057b79f2ac09df6be3e1b8ee954b" alt="build"></a> <a href="https://greenkeeper.io/"><img src="https://badges.greenkeeper.io/yujiosaka/headless-chrome-crawler.svg" alt="Greenkeeper badge"></a></h1>
+					</a>
+					<a href="#api--examples--tips--code-of-conduct--contributing--changelog" id="api--examples--tips--code-of-conduct--contributing--changelog" style="color: inherit; text-decoration: none;">
+						<h6><a href="https://github.com/yujiosaka/headless-chrome-crawler/blob/master/docs/API.md">API</a> | <a href="https://github.com/yujiosaka/headless-chrome-crawler/tree/master/examples">Examples</a> | <a href="https://github.com/yujiosaka/headless-chrome-crawler/blob/master/docs/TIPS.md">Tips</a> | <a href="https://github.com/yujiosaka/headless-chrome-crawler/blob/master/docs/CODE_OF_CONDUCT.md">Code of Conduct</a> | <a href="https://github.com/yujiosaka/headless-chrome-crawler/blob/master/docs/CONTRIBUTING.md">Contributing</a> | <a href="https://github.com/yujiosaka/headless-chrome-crawler/blob/master/docs/CHANGELOG.md">Changelog</a></h6>
+					</a>
+					<p>Distributed crawler powered by Headless Chrome</p>
+					<img src="https://user-images.githubusercontent.com/2261067/36531211-81d54840-1800-11e8-8aa7-019c777712bf.png" height="300" align="right">
+					<a href="#features" id="features" style="color: inherit; text-decoration: none;">
+						<h2>Features</h2>
+					</a>
+					<p>Crawlers based on simple requests to HTML files are generally fast. However, it sometimes ends up capturing empty bodies, especially when the websites are built on such modern frontend frameworks as <a href="https://angularjs.org">AngularJS</a>, <a href="https://reactjs.org">React</a> and <a href="https://jp.vuejs.org/index.html">Vue.js</a>.</p>
+					<p>Powered by Headless Chrome, the crawler provides <a href="#api-reference">simple APIs</a> to crawl these dynamic websites with the following features:</p>
+					<ul>
+						<li>Distributed crawling</li>
+						<li>Configure concurrency, delay and retry</li>
+						<li>Support both <a href="https://en.wikipedia.org/wiki/Depth-first_search">depth-first search</a> and <a href="https://en.wikipedia.org/wiki/Breadth-first_search">breadth-first search</a> algorithm</li>
+						<li>Pluggable cache storages such as <a href="https://redis.io">Redis</a></li>
+						<li>Support <a href="https://tools.ietf.org/html/rfc4180">CSV</a> and <a href="http://jsonlines.org">JSON Lines</a> for exporting results</li>
+						<li>Pause at the max request and resume at any time</li>
+						<li>Insert <a href="https://jquery.com">jQuery</a> automatically for scraping</li>
+						<li>Save screenshots for the crawling evidence</li>
+						<li>Emulate devices and user agents</li>
+						<li>Priority queue for crawling efficiency</li>
+						<li>Obey <a href="https://developers.google.com/search/reference/robots_txt">robots.txt</a></li>
+						<li>Follow <a href="https://www.sitemaps.org/">sitemap.xml</a></li>
+						<li>[Promise] support</li>
+					</ul>
+					<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+						<h2>Getting Started</h2>
+					</a>
+					<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+						<h3>Installation</h3>
+					</a>
+					<pre><code class="language-sh">yarn add headless-chrome-crawler
+<span class="hljs-comment"># or "npm i headless-chrome-crawler"</span></code></pre>
+					<blockquote>
+						<p><strong>Note</strong>: headless-chrome-crawler contains <a href="https://github.com/GoogleChrome/puppeteer">Puppeteer</a>. During installation, it automatically downloads a recent version of Chromium. To skip the download, see <a href="https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#environment-variables">Environment variables</a>.</p>
+					</blockquote>
+					<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+						<h3>Usage</h3>
+					</a>
+					<pre><code class="language-js"><span class="hljs-keyword">const</span> HCCrawler = <span class="hljs-built_in">require</span>(<span class="hljs-string">'headless-chrome-crawler'</span>);
+
+<span class="hljs-function">(<span class="hljs-params"><span class="hljs-keyword">async</span> (</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> crawler = <span class="hljs-keyword">await</span> HCCrawler.launch({
+    <span class="hljs-comment">// Function to be evaluated in browsers</span>
+    <span class="hljs-attr">evaluatePage</span>: <span class="hljs-function">(<span class="hljs-params">(</span>) =&gt;</span> ({
+      <span class="hljs-attr">title</span>: $(<span class="hljs-string">'title'</span>).text(),
+    })),
+    <span class="hljs-comment">// Function to be called with evaluated results from browsers</span>
+    <span class="hljs-attr">onSuccess</span>: (<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(result);
+    }),
+  });
+  <span class="hljs-comment">// Queue a request</span>
+  <span class="hljs-keyword">await</span> crawler.queue(<span class="hljs-string">'https://example.com/'</span>);
+  <span class="hljs-comment">// Queue multiple requests</span>
+  <span class="hljs-keyword">await</span> crawler.queue([<span class="hljs-string">'https://example.net/'</span>, <span class="hljs-string">'https://example.org/'</span>]);
+  <span class="hljs-comment">// Queue a request with custom options</span>
+  <span class="hljs-keyword">await</span> crawler.queue({
+    <span class="hljs-attr">url</span>: <span class="hljs-string">'https://example.com/'</span>,
+    <span class="hljs-comment">// Emulate a tablet device</span>
+    <span class="hljs-attr">device</span>: <span class="hljs-string">'Nexus 7'</span>,
+    <span class="hljs-comment">// Enable screenshot by passing options</span>
+    <span class="hljs-attr">screenshot</span>: {
+      <span class="hljs-attr">path</span>: <span class="hljs-string">'./tmp/example-com.png'</span>
+    },
+  });
+  <span class="hljs-keyword">await</span> crawler.onIdle(); <span class="hljs-comment">// Resolved when no queue is left</span>
+  <span class="hljs-keyword">await</span> crawler.close(); <span class="hljs-comment">// Close the crawler</span>
+})();</code></pre>
+					<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
+						<h2>Examples</h2>
+					</a>
+					<ul>
+						<li><a href="https://github.com/yujiosaka/headless-chrome-crawler/blob/master/examples/priority-queue.js">Priority queue for crawling efficiency</a></li>
+						<li><a href="https://github.com/yujiosaka/headless-chrome-crawler/blob/master/examples/emulate-device.js">Emulate device and user agent</a></li>
+						<li><a href="https://github.com/yujiosaka/headless-chrome-crawler/blob/master/examples/redis-cache.js">Redis cache to skip duplicate requests</a></li>
+						<li><a href="https://github.com/yujiosaka/headless-chrome-crawler/blob/master/examples/csv-exporter.js">Export a CSV file for crawled results</a></li>
+						<li><a href="https://github.com/yujiosaka/headless-chrome-crawler/blob/master/examples/conditional-screenshot.js">Conditionally saving screenshots</a></li>
+					</ul>
+					<p>See <a href="https://github.com/yujiosaka/headless-chrome-crawler/tree/master/examples">here</a> for the full examples list. The examples can be run from the root folder as follows:</p>
+					<pre><code class="language-sh">NODE_PATH=../ node examples/priority-queue.js</code></pre>
+					<a href="#api-reference" id="api-reference" style="color: inherit; text-decoration: none;">
+						<h2>API reference</h2>
+					</a>
+					<p>See <a href="https://github.com/yujiosaka/headless-chrome-crawler/blob/master/docs/API.md">here</a> for the API reference.</p>
+					<a href="#debugging-tips" id="debugging-tips" style="color: inherit; text-decoration: none;">
+						<h2>Debugging tips</h2>
+					</a>
+					<p>See <a href="https://github.com/yujiosaka/headless-chrome-crawler/blob/master/docs/TIPS.md">here</a> for the debugging tips.</p>
+					<a href="#faq" id="faq" style="color: inherit; text-decoration: none;">
+						<h2>FAQ</h2>
+					</a>
+					<a href="#how-is-this-different-from-other-crawlers" id="how-is-this-different-from-other-crawlers" style="color: inherit; text-decoration: none;">
+						<h3>How is this different from other crawlers?</h3>
+					</a>
+					<p>There are roughly two types of crawlers. One is static and the other is dynamic.</p>
+					<p>The static crawlers are based on simple requests to HTML files. They are generally fast, but fail scraping the contents when the HTML dynamically changes on browsers.</p>
+					<p>Dynamic crawlers based on <a href="http://phantomjs.org">PhantomJS</a> and <a href="http://www.seleniumhq.org">Selenium</a> work magically on such dynamic applications. However, <a href="https://groups.google.com/forum/#!topic/phantomjs/9aI5d-LDuNE">PhantomJS&#39;s maintainer has stepped down and recommended to switch to Headless Chrome</a>, which is fast and stable. <a href="http://www.seleniumhq.org">Selenium</a> is still a well-maintained cross browser platform which runs on Chrome, Safari, IE and so on. However, crawlers do not need such cross browsers support.</p>
+					<p>This crawler is dynamic and based on Headless Chrome.</p>
+					<a href="#how-is-this-different-from-puppeteer" id="how-is-this-different-from-puppeteer" style="color: inherit; text-decoration: none;">
+						<h3>How is this different from Puppeteer?</h3>
+					</a>
+					<p>This crawler is built on top of <a href="https://github.com/GoogleChrome/puppeteer">Puppeteer</a>.</p>
+					<p><a href="https://github.com/GoogleChrome/puppeteer">Puppeteer</a> provides low to mid level APIs to manupulate Headless Chrome, so you can build your own crawler with it. This way you have more controls on what features to implement in order to satisfy your needs.</p>
+					<p>However, most crawlers requires such common features as following links, obeying <a href="https://developers.google.com/search/reference/robots_txt">robots.txt</a> and etc. This crawler is a general solution for most crawling purposes. If you want to quickly start crawling with Headless Chrome, this crawler is for you.</p>
+				</div>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_accessibility.html">@bodiless/accessibility</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_backend.html">@bodiless/backend</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_bv.html">@bodiless/bv</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_components.html">@bodiless/components</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_core.html">@bodiless/core</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_core_ui.html">@bodiless/core-<wbr>ui</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_documentation.html">@bodiless/documentation</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_fclasses.html">@bodiless/fclasses</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_gatsby_plugin_ssi.html">@bodiless/gatsby-<wbr>plugin-<wbr>ssi</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_gatsby_starter_bodiless.html">@bodiless/gatsby-<wbr>starter-<wbr>bodiless</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_gatsby_theme_bodiless.html">@bodiless/gatsby-<wbr>theme-<wbr>bodiless</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="_bodiless_headless_chrome_crawler.html">@bodiless/headless-<wbr>chrome-<wbr>crawler</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_layouts.html">@bodiless/layouts</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_layouts_ui.html">@bodiless/layouts-<wbr>ui</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_migration_tool.html">@bodiless/migration-<wbr>tool</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_organisms.html">@bodiless/organisms</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_psh.html">@bodiless/psh</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_richtext.html">@bodiless/richtext</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_richtext_ui.html">@bodiless/richtext-<wbr>ui</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="_bodiless_ui.html">@bodiless/ui</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
