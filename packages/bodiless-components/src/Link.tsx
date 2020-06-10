@@ -79,8 +79,19 @@ export const editButtonOptions: EditButtonOptions<Props, Data> = {
   local: true,
 };
 
+const withPropTransformer = (transformer: Function) => prop => Component => props => {
+  const props$ = {
+    ...props,
+    [prop]: transformer(props[prop]),
+  };
+  return <Component {...props$} />;
+};
+
+const hrefTransformer = value => value !== '' ? value : '#';
+const withHrefTransformer = withPropTransformer(hrefTransformer)('href');
+
 const emptyValue = {
-  href: '#',
+  href: '',
 };
 // Composed hoc which creates editable version of the component.
 // Note - the order is important. In particular:
@@ -102,6 +113,7 @@ export const asBodilessLink = (nodeKey?: string) => flowRight(
     withLocalContextMenu,
   ),
   withData,
+  withHrefTransformer,
 ) as Bodiless<Props, Props & Partial<WithNodeProps>>;
 const Link = asBodilessLink()('a');
 export default Link;
