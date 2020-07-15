@@ -29,7 +29,7 @@ import useContextMenuForm, { contextMenuForm, ContextMenuForm } from './contextM
 import type { FormProps as ContextMenuFormProps } from './contextMenuForm';
 import withData from './withData';
 import NodeProvider, { useNode, useNodeDataHandlers } from './NodeProvider';
-import { DefaultContentNode } from './ContentNode';
+import { DefaultContentNode, Status as NodeStatus } from './ContentNode';
 import {
   withMenuOptions,
   withNodeAndHandlers,
@@ -55,6 +55,7 @@ import {
   NotificationProvider,
   useNotifications,
   useNotify,
+  useNotifyContext,
 } from './NotificationProvider';
 import NotificationButtonProvider from './NotificationButtonProvider';
 import SwitcherButtonProvider from './SwitcherButtonProvider';
@@ -94,6 +95,7 @@ export {
   useNode,
   useNodeDataHandlers,
   DefaultContentNode,
+  NodeStatus,
   ifEditable,
   ifReadOnly,
   withoutProps,
@@ -113,6 +115,7 @@ export {
   useNotifications,
   useNotify,
   SwitcherButtonProvider,
+  useNotifyContext,
 };
 
 export type {

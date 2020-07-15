@@ -12,8 +12,19 @@
  * limitations under the License.
  */
 
-import React, { useContext } from 'react';
-import { ContentNode, DefaultContentNode } from './ContentNode';
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { v1 } from 'uuid';
+import {
+  ContentNode,
+  DefaultContentNode,
+  Status as NodeStatus,
+} from './ContentNode';
+import { useNotifyContext } from './NotificationProvider';
 
 type NodeMap<D> = {
   activeCollection: string;
@@ -31,13 +42,35 @@ const context = React.createContext<NodeMap<any>>({
 
 const NodeConsumer = context.Consumer;
 
+const useNotifyOnNodeError = <D extends object>(node: ContentNode<D>) => {
+  const nodeStatus = node.status;
+  const { notify } = useNotifyContext();
+  const owner = useRef(v1()).current;
+  const [hasNotificationError, setHasNotificationError] = useState(false);
+  useEffect(() => {
+    if (nodeStatus === NodeStatus.Error) {
+      setHasNotificationError(true);
+      notify(owner, [{
+        id: node.path.join('$'),
+        message: `error saving ${node.path.join('$')}`,
+      }]);
+    }
+    if (hasNotificationError && nodeStatus === NodeStatus.Success) {
+      notify(owner, []);
+      setHasNotificationError(false);
+    }
+  }, [nodeStatus]);
+}
+
 const useNode = <D extends object>(collection?: string) => {
   const map = React.useContext(context);
   // If no collection is specified, then return a node from the
   // collection which was set by the most recent NodeProvier.
   const key = collection || map.activeCollection || '_default';
+  const contentNode = map.collections[key] as ContentNode<D>;
+  useNotifyOnNodeError(contentNode);
   return {
-    node: map.collections[key] as ContentNode<D>,
+    node: contentNode,
   };
 };
 

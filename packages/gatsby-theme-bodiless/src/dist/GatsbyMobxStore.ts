@@ -16,6 +16,7 @@ import {
   observable, action,
 } from 'mobx';
 import { AxiosPromise } from 'axios';
+import { NodeStatus } from '@bodiless/core';
 // import isEqual from 'react-fast-compare';
 import BackendClient from './BackendClient';
 import addPageLeaver from './addPageLeaver';
@@ -153,6 +154,12 @@ export default class GatsbyMobxStore {
     const storeValue = item && !item.isDeleted ? item.data : null;
     const dataValue = this.data[key];
     return storeValue || dataValue || {};
+  };
+
+  getNodeStatus = (keyPath: string[]) => {
+    const key = keyPath.join(nodeChildDelimiter);
+    const item = this.store.get(key);
+    return item && !item.isDeleted && item.hasFlushingError ? NodeStatus.Error : NodeStatus.Success;
   };
 
   @action setItem = (key: string, item: Item) => {

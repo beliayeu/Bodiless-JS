@@ -101,7 +101,10 @@ const useNotify = (notifications: Notification[]) => {
   );
 };
 
+const useNotifyContext = () => useContext(NotifyContext);
+
 export {
+  useNotifyContext,
   NotificationProvider,
   NotificationProviderItem,
   useNotify,
