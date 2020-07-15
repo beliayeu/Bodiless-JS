@@ -12,7 +12,12 @@
  * limitations under the License.
  */
 
-import React, { ComponentType, useState } from 'react';
+import React, {
+  ComponentType,
+  useState,
+  createContext,
+  useContext,
+} from 'react';
 import { flow } from 'lodash';
 import {
   withDesign,
@@ -21,6 +26,9 @@ import {
   H2,
   StylableProps,
   addProps,
+} from '@bodiless/fclasses';
+import type {
+  DesignableComponentsProps
 } from '@bodiless/fclasses';
 import {
   asEditable,
@@ -42,18 +50,20 @@ const singleAccordionComponentStart:SingleAccordionComponents = {
   Body: Div,
 };
 
+enum ACCORDION_STATE {
+  EXPANDED,
+  COLLAPSED,
+}
+
+type Props = {
+  state: ACCORDION_STATE,
+  toggle: Function,
+  expandedStyle: string | null,
+} & DesignableComponentsProps<SingleAccordionComponents>;
+
 const SingleAccordionBase = ({
-  components, expanded, expandedStyle = null, ...rest
-}: any) => {
-  const EXPANDED = 'expanded';
-  const COLLAPSED = 'collapsed';
-  const initialState = expanded ? EXPANDED : COLLAPSED;
-  const [accordionState, setAccordionState] = useState(initialState);
-
-  const toggleAccordionState = () => {
-    setAccordionState(accordionState === EXPANDED ? COLLAPSED : EXPANDED);
-  };
-
+  components, state, expandedStyle = null, toggle, ...rest
+}: Props) => {
   const {
     Wrapper,
     TitleWrapper,
@@ -63,26 +73,72 @@ const SingleAccordionBase = ({
   } = components;
 
   return (
-    <Wrapper className={[accordionState]} {...rest}>
+    <Wrapper className={[state]} {...rest}>
       <TitleWrapper
-        onClick={toggleAccordionState}
+        onClick={toggle}
         className={[
           'flex',
           'justify-between',
           'select-none',
-          (accordionState === EXPANDED && expandedStyle) || '',
+          (state === ACCORDION_STATE.EXPANDED && expandedStyle) || '',
         ]}
       >
         <Title />
-        <span className="material-icons cursor-pointer select-none" data-accordion-element="accordion-icon" data-accordion-icon={accordionState === COLLAPSED ? 'expand' : 'collapse'}>
-          {accordionState === COLLAPSED ? 'add' : 'remove'}
+        <span className="material-icons cursor-pointer select-none" data-accordion-element="accordion-icon" data-accordion-icon={state === ACCORDION_STATE.COLLAPSED ? 'expand' : 'collapse'}>
+          {state === ACCORDION_STATE.COLLAPSED ? 'add' : 'remove'}
         </span>
       </TitleWrapper>
-      <BodyWrapper className={accordionState === COLLAPSED ? 'hidden' : 'block'}>
+      <BodyWrapper className={state === ACCORDION_STATE.COLLAPSED ? 'hidden' : 'block'}>
         <Body />
       </BodyWrapper>
     </Wrapper>
   );
+};
+
+const createSingleAccordionProvider = () => {
+  const SingleAccordionContext = createContext({
+    accordionState: ACCORDION_STATE.EXPANDED,
+    setAccordionState: () => {},
+  });
+  const withSingleAccordionProvider = Component => {
+    const WithSingleAccordionProvider = props => {
+      const { expanded } = props;
+      const initialState = expanded ? ACCORDION_STATE.EXPANDED : ACCORDION_STATE.COLLAPSED;
+      const [accordionState, setAccordionState] = useState(initialState);
+      const providerValue = {
+        accordionState,
+        setAccordionState,
+      };
+      const props$1 = {
+        ...props,
+        state: accordionState,
+        toggle: () => setAccordionState(accordionState === ACCORDION_STATE.EXPANDED ? ACCORDION_STATE.COLLAPSED : ACCORDION_STATE.EXPANDED),
+      };
+      return (
+        <SingleAccordionContext.Provider value={providerValue}>
+          <Component {...props$1} />
+        </SingleAccordionContext.Provider>
+      );
+    };
+    WithSingleAccordionProvider.displayName = 'WithSingleAccordionProvider';
+    return WithSingleAccordionProvider;
+  };
+  return {
+    withAccordionContext: withSingleAccordionProvider,
+    useAccordionContext: () => useContext(SingleAccordionContext),
+  };
+};
+
+const createSingleAccordion = () => {
+  const { withAccordionContext, useAccordionContext } = createSingleAccordionProvider();
+  return {
+    Accordion: flow(
+      designable(singleAccordionComponentStart),
+      withAccordionContext,
+    )(SingleAccordionBase),
+    isExpanded: () => useAccordionContext().accordionState === ACCORDION_STATE.EXPANDED,
+    isCollapsed: () => useAccordionContext().accordionState === ACCORDION_STATE.COLLAPSED,
+  };
 };
 
 const asSingleAccordion = withDesign({
@@ -98,9 +154,7 @@ const asTestableAccordion = withDesign({
   Body: addProps({ 'data-accordion-element': 'accordion-body' }),
 });
 
-const SingleAccordionClean = flow(
-  designable(singleAccordionComponentStart),
-)(SingleAccordionBase);
+const { Accordion: SingleAccordionClean } = createSingleAccordion();
 
 const SingleAccordion = flow(
   asSingleAccordion,
@@ -114,6 +168,7 @@ const TestableSingleAccordion = flow(
 
 export default SingleAccordion;
 export {
+  createSingleAccordion,
   SingleAccordionBase,
   SingleAccordion,
   SingleAccordionClean,
