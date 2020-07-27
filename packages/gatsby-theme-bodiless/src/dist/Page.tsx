@@ -22,9 +22,18 @@ import { ContextWrapper, PageEditor } from '@bodiless/core-ui';
 import GatsbyNodeProvider, {
   Props as NodeProviderProps,
 } from './GatsbyNodeProvider';
+<<<<<<< HEAD
 import GatsbyPageProvider, { Props as PageProviderProps } from './GatsbyPageProvider';
 import useNewPageButton from './useNewPageButton';
 import useGitButtons from './useGitButtons';
+=======
+import GitProvider from './GitProvider';
+import NewPageProvider from './NewPageProvider';
+import GatsbyPageProvider, {
+  Props as PageProviderProps,
+} from './GatsbyPageProvider';
+import OnStoreErrorNotification from './OnStoreErrorNotification';
+>>>>>>> feat/notify-of-error
 
 type FinalUI = {
   ContextWrapper: ComponentType<ContextWrapperProps>;
