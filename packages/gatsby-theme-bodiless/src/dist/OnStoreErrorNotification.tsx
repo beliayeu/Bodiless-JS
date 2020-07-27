@@ -25,6 +25,7 @@ const OnStoreErrorNotification = observer(({ children }) => {
     id: STORE_ERROR_NOTIFICATION_ID,
     message: 'There is an error with saving data',
   }] : [];
+  console.log('OnStoreErrorNotification has error', store.hasError())
   useNotify(notifications);
   return <>{children}</>;
 });

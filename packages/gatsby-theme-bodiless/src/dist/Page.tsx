@@ -16,24 +16,17 @@ import React, { FC, ComponentType } from 'react';
 import {
   StaticPage,
   ContextWrapperProps,
+  NotificationProvider,
 } from '@bodiless/core';
 import { observer } from 'mobx-react-lite';
 import { ContextWrapper, PageEditor } from '@bodiless/core-ui';
 import GatsbyNodeProvider, {
   Props as NodeProviderProps,
 } from './GatsbyNodeProvider';
-<<<<<<< HEAD
 import GatsbyPageProvider, { Props as PageProviderProps } from './GatsbyPageProvider';
 import useNewPageButton from './useNewPageButton';
 import useGitButtons from './useGitButtons';
-=======
-import GitProvider from './GitProvider';
-import NewPageProvider from './NewPageProvider';
-import GatsbyPageProvider, {
-  Props as PageProviderProps,
-} from './GatsbyPageProvider';
 import OnStoreErrorNotification from './OnStoreErrorNotification';
->>>>>>> feat/notify-of-error
 
 type FinalUI = {
   ContextWrapper: ComponentType<ContextWrapperProps>;
@@ -62,16 +55,19 @@ const Page: FC<Props> = observer(({ children, ui, ...rest }) => {
   const { PageEditor: Editor, ContextWrapper: Wrapper } = getUI(ui);
   if (process.env.NODE_ENV === 'development') {
     return (
-      <GatsbyNodeProvider {...rest}>
-        <GatsbyPageProvider pageContext={rest.pageContext}>
-          <Editor>
-            <InnerButtons />
-            <Wrapper clickable>
-              {children}
-            </Wrapper>
-          </Editor>
-        </GatsbyPageProvider>
-      </GatsbyNodeProvider>
+      <NotificationProvider>
+        <GatsbyNodeProvider {...rest}>
+          <GatsbyPageProvider pageContext={rest.pageContext}>
+            <Editor>
+              <InnerButtons />
+              <Wrapper clickable>
+                <OnStoreErrorNotification />
+                {children}
+              </Wrapper>
+            </Editor>
+          </GatsbyPageProvider>
+        </GatsbyNodeProvider>
+      </NotificationProvider>
     );
   }
   return (

@@ -54,6 +54,7 @@ import {
   useActivateOnEffectActivator,
 } from './ActivateContext';
 import {
+  NotificationProvider,
   useNotifications,
   useNotify,
 } from './NotificationProvider';
@@ -117,6 +118,7 @@ export {
   useEditToggle,
   useNotifications,
   useNotify,
+  NotificationProvider,
 };
 
 export type {

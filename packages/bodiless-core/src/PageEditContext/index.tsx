@@ -184,6 +184,7 @@ class PageEditContext implements PageEditContextInterface {
   }
 
   get allMenuOptions() {
+    console.log('allMenuOptions');
     // Sets the group for each option to
     const ownOptions = this.getMenuOptions
       // Add the id of this context as the "group" of each option.

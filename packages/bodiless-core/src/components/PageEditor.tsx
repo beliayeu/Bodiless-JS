@@ -100,13 +100,11 @@ const PageEditor: FC<Props> = ({ children, ui }) => {
   useEffect(() => { if (!context.isActive) context.activate(); }, []);
 
   return (
-    <NotificationProvider>
-      <uiContext.Provider value={newUI}>
-        {children}
-        <GlobalContextMenu />
-        <PageOverlay />
-      </uiContext.Provider>
-    </NotificationProvider>
+    <uiContext.Provider value={newUI}>
+      {children}
+      <GlobalContextMenu />
+      <PageOverlay />
+    </uiContext.Provider>
   );
 };
 
