@@ -14,13 +14,21 @@
 
 import React, { Component } from 'react';
 import { pick } from 'lodash';
-import { DefaultContentNode, NodeProvider } from '@bodiless/core';
+import { observer } from "mobx-react";
+import {
+  DefaultContentNode,
+  NodeProvider,
+  getNotifyContext,
+} from '@bodiless/core';
 import GatsbyMobxStore, { DataSource } from './GatsbyMobxStore';
-import GatsbyStoreProvider from './GatsbyStoreProvider';
+import { v1 } from 'uuid';
 
 type State = {
   store: GatsbyMobxStore,
+  hasError: boolean,
 };
+
+const STORE_ERROR_NOTIFICATION_ID = 'STORE_ERROR_NOTIFICATION_ID';
 
 export type Props = {
   data: any,
@@ -29,16 +37,24 @@ export type Props = {
   }
 };
 
+@observer
 class GatsbyNodeProvider extends Component<Props, State> implements DataSource {
   constructor(props: Props) {
     super(props);
     this.state = {
       store: new GatsbyMobxStore(this),
+      hasError: false,
     };
   }
 
+  static id = v1();
+
+  static contextType = getNotifyContext();
+
+  private hasStoreError = false;
+
   // eslint-disable-next-line react/state-in-constructor
-  readonly state: State;
+  state: State;
 
   // React hook inserts props into mobx store.
   static getDerivedStateFromProps(props: Props, state: State) {
@@ -51,7 +67,18 @@ class GatsbyNodeProvider extends Component<Props, State> implements DataSource {
   // Prevent unnecessary renders when the Gatsby JSON Store updates.
   // Mobx will take care of updating components whose data have changed.
   shouldComponentUpdate() {
-    return false;
+    console.log('shouldComponentUpdate', 'this.state.hasError', this.state.hasError, 'this.state.store.hasError()', this.state.store.hasError)
+    return this.state.hasError !== this.state.store.hasError;
+  }
+
+  componentDidUpdate() {
+    console.log('GatsbyNodeProvider componentDidUpdate');
+    const { store } = this.state;
+    const notifications = store && store.hasError ? [{
+      id: STORE_ERROR_NOTIFICATION_ID,
+      message: 'There is an error with saving data',
+    }] : [];
+    this.context.notify(GatsbyNodeProvider.id, notifications);
   }
 
   get slug() {
@@ -70,16 +97,16 @@ class GatsbyNodeProvider extends Component<Props, State> implements DataSource {
   }
 
   render() {
-    const { store } = this.state;
+    console.log('GatsbyNodeProvider render', 'this.state.hasError', this.state.hasError, 'this.state.store.hasError()', this.state.store.hasError);
+    // workaroun in order to make the component react on mobx state changes
+    const hasError = this.state.store.hasError;
     const { children } = this.props;
     return (
-      <GatsbyStoreProvider store={store}>
-        <NodeProvider node={this.getRootNode('Site')} collection="site">
-          <NodeProvider node={this.getRootNode('Page')} collection="_default">
-            {children}
-          </NodeProvider>
+      <NodeProvider node={this.getRootNode('Site')} collection="site">
+        <NodeProvider node={this.getRootNode('Page')} collection="_default">
+          {children}
         </NodeProvider>
-      </GatsbyStoreProvider>
+      </NodeProvider>
     );
   }
 }

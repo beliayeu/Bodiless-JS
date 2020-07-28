@@ -13,7 +13,7 @@
  */
 
 import {
-  observable, action,
+  observable, action, computed,
 } from 'mobx';
 import { AxiosPromise } from 'axios';
 // import isEqual from 'react-fast-compare';
@@ -196,9 +196,10 @@ export default class GatsbyMobxStore {
     this.deleteItem(key);
   };
 
-  hasError = () => {
+  @computed get hasError() {
     const itemsWithError = Array.from(this.store.values())
       .filter(item => item.hasFlushingError);
+    console.log('GatsbyMobxStore hasError', itemsWithError.length > 0);
     return itemsWithError.length > 0;
   };
 }

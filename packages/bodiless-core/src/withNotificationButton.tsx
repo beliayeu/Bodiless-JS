@@ -12,12 +12,13 @@
  * limitations under the License.
  */
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { ContextMenuForm } from './contextMenuForm';
 import { useRegisterMenuOptions } from './PageContextProvider';
 import { useNotifications } from './NotificationProvider';
 import { useUI as useFormUI } from './components/ContextMenuItem';
 import type { FormProps as ContextMenuFormProps } from './contextMenuForm';
+import { useEditContext } from './hooks';
 
 const NotificationList = () => {
   const { ComponentFormList, ComponentFormListItem } = useFormUI();
@@ -52,12 +53,22 @@ const renderForm = (props: ContextMenuFormProps) => <RenderForm {...props} />;
  * Hook to add a notification button.
  */
 const useNotificationButton = () => {
-  const { notifications } = useNotifications();  
+  const context = useEditContext();
+  const { notifications } = useNotifications();
+  const hasNotifications = notifications.length > 0;
+  const [ isActive, setIsActive ] = useState(hasNotifications);
+  if (hasNotifications !== isActive) {
+    setIsActive(hasNotifications);
+  }
+  useEffect(() => {
+    console.log('useNotificationButton before context refresh');
+    context.refresh();
+  }, [isActive]);
   const getMenuOptions = useCallback(() => [{
     name: 'Notifications',
     label: 'Alerts',
-    icon: notifications.length > 0 ? 'notification_important' : 'notifications',
-    isActive: () => notifications.length > 0,
+    icon: hasNotifications ? 'notification_important' : 'notifications',
+    isActive: () => hasNotifications,
     handler: () => renderForm,
   }], [notifications]);
   useRegisterMenuOptions({
