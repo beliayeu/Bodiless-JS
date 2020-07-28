@@ -67,12 +67,10 @@ class GatsbyNodeProvider extends Component<Props, State> implements DataSource {
   // Prevent unnecessary renders when the Gatsby JSON Store updates.
   // Mobx will take care of updating components whose data have changed.
   shouldComponentUpdate() {
-    console.log('shouldComponentUpdate', 'this.state.hasError', this.state.hasError, 'this.state.store.hasError()', this.state.store.hasError)
     return this.state.hasError !== this.state.store.hasError;
   }
 
   componentDidUpdate() {
-    console.log('GatsbyNodeProvider componentDidUpdate');
     const { store } = this.state;
     const notifications = store && store.hasError ? [{
       id: STORE_ERROR_NOTIFICATION_ID,
@@ -97,9 +95,7 @@ class GatsbyNodeProvider extends Component<Props, State> implements DataSource {
   }
 
   render() {
-    console.log('GatsbyNodeProvider render', 'this.state.hasError', this.state.hasError, 'this.state.store.hasError()', this.state.store.hasError);
-    // workaroun in order to make the component react on mobx state changes
-    const hasError = this.state.store.hasError;
+    this.state.hasError = this.state.store.hasError;
     const { children } = this.props;
     return (
       <NodeProvider node={this.getRootNode('Site')} collection="site">

@@ -61,7 +61,6 @@ const useNotificationButton = () => {
     setIsActive(hasNotifications);
   }
   useEffect(() => {
-    console.log('useNotificationButton before context refresh');
     context.refresh();
   }, [isActive]);
   const getMenuOptions = useCallback(() => [{
