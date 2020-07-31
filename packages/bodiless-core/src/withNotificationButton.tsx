@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-import React, { useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { ContextMenuForm } from './contextMenuForm';
 import { useRegisterMenuOptions } from './PageContextProvider';
 import { useNotifications } from './NotificationProvider';
@@ -54,7 +54,7 @@ const renderForm = (props: ContextMenuFormProps) => <RenderForm {...props} />;
 const useNotificationButton = () => {
   const { notifications } = useNotifications();
 
-  const getMenuOptions = useCallback(() => [{
+  const menuOptions = useMemo(() => [{
     name: 'Notifications',
     label: 'Alerts',
     icon: notifications.length > 0 ? 'notification_important' : 'notifications',
@@ -62,7 +62,7 @@ const useNotificationButton = () => {
     handler: () => renderForm,
   }], [notifications]);
   useRegisterMenuOptions({
-    getMenuOptions,
+    getMenuOptions: () => menuOptions,
     name: 'Notifications',
   });
 };

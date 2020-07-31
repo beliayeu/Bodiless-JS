@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-import React, { Fragment, ComponentType } from 'react';
+import React, { Fragment, ComponentType, useMemo } from 'react';
 import {
   useNode, TMenuOption, withMenuOptions, useEditContext,
 } from '@bodiless/core';
@@ -66,7 +66,7 @@ const withToggleButton = (options? : ToggleMenuOptions) => {
       context.refresh();
     };
 
-    return () => (
+    const menuOptions = useMemo(() => (
       isOn() ? [] : [{
         icon: icon || 'toggle_off',
         name: 'Toggle',
@@ -75,7 +75,8 @@ const withToggleButton = (options? : ToggleMenuOptions) => {
         global: false,
         local: true,
       }]
-    );
+    ), [isOn()]);
+    return () => menuOptions;
   };
 
   return withMenuOptions({ useGetMenuOptions, name: 'toggle' });

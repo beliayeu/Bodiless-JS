@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-import React, { ComponentType } from 'react';
+import React, { ComponentType, useMemo } from 'react';
 import {
   withMenuOptions, useEditContext, withLocalContextMenu, withContextActivator, withoutProps,
 } from '@bodiless/core';
@@ -32,7 +32,7 @@ const useGetMenuOptions = (props: TitleProps) => {
     context.refresh();
   };
 
-  return () => {
+  const menuOptions = useMemo(() => {
     const options = [];
     options.push({
       name: 'Add',
@@ -54,7 +54,9 @@ const useGetMenuOptions = (props: TitleProps) => {
       });
     }
     return options;
-  };
+  }, [canDelete()]);
+
+  return () => menuOptions;
 };
 
 // TODO: Maybe generalize this as an "alterDesign()" method.

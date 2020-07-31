@@ -13,7 +13,7 @@
  */
 
 /* eslint-disable no-alert */
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   contextMenuForm,
   getUI,
@@ -109,7 +109,7 @@ const useGetMenuOptions = (): TMenuOptionGetter => {
   const context = useEditContext();
   const gatsbyPage = useGatsbyPageContext();
 
-  return () => [
+  const menuOptions = useMemo(() => [
     {
       name: 'newpage',
       icon: 'note_add',
@@ -117,7 +117,8 @@ const useGetMenuOptions = (): TMenuOptionGetter => {
       isHidden: () => !context.isEdit,
       handler: () => formPageAdd(defaultClient, gatsbyPage.subPageTemplate, context),
     },
-  ];
+  ], [gatsbyPage.subPageTemplate]);
+  return () => menuOptions;
 };
 
 const useNewPageButton = () => {

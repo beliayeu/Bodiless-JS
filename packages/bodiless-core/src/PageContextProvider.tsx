@@ -12,7 +12,9 @@
  * limitations under the License.
  */
 
-import React, { FC, useRef, ComponentType } from 'react';
+import React, {
+  FC, useRef, ComponentType, useEffect,
+} from 'react';
 import PageEditContext from './PageEditContext';
 import { useEditContext, useUUID } from './hooks';
 import { Props, Options, TMenuOptionGetter } from './Types/PageContextProviderTypes';
@@ -45,6 +47,7 @@ export const useRegisterMenuOptions = (props: Props) => {
   const values = useNewContextValues(props);
   const context = useEditContext();
   context.registerPeer(values);
+  // useEffect(() => { if (context.isActive) context.updateMenuOptions(); });
 };
 
 /**
@@ -58,6 +61,7 @@ const PageContextProvider: FC<Props> = ({ children, ...rest }) => {
   const context = useEditContext();
   // eslint-disable-next-line react/destructuring-assignment
   const newValue = context.spawn(values);
+  // useEffect(() => { if (context.isActive) context.updateMenuOptions(); });
   return (
     <PageEditContext.Provider value={newValue}>
       {children}

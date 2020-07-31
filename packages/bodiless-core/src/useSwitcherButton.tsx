@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 import { useRegisterMenuOptions } from './PageContextProvider';
 import { useEditContext } from './hooks';
 
@@ -24,7 +24,7 @@ import { useEditContext } from './hooks';
  */
 const useSwitcherButton = () => {
   const context = useEditContext();
-  const getMenuOptions = useCallback(() => [{
+  const menuOptions = useMemo(() => [{
     name: 'switcher',
     icon: 'compare_arrows',
     handler: () => {
@@ -32,6 +32,7 @@ const useSwitcherButton = () => {
       context.refresh();
     },
   }], []);
+  const getMenuOptions = () => menuOptions;
   useRegisterMenuOptions({
     getMenuOptions,
     name: 'Switcher',

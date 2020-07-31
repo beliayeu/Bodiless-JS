@@ -12,14 +12,13 @@
  * limitations under the License.
  */
 
+import { useCallback, useMemo } from 'react';
 import { flowRight } from 'lodash';
 import { withoutProps } from './hoc';
-import { PageEditContextInterface } from './PageEditContext/types';
 import useContextMenuForm, {
   FormBodyProps as ContextMenuFormBodyProps,
 } from './contextMenuForm';
 import { withMenuOptions } from './PageContextProvider';
-import type { TMenuOptionGetter } from './Types/PageContextProviderTypes';
 import type { EditButtonProps, EditButtonOptions } from './Types/EditButtonTypes';
 
 export const useEditFormProps = <P extends object, D extends object>({
@@ -55,22 +54,22 @@ export const createMenuOptionHook = <P extends object, D extends object>({
   global,
   local,
   renderForm,
-  useGetMenuOptions,
+  // useGetMenuOptions,
 }: EditButtonOptions<P, D>) => (
     props: P & EditButtonProps<D>,
-    context: PageEditContextInterface,
+    // context: PageEditContextInterface,
   ) => {
     const { unwrap, isActive } = props;
-    const renderFormBody = (p: ContextMenuFormBodyProps<D>) => renderForm({
+    const renderFormBody = useCallback((p: ContextMenuFormBodyProps<D>) => renderForm({
       ...p,
       unwrap,
       componentProps: props,
-    });
-    const form = useContextMenuForm({
+    }), [unwrap, ...Object.values(props)]);
+    const form = useCallback(useContextMenuForm({
       ...useEditFormProps(props),
       renderFormBody,
-    });
-    const getMenuOptions: TMenuOptionGetter = () => [
+    }), [renderFormBody, ...Object.values(props)]);
+    const menuOptions = useMemo(() => [
       {
         icon,
         name,
@@ -81,12 +80,13 @@ export const createMenuOptionHook = <P extends object, D extends object>({
         // @TODO: Align this onSubmit prop received from ContextMenu with closeForm
         handler: () => form,
       },
-    ];
+    ], [form]);
+    const getMenuOptions = () => menuOptions;
     // If a hook providing additional menu options was specified, then call it.
-    if (useGetMenuOptions) {
-      const getMenuOptions$1 = useGetMenuOptions(props, context) || (() => []);
-      return () => [...getMenuOptions(), ...getMenuOptions$1()];
-    }
+    // if (useGetMenuOptions) {
+    //   const getMenuOptions$1 = useGetMenuOptions(props, context) || (() => []);
+    //   return () => [...getMenuOptions(), ...getMenuOptions$1()];
+    // }
     return getMenuOptions;
   };
 

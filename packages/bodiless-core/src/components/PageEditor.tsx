@@ -15,7 +15,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, {
-  FC, createContext, useContext, useEffect, useCallback,
+  FC, createContext, useContext, useEffect, useMemo,
 } from 'react';
 import { observer } from 'mobx-react-lite';
 
@@ -57,7 +57,8 @@ const GlobalContextMenu: FC<Props> = observer(() => {
 
 const PageEditor: FC<Props> = ({ children, ui }) => {
   const context = useEditContext();
-  const getMenuOptions = useCallback(() => [
+  const { isEdit } = context;
+  const menuOptions = useMemo(() => [
     {
       name: 'docs',
       icon: 'description',
@@ -70,17 +71,17 @@ const PageEditor: FC<Props> = ({ children, ui }) => {
       name: 'edit',
       icon: 'edit',
       label: 'Edit',
-      isActive: () => context.isEdit,
+      isActive: () => isEdit,
       handler: () => {
         // Force page reload after switching back to edit.
-        if (!context.isEdit) {
-          window.location.reload();
-        }
+        // if (!context.isEdit) {
+        //   window.location.reload();
+        // }
         context.toggleEdit();
         context.refresh();
       },
     },
-  ], []);
+  ], [isEdit]);
 
   const newUI = {
     ...useUI(),
@@ -93,7 +94,7 @@ const PageEditor: FC<Props> = ({ children, ui }) => {
   useSwitcherButton();
   useNotificationButton();
   useRegisterMenuOptions({
-    getMenuOptions,
+    getMenuOptions: () => menuOptions,
     name: 'Editor',
   });
   useEffect(() => { if (!context.isActive) context.activate(); }, []);

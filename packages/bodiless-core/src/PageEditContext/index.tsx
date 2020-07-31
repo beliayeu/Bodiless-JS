@@ -68,8 +68,6 @@ const defaultOverlaySettings: TOverlaySettings = {
 class PageEditStore implements PageEditStoreInterface {
   @observable activeContext: PageEditContext | undefined = undefined;
 
-  @observable contextMenuOptions: TMenuOption[] = [];
-
   @observable isEdit = getFromSessionStorage('isEdit', false);
 
   @observable isPositionToggled = getFromSessionStorage('isPositionToggled', false);
@@ -83,14 +81,49 @@ class PageEditStore implements PageEditStoreInterface {
 
   @observable areLocalTooltipsDisabled = false;
 
+  @observable
+  optionMap = new Map<string, Map<string, TMenuOption>>();
+
   @action
   setActiveContext(context?: PageEditContext) {
     if (context) this.activeContext = context;
-    this.contextMenuOptions = reduceRecursively<TMenuOption>(
+    const optionArray = reduceRecursively<TMenuOption>(
       [],
       (passedContext: PageEditContext) => passedContext.allMenuOptions,
       this.activeContext,
     );
+    optionArray.forEach(op => {
+      if (!this.optionMap.get(op.context!)) {
+        this.optionMap.set(op.context!, observable.map());
+      }
+      this.optionMap.get(op.context!)!.set(op.name, op);
+    });
+  }
+
+  @action
+  updateMenuOptions(contexts: PageEditContextInterface[]) {
+    contexts.forEach(context => {
+      const map = this.optionMap.get(context.id);
+      if (!map) return;
+      const keys = new Set();
+      // Update all items in the map
+      context.getMenuOptions().forEach(op => {
+        map.set(op.name, op);
+        keys.add(op);
+      });
+      // Delete any items which are no longer present.
+      map.forEach(($, key) => {
+        if (!keys.has(key)) map.delete(key);
+      });
+    });
+  }
+
+  @computed get contextMenuOptions(): TMenuOption[] {
+    const options: TMenuOption[] = [];
+    this.optionMap.forEach(contextMap => {
+      contextMap.forEach(option => { options.push(option); });
+    });
+    return options;
   }
 
   @action toggleEdit(on? : boolean) {
@@ -187,7 +220,9 @@ class PageEditContext implements PageEditContextInterface {
     // Sets the group for each option to
     const ownOptions = this.getMenuOptions
       // Add the id of this context as the "group" of each option.
-      ? this.getMenuOptions().map((op): TMenuOption => ({ group: this.id, ...op }))
+      ? this.getMenuOptions().map(
+        (op): TMenuOption => ({ context: this.id, group: this.id, ...op }),
+      )
       : [];
     return this.peerContexts.reduce(
       (finalOptions, peerContext) => [...finalOptions, ...peerContext.allMenuOptions],
@@ -219,7 +254,11 @@ class PageEditContext implements PageEditContextInterface {
   }
 
   refresh() {
-    this.store.setActiveContext();
+    // this.store.setActiveContext();
+  }
+
+  updateMenuOptions() {
+    this.store.updateMenuOptions([this, ...this.peerContexts]);
   }
 
   // Tests whether this context is "active" - i.e. whether it or one of its descendants is the

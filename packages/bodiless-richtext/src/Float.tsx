@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-import React, { ComponentType } from 'react';
+import React, { ComponentType, useMemo } from 'react';
 import { flowRight } from 'lodash';
 import {
   withContextActivator,
@@ -46,7 +46,7 @@ const withFloatWrapper = <P extends object> (Component:ComponentType<P>) => obse
 
 const useGetMenuOptions = () => {
   const { node } = useNode<Data>();
-  return () => ([
+  const menuOptions = useMemo(() => ([
     {
       icon: 'format_align_left',
       name: 'Float Left',
@@ -68,7 +68,8 @@ const useGetMenuOptions = () => {
       local: true,
       global: true,
     },
-  ]);
+  ]), []);
+  return () => menuOptions;
 };
 const asFloat = flowRight(
   withFloatWrapper,
