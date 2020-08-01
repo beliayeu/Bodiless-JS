@@ -106,7 +106,9 @@ class PageEditStore implements PageEditStoreInterface {
     contexts.forEach(context => {
       contextKeys.push(context.id);
       if (!this.optionMap.has(context.id)) {
-        this.optionMap.set(context.id, observable.map());
+        // We create a shallow map for each context bc we expect the
+        // items to be memoized, so we need only compare references.
+        this.optionMap.set(context.id, observable.map({}, { deep: false }));
       }
       const map = this.optionMap.get(context.id);
       const keys = new Set();
@@ -363,5 +365,5 @@ Please try your operation again if it was not successful.`,
 export default PageEditContext;
 
 export const useApi = () => ({
-  currentMenuOptions: defaultStore.optionMap,
+  currentMenuOptions: defaultStore.contextMenuOptions,
 });
