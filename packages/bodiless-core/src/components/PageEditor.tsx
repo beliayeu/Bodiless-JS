@@ -71,7 +71,7 @@ const PageEditor: FC<Props> = ({ children, ui }) => {
       name: 'edit',
       icon: 'edit',
       label: 'Edit',
-      isActive: () => isEdit,
+      isActive: isEdit,
       handler: () => {
         // Force page reload after switching back to edit.
         // if (!context.isEdit) {
@@ -110,4 +110,4 @@ const PageEditor: FC<Props> = ({ children, ui }) => {
   );
 };
 
-export default PageEditor;
+export default observer(PageEditor);

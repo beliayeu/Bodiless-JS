@@ -12,11 +12,14 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useMemo, useEffect, FC } from 'react';
 import { shallow, mount } from 'enzyme';
+import { observable, autorun } from 'mobx';
+import { observer } from 'mobx-react-lite';
 import PageContextProvider, { withMenuOptions } from '../src/PageContextProvider';
 import { useEditContext } from '../src/hooks';
 import { PageEditContextInterface } from '../src/PageEditContext/types';
+import { useApi } from '../src/PageEditContext';
 
 describe('withMenuOptions', () => {
   type Props = {
@@ -109,5 +112,99 @@ describe('ContextProvider', () => {
     wrapper.setProps({ name: 'foo' });
     const secondId = wrapper.find('span').text();
     expect(firstId).toBe(secondId);
+  });
+});
+
+describe.only('useRegisterMenuOptions', () => {
+  it('test mobx equality of meemoized value', () => {
+    const map = observable.map<any>();
+    const effect = jest.fn();
+    const reaction = jest.fn();
+    const disposer = autorun(reaction);
+
+    const Changer = () => {
+      const obj$ = {
+        bar: 'baz',
+      };
+      const obj = useMemo(() => obj$, []);
+      useEffect(() => {
+        effect();
+        map.set('foo', obj);
+      });
+      return null;
+    };
+    const wrapper = mount(<Changer />);
+    expect(effect).toHaveBeenCalledTimes(1);
+    expect(reaction).toHaveBeenCalledTimes(1);
+    wrapper.setProps({ foo: 'bar' });
+    expect(reaction).toHaveBeenCalledTimes(1);
+    expect(effect).toHaveBeenCalledTimes(2);
+    disposer();
+  });
+
+  const providerFired = jest.fn(() => console.log('provider fired'));
+  const Provider: FC<any> = props => {
+    const { children, foo } = props;
+    const options$ = [{
+      name: 'foo',
+      label: foo,
+    }];
+    const options = useMemo(() => options$, [foo]);
+    useEffect(providerFired);
+    return (
+      <PageContextProvider
+        getMenuOptions={() => options}
+        name="foo"
+      >
+        {children}
+      </PageContextProvider>
+    );
+  };
+
+  const activatorFired = jest.fn(() => console.log('activator fired'));
+  const Activator: FC = ({ children }) => {
+    const context = useEditContext();
+    useEffect(() => {
+      context.activate();
+      activatorFired();
+    }, []);
+    return <>{children}</>;
+  };
+
+  const listenerFired = jest.fn(() => console.log('listener fired'));
+  const Listener = observer(() => {
+    const { currentMenuOptions } = useApi();
+    const fooOptions = currentMenuOptions.get('foo');
+    const option = fooOptions && fooOptions.get('foo');
+    console.log(option);
+
+    useEffect(listenerFired);
+    return <>{option && option.label}</>;
+  });
+
+  it.only('Does not re-render a listener when options have not changed', () => {
+    providerFired.mockClear();
+    listenerFired.mockClear();
+    activatorFired.mockClear();
+    const Test = (props: any) => (
+      <>
+        <Provider {...props}>
+          <Activator />
+        </Provider>
+        <Listener />
+      </>
+    );
+    const wrapper = mount(<Test foo="bar" />);
+    expect(providerFired).toHaveBeenCalledTimes(1);
+    expect(listenerFired).toHaveBeenCalledTimes(2);
+    expect(activatorFired).toHaveBeenCalledTimes(1);
+    wrapper.setProps({ foo: 'baz' });
+    expect(providerFired).toHaveBeenCalledTimes(2);
+    expect(listenerFired).toHaveBeenCalledTimes(3);
+    expect(activatorFired).toHaveBeenCalledTimes(1);
+    wrapper.setProps({ bar: 'baz' });
+    expect(providerFired).toHaveBeenCalledTimes(3);
+    expect(listenerFired).toHaveBeenCalledTimes(3);
+    expect(activatorFired).toHaveBeenCalledTimes(1);
   });
 });

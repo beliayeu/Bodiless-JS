@@ -57,7 +57,7 @@ const ContextMenuItem = (props: IProps) => {
     FormWrapper,
     Tooltip,
   } = finalUI;
-  const isActive = option.isActive ? option.isActive() : false;
+  const isActive = option.isActive && (typeof option.isActive === 'function' ? option.isActive() : option.isActive);
   const isDisabled = option.isDisabled ? option.isDisabled() : false;
   const isHidden = option.isHidden ? option.isHidden() : false;
   const isFirst = index === 0;

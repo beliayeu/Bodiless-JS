@@ -14,7 +14,6 @@
 
 import React, { ConsumerProps, FC } from 'react';
 import { Observer } from 'mobx-react';
-import { v1 } from 'uuid';
 import { action, computed, observable } from 'mobx';
 import {
   DefinesLocalEditContext,
@@ -40,8 +39,8 @@ import {
  */
 const reduceRecursively = <T extends any>(
   accumulator: T[],
-  callback: (c: PageEditContext) => T[],
-  context?: PageEditContext,
+  callback: (c: PageEditContextInterface) => T[],
+  context?: PageEditContextInterface,
 ): T[] => {
   if (!context) return [];
   const newItems = callback(context);
@@ -66,7 +65,7 @@ const defaultOverlaySettings: TOverlaySettings = {
  * Holds the current UI state for the editor.
  */
 class PageEditStore implements PageEditStoreInterface {
-  @observable activeContext: PageEditContext | undefined = undefined;
+  @observable activeContext: PageEditContextInterface | undefined = undefined;
 
   @observable isEdit = getFromSessionStorage('isEdit', false);
 
@@ -85,37 +84,43 @@ class PageEditStore implements PageEditStoreInterface {
   optionMap = new Map<string, Map<string, TMenuOption>>();
 
   @action
-  setActiveContext(context?: PageEditContext) {
+  setActiveContext(context?: PageEditContextInterface) {
     if (context) this.activeContext = context;
-    const optionArray = reduceRecursively<TMenuOption>(
-      [],
-      (passedContext: PageEditContext) => passedContext.allMenuOptions,
-      this.activeContext,
-    );
-    optionArray.forEach(op => {
-      if (!this.optionMap.get(op.context!)) {
-        this.optionMap.set(op.context!, observable.map());
-      }
-      this.optionMap.get(op.context!)!.set(op.name, op);
+
+    // Travel the context trail, updating options for each context.
+    const keys: string[] = [];
+    for (let c = this.activeContext; c; c = c.parent) {
+      keys.push(...this.updateMenuOptions([c!, ...c!.peerContexts]));
+    }
+
+    // Delete options for any context which is not in the trail
+    const keySet = new Set(keys);
+    this.optionMap.forEach(($, key) => {
+      if (!keySet.has(key)) this.optionMap.delete(key);
     });
   }
 
   @action
   updateMenuOptions(contexts: PageEditContextInterface[]) {
+    const contextKeys: string[] = [];
     contexts.forEach(context => {
+      contextKeys.push(context.id);
+      if (!this.optionMap.has(context.id)) {
+        this.optionMap.set(context.id, observable.map());
+      }
       const map = this.optionMap.get(context.id);
-      if (!map) return;
       const keys = new Set();
       // Update all items in the map
       context.getMenuOptions().forEach(op => {
-        map.set(op.name, op);
-        keys.add(op);
+        map!.set(op.name, op);
+        keys.add(op.name);
       });
       // Delete any items which are no longer present.
-      map.forEach(($, key) => {
-        if (!keys.has(key)) map.delete(key);
+      map!.forEach(($, key) => {
+        if (!keys.has(key)) map!.delete(key);
       });
     });
+    return contextKeys;
   }
 
   @computed get contextMenuOptions(): TMenuOption[] {
@@ -181,20 +186,20 @@ const defaultStore = new PageEditStore();
  * Singleton store.
  */
 class PageEditContext implements PageEditContextInterface {
-  readonly id: string = v1();
+  readonly id: string = 'root';
 
-  readonly name: string = 'PageEditContext';
+  readonly name: string = 'root';
 
   readonly getMenuOptions: TMenuOptionGetter = () => [];
 
-  readonly parent: PageEditContext | undefined;
+  readonly parent: PageEditContextInterface | undefined;
 
-  private store: PageEditStore = defaultStore;
+  store: PageEditStoreInterface = defaultStore;
 
   hasLocalMenu = false;
 
   // When called with no argument this creates a new store and react context.
-  constructor(values?: DefinesLocalEditContext, parent?: PageEditContext) {
+  constructor(values?: DefinesLocalEditContext, parent?: PageEditContextInterface) {
     if (values) {
       this.id = values.id;
       this.name = values.name;
@@ -258,6 +263,7 @@ class PageEditContext implements PageEditContextInterface {
   }
 
   updateMenuOptions() {
+    console.log('update menu options for ', this.name);
     this.store.updateMenuOptions([this, ...this.peerContexts]);
   }
 
@@ -274,7 +280,7 @@ class PageEditContext implements PageEditContextInterface {
   }
 
   get isInnermostLocalMenu() {
-    const getId = (context: PageEditContext):string => {
+    const getId = (context: PageEditContextInterface):string => {
       if (context.hasLocalMenu) return context.id;
       if (context.parent) return getId(context.parent);
       return '';
@@ -355,3 +361,7 @@ Please try your operation again if it was not successful.`,
 }
 
 export default PageEditContext;
+
+export const useApi = () => ({
+  currentMenuOptions: defaultStore.optionMap,
+});

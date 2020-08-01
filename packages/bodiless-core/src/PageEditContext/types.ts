@@ -59,14 +59,17 @@ export interface CanBeActivated {
 }
 export interface PageEditStoreInterface {
   activeContext: PageEditContextInterface | undefined;
+  updateMenuOptions: (contexts: PageEditContextInterface[]) => string[];
   contextMenuOptions: TMenuOption[];
   isEdit: boolean;
+  isPositionToggled: boolean;
   setActiveContext(context?: PageEditContextInterface): void;
-  toggleEdit(): void;
-  togglePosition(): void;
+  toggleEdit: (on?: boolean) => void;
+  togglePosition: (on?: boolean) => void;
   contextTrail: string[];
   areLocalTooltipsDisabled: boolean;
   toggleLocalTooltipsDisabled(isDisabled?: boolean): void;
+  pageOverlay: TPageOverlayStore;
 }
 
 export interface PageEditContextInterface extends
@@ -82,6 +85,8 @@ export interface PageEditContextInterface extends
   readonly id: string;
   readonly name: string;
   readonly parent?: PageEditContextInterface;
+  readonly peerContexts: PageEditContextInterface[];
+  store: PageEditStoreInterface;
   updateMenuOptions: () => void;
   /**
    * Function property which gets the menu options associated with this context.

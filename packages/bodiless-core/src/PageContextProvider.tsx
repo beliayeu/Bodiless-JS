@@ -30,7 +30,7 @@ import { Props, Options, TMenuOptionGetter } from './Types/PageContextProviderTy
 const useNewContextValues = ({ getMenuOptions, name, id }: Props) => {
   const ref = useRef<TMenuOptionGetter>();
   ref.current = getMenuOptions;
-  const id$ = id || useUUID();
+  const id$ = id || name || useUUID();
   return {
     getMenuOptions: () => (ref.current || getMenuOptions!)(),
     id: id$,
@@ -47,7 +47,7 @@ export const useRegisterMenuOptions = (props: Props) => {
   const values = useNewContextValues(props);
   const context = useEditContext();
   context.registerPeer(values);
-  // useEffect(() => { if (context.isActive) context.updateMenuOptions(); });
+  useEffect(() => { if (context.isActive) context.updateMenuOptions(); });
 };
 
 /**
@@ -61,7 +61,7 @@ const PageContextProvider: FC<Props> = ({ children, ...rest }) => {
   const context = useEditContext();
   // eslint-disable-next-line react/destructuring-assignment
   const newValue = context.spawn(values);
-  // useEffect(() => { if (context.isActive) context.updateMenuOptions(); });
+  useEffect(() => { if (newValue.isActive) newValue.updateMenuOptions(); });
   return (
     <PageEditContext.Provider value={newValue}>
       {children}
