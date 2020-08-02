@@ -75,13 +75,15 @@ const ContextMenu: FC<IProps> = (props) => {
     };
     return renderForm(formProps);
   }
+  const finalChildren = children
+    ? [...React.Children.toArray(children).filter(React.isValidElement), ...childrenFromOptions]
+    : childrenFromOptions;
 
-  if (children || childrenFromOptions.length > 0) {
+  if (finalChildren.length > 0) {
     return (
       <Toolbar onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}>
         <StructuredChildren components={{ Group }} {...childProps}>
-          {children}
-          {childrenFromOptions}
+          {finalChildren}
         </StructuredChildren>
       </Toolbar>
     );

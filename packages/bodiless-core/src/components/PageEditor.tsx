@@ -26,6 +26,7 @@ import useNotificationButton from '../withNotificationButton';
 import useSwitcherButton from '../useSwitcherButton';
 import { useRegisterMenuOptions } from '../PageContextProvider';
 import { NotificationProvider } from '../NotificationProvider';
+import { useApi } from '../PageEditContext';
 
 type CompleteUI = {
   GlobalContextMenu: React.ComponentType<ContextMenuProps>;
@@ -48,7 +49,8 @@ export const useUI = () => useContext(uiContext);
 const GlobalContextMenu: FC<Props> = observer(() => {
   const { GlobalContextMenu: Menu } = useUI();
   const context = useEditContext();
-  const { contextMenuOptions, isPositionToggled } = context;
+  const { isPositionToggled } = context;
+  const { contextMenuOptions } = useApi();
   const options = contextMenuOptions.filter(
     (op: TMenuOption) => op.global !== false,
   );
@@ -71,7 +73,7 @@ const PageEditor: FC<Props> = ({ children, ui }) => {
       name: 'edit',
       icon: 'edit',
       label: 'Edit',
-      isActive: isEdit,
+      isActive: () => isEdit,
       handler: () => {
         // Force page reload after switching back to edit.
         // if (!context.isEdit) {

@@ -82,8 +82,9 @@ type GroupedChildrenProps = {
   [prop: string]: any,
 };
 
-const StructuredChildren: FC<GroupedChildrenProps> = ({ components, children, ...rest }) => (
-  <>{buildChildren(components.Group || Group, rest)(children)}</>
-);
+const StructuredChildren: FC<GroupedChildrenProps> = ({ components, children, ...rest }) => {
+  const newChildren = buildChildren(components.Group || Group, rest)(children);
+  return <>{newChildren}</>;
+};
 
 export default StructuredChildren;

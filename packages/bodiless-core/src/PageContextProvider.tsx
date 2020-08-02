@@ -28,11 +28,9 @@ import { Props, Options, TMenuOptionGetter } from './Types/PageContextProviderTy
  * @return Values suitable for passing to the `PageEditContext` constructor.
  */
 const useNewContextValues = ({ getMenuOptions, name, id }: Props) => {
-  const ref = useRef<TMenuOptionGetter>();
-  ref.current = getMenuOptions;
-  const id$ = id || name || useUUID();
+  const id$ = id || useUUID();
   return {
-    getMenuOptions: () => (ref.current || getMenuOptions!)(),
+    getMenuOptions,
     id: id$,
     name: name || id$,
   };

@@ -16,7 +16,7 @@ import React, { useMemo, useEffect, FC } from 'react';
 import { shallow, mount } from 'enzyme';
 import { observable, autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
-import PageContextProvider, { withMenuOptions } from '../src/PageContextProvider';
+import PageContextProvider, { withMenuOptions, useRegisterMenuOptions } from '../src/PageContextProvider';
 import { useEditContext } from '../src/hooks';
 import { PageEditContextInterface } from '../src/PageEditContext/types';
 import { useApi } from '../src/PageEditContext';
@@ -116,7 +116,38 @@ describe('ContextProvider', () => {
 });
 
 describe.only('useRegisterMenuOptions', () => {
-  it('test mobx equality of meemoized value', () => {
+  it.only('registers root menu options correctly', () => {
+    const fooOptions = [{
+      name: 'foo',
+    }];
+    const barOptions = [{
+      name: 'bar',
+    }];
+    const Foo: FC = () => {
+      useRegisterMenuOptions({ getMenuOptions: () => fooOptions, name: 'Foo' });
+      useRegisterMenuOptions({ getMenuOptions: () => barOptions, name: 'Bar' });
+      return null;
+    };
+    const Menu = observer(() => {
+      const items = useApi().contextMenuOptions.map(option => <span id={option.name}>{option.name}</span>);
+      return (
+        <>
+          Items
+          {items}
+        </>
+      );
+    });
+    const Test: FC = () => (
+      <>
+        <Foo />
+        <Menu />
+      </>
+    );
+    const wrapper = mount(<Test />);
+    console.log(wrapper.debug());
+  });
+
+  it.skip('test mobx equality of meemoized value', () => {
     const map = observable.map<any>();
     const effect = jest.fn();
     const reaction = jest.fn();
@@ -173,16 +204,13 @@ describe.only('useRegisterMenuOptions', () => {
 
   const listenerFired = jest.fn(() => console.log('listener fired'));
   const Listener = observer(() => {
-    const { currentMenuOptions } = useApi();
-    const fooOptions = currentMenuOptions.get('foo');
-    const option = fooOptions && fooOptions.get('foo');
-    console.log(option);
-
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { contextMenuOptions } = useApi();
     useEffect(listenerFired);
-    return <>{option && option.label}</>;
+    return <></>;
   });
 
-  it.only('Does not re-render a listener when options have not changed', () => {
+  it('Does not re-render a listener when options have not changed', () => {
     providerFired.mockClear();
     listenerFired.mockClear();
     activatorFired.mockClear();

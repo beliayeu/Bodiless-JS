@@ -127,8 +127,13 @@ class PageEditStore implements PageEditStoreInterface {
 
   @computed get contextMenuOptions(): TMenuOption[] {
     const options: TMenuOption[] = [];
-    this.optionMap.forEach(contextMap => {
-      contextMap.forEach(option => { options.push(option); });
+    this.optionMap.forEach((contextMap, contextName) => {
+      contextMap.forEach(option => {
+        options.push({
+          ...option,
+          group: option.group || contextName,
+        });
+      });
     });
     return options;
   }
@@ -272,7 +277,7 @@ class PageEditContext implements PageEditContextInterface {
   // Tests whether this context is "active" - i.e. whether it or one of its descendants is the
   // "current" context.
   get isActive() {
-    return this.store.contextTrail.includes(this.id);
+    return !this.parent || this.store.contextTrail.includes(this.id);
   }
 
   get isInnermost() {
@@ -365,5 +370,5 @@ Please try your operation again if it was not successful.`,
 export default PageEditContext;
 
 export const useApi = () => ({
-  currentMenuOptions: defaultStore.contextMenuOptions,
+  contextMenuOptions: defaultStore.contextMenuOptions,
 });
