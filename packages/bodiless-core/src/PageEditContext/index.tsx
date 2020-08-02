@@ -371,5 +371,4 @@ export default PageEditContext;
 
 export const useApi = () => ({
   contextMenuOptions: defaultStore.contextMenuOptions,
-  rootContext: defaultStore.rootContext;
 });

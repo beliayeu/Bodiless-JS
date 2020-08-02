@@ -21,7 +21,7 @@ import { useEditContext } from '../src/hooks';
 import { PageEditContextInterface } from '../src/PageEditContext/types';
 import { useApi } from '../src/PageEditContext';
 
-describe.only('withMenuOptions', () => {
+describe('withMenuOptions', () => {
   type Props = {
     foo: string;
   };
