@@ -201,7 +201,7 @@ class PageEditContext implements PageEditContextInterface {
 
   readonly parent: PageEditContextInterface | undefined;
 
-  store: PageEditStoreInterface = defaultStore;
+  private store: PageEditStoreInterface = defaultStore;
 
   hasLocalMenu = false;
 
@@ -214,7 +214,6 @@ class PageEditContext implements PageEditContextInterface {
     }
     if (parent) {
       this.parent = parent;
-      this.store = parent.store;
     }
   }
 
@@ -265,12 +264,7 @@ class PageEditContext implements PageEditContextInterface {
     this.store.setActiveContext(this);
   }
 
-  refresh() {
-    // this.store.setActiveContext();
-  }
-
   updateMenuOptions() {
-    console.log('update menu options for ', this.name);
     this.store.updateMenuOptions([this, ...this.peerContexts]);
   }
 

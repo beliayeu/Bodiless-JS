@@ -13,11 +13,11 @@
  */
 
 import React, {
-  FC, useRef, ComponentType, useEffect,
+  FC, ComponentType, useEffect,
 } from 'react';
 import PageEditContext from './PageEditContext';
 import { useEditContext, useUUID } from './hooks';
-import { Props, Options, TMenuOptionGetter } from './Types/PageContextProviderTypes';
+import { Props, Options } from './Types/PageContextProviderTypes';
 
 /**
  * @private

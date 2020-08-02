@@ -14,7 +14,7 @@
 
 import React, { Fragment, ComponentType, useMemo } from 'react';
 import {
-  useNode, TMenuOption, withMenuOptions, useEditContext,
+  useNode, TMenuOption, withMenuOptions,
 } from '@bodiless/core';
 import { observer } from 'mobx-react-lite';
 
@@ -59,19 +59,13 @@ const withToggleButton = (options? : ToggleMenuOptions) => {
     const icon = options ? options.icon : false;
     const label = options ? options.label : undefined;
     const { setOn, isOn } = useAccessors();
-    // TODO: This should be a general useMenuHandler() utility exposed by bodiless core.
-    const context = useEditContext();
-    const asHandler = (action: Function) => () => {
-      action();
-      context.refresh();
-    };
 
     const menuOptions = useMemo(() => (
       isOn() ? [] : [{
         icon: icon || 'toggle_off',
         name: 'Toggle',
         label,
-        handler: asHandler(() => setOn(true)),
+        handler: () => setOn(true),
         global: false,
         local: true,
       }]

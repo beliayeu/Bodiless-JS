@@ -80,7 +80,6 @@ const PageEditor: FC<Props> = ({ children, ui }) => {
         //   window.location.reload();
         // }
         context.toggleEdit();
-        context.refresh();
       },
     },
   ], [isEdit]);

@@ -25,12 +25,6 @@ const useGetMenuOptions = (props: TitleProps) => {
   const {
     onAdd, onDelete, canDelete,
   } = props;
-  const context = useEditContext();
-
-  const asHandler = (action: Function) => () => {
-    action();
-    context.refresh();
-  };
 
   const menuOptions = useMemo(() => {
     const options = [];
@@ -38,7 +32,7 @@ const useGetMenuOptions = (props: TitleProps) => {
       name: 'Add',
       icon: 'add',
       label: 'Add',
-      handler: asHandler(onAdd),
+      handler: onAdd,
       global: false,
       local: true,
     });
@@ -48,7 +42,7 @@ const useGetMenuOptions = (props: TitleProps) => {
         name: 'Remove',
         icon: 'delete',
         label: 'Delete',
-        handler: asHandler(onDelete),
+        handler: onDelete,
         global: false,
         local: true,
       });

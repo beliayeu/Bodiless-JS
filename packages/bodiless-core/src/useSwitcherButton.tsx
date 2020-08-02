@@ -27,10 +27,7 @@ const useSwitcherButton = () => {
   const menuOptions = useMemo(() => [{
     name: 'switcher',
     icon: 'compare_arrows',
-    handler: () => {
-      context.togglePosition();
-      context.refresh();
-    },
+    handler: () => context.togglePosition(),
   }], []);
   const getMenuOptions = () => menuOptions;
   useRegisterMenuOptions({

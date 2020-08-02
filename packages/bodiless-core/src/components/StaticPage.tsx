@@ -26,6 +26,8 @@ class StaticContext implements PageEditContextInterface {
 
   activate = () => undefined;
 
+  updateMenuOptions = () => undefined;
+
   refresh = () => undefined;
 
   isEdit = false;
@@ -35,6 +37,8 @@ class StaticContext implements PageEditContextInterface {
   isPositionToggled = false;
 
   togglePosition = () => undefined;
+
+  peerContexts = [];
 
   contextMenuOptions = [];
 

@@ -109,6 +109,8 @@ const withSlateActivator = <P extends object>(Component: ComponentType<P>) => (p
   // by this editor depend on the state of the editor. If this is ever the case, we will
   // need to add logic to prevent the context from refreshing on *every* change, and
   // only trigger refresh when necxessary.
+  // NOTE: As of this commit, refresh has been deprecated, and this may no longer
+  // be necessary.
   // const context = useEditContext();
   // tslint:disable-next-line: ter-arrow-parens
   // const onChange: BasicEditorProps['onChange'] = change => {

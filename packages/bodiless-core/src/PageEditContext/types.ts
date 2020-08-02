@@ -55,7 +55,6 @@ export interface CanBeActivated {
   hasLocalMenu: boolean;
   isInnermostLocalMenu: boolean;
   activate: () => void;
-  refresh: () => void;
 }
 export interface PageEditStoreInterface {
   activeContext: PageEditContextInterface | undefined;
@@ -86,7 +85,7 @@ export interface PageEditContextInterface extends
   readonly name: string;
   readonly parent?: PageEditContextInterface;
   readonly peerContexts: PageEditContextInterface[];
-  store: PageEditStoreInterface;
+  // store: PageEditStoreInterface;
   updateMenuOptions: () => void;
   /**
    * Function property which gets the menu options associated with this context.

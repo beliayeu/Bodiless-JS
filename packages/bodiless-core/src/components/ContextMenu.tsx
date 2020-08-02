@@ -50,7 +50,6 @@ const Group: FC<any> = ({ children }) => <>{children}</>;
 
 const ContextMenu: FC<IProps> = (props) => {
   if (typeof window === 'undefined') return null;
-  console.log('render context menu');
 
   const [renderForm, setRenderForm] = useState<(props:ContextMenuFormProps) => JSX.Element>();
   const {
