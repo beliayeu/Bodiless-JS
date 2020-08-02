@@ -127,8 +127,11 @@ class PageEditStore implements PageEditStoreInterface {
 
   @computed get contextMenuOptions(): TMenuOption[] {
     const options: TMenuOption[] = [];
-    this.optionMap.forEach((contextMap, contextName) => {
-      contextMap.forEach(option => {
+    const keys = Array.from(this.optionMap.keys()).reverse();
+    keys.forEach(contextName => {
+      const contextMap = this.optionMap.get(contextName);
+      // We know this value exists bc we are iterating over the keys.
+      contextMap!.forEach(option => {
         options.push({
           ...option,
           group: option.group || contextName,
@@ -193,9 +196,9 @@ const defaultStore = new PageEditStore();
  * Singleton store.
  */
 class PageEditContext implements PageEditContextInterface {
-  readonly id: string = 'root';
+  readonly id: string = 'Root';
 
-  readonly name: string = 'root';
+  readonly name: string = 'Root';
 
   readonly getMenuOptions: TMenuOptionGetter = () => [];
 
@@ -209,7 +212,7 @@ class PageEditContext implements PageEditContextInterface {
   constructor(values?: DefinesLocalEditContext, parent?: PageEditContextInterface) {
     if (values) {
       this.id = values.id;
-      this.name = values.name;
+      this.name = values.name || values.id;
       if (values.getMenuOptions) this.getMenuOptions = values.getMenuOptions;
     }
     if (parent) {
@@ -224,7 +227,10 @@ class PageEditContext implements PageEditContextInterface {
     // Ensure that the same context is not registered more than once.
     const existsAt = this.peerContexts.findIndex(c => c.id === context.id);
     if (existsAt >= 0) this.peerContexts.splice(existsAt, 1, context);
-    else this.peerContexts.push(context);
+    // Insert at the beginning. "lower" contexts are always before "upper" contexts in lists.
+    // This is bc of the way we traverse the context trail when a context is activated,
+    // starting with the "innermost" (lowest) context.
+    else this.peerContexts.splice(0, 0, context);
   }
 
   get allMenuOptions() {
@@ -365,4 +371,5 @@ export default PageEditContext;
 
 export const useApi = () => ({
   contextMenuOptions: defaultStore.contextMenuOptions,
+  rootContext: defaultStore.rootContext;
 });

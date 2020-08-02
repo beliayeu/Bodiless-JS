@@ -17,27 +17,25 @@ import PageEditContext, { useApi } from '../src/PageEditContext';
 import { PageEditContextInterface } from '../src/PageEditContext/types';
 import { TMenuOption } from '../src/Types/ContextMenuTypes';
 
-const spawn = (parent: PageEditContextInterface) => {
-  const id = Math.random().toString();
-  return parent.spawn({
+const spawn = (parent: PageEditContextInterface, id: string) => (
+  parent.spawn({
     id,
     name: id,
     getMenuOptions: () => [
       {
         name: id,
-        icon: 'foo',
       },
     ],
-  });
-};
+  })
+);
 
 const createContextTree: () => { [key: string]: PageEditContextInterface } = () => {
   const root = new PageEditContext();
-  const parent1 = spawn(root);
-  const child11 = spawn(parent1);
-  const child12 = spawn(parent1);
-  const parent2 = spawn(root);
-  const child21 = spawn(parent2);
+  const parent1 = spawn(root, 'parent1');
+  const child11 = spawn(parent1, 'child11');
+  const child12 = spawn(parent1, 'child12');
+  const parent2 = spawn(root, 'parent2');
+  const child21 = spawn(parent2, 'child21');
   return {
     root,
     parent1,
@@ -163,7 +161,7 @@ describe.skip('mobx', () => {
   });
 });
 
-describe.only('Update menu options', () => {
+describe('Update menu options', () => {
   const parentOptions = [{
     name: 'parent',
   }];
@@ -197,7 +195,7 @@ describe.only('Update menu options', () => {
     }, parentContext);
     context.registerPeer(peerContext);
     return context;
-  }
+  };
 
   const context = createContext();
   const listener = jest.fn();
@@ -206,7 +204,7 @@ describe.only('Update menu options', () => {
   beforeAll(() => {
     disposer = autorun(() => {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      useApi().currentMenuOptions;
+      useApi().contextMenuOptions;
       listener();
     });
     listener.mockClear();

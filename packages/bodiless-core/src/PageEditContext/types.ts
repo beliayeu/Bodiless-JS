@@ -45,8 +45,8 @@ export interface CanGetContextMenuOptions {
   contextMenuOptions: TMenuOption[];
 }
 export interface DefinesLocalEditContext {
-  name: string;
   id: string;
+  name?: string;
   getMenuOptions?: () => TMenuOption[];
 }
 export interface CanBeActivated {

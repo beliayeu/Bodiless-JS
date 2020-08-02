@@ -21,7 +21,7 @@ import { useEditContext } from '../src/hooks';
 import { PageEditContextInterface } from '../src/PageEditContext/types';
 import { useApi } from '../src/PageEditContext';
 
-describe('withMenuOptions', () => {
+describe.only('withMenuOptions', () => {
   type Props = {
     foo: string;
   };
@@ -115,36 +115,48 @@ describe('ContextProvider', () => {
   });
 });
 
-describe.only('useRegisterMenuOptions', () => {
-  it.only('registers root menu options correctly', () => {
+describe('useRegisterMenuOptions', () => {
+  it('registers root menu options correctly', () => {
     const fooOptions = [{
       name: 'foo',
     }];
     const barOptions = [{
       name: 'bar',
     }];
-    const Foo: FC = () => {
+    const bazOptions = [{
+      name: 'baz',
+    }];
+    const FooBar: FC = () => {
       useRegisterMenuOptions({ getMenuOptions: () => fooOptions, name: 'Foo' });
       useRegisterMenuOptions({ getMenuOptions: () => barOptions, name: 'Bar' });
       return null;
     };
+    const Baz: FC = () => {
+      useRegisterMenuOptions({ getMenuOptions: () => bazOptions, name: 'Baz' });
+      return null;
+    };
     const Menu = observer(() => {
-      const items = useApi().contextMenuOptions.map(option => <span id={option.name}>{option.name}</span>);
+      const items = useApi().contextMenuOptions.map(
+        option => <span id={option.name} key={option.name}>{option.name}</span>,
+      );
       return (
         <>
-          Items
           {items}
         </>
       );
     });
     const Test: FC = () => (
       <>
-        <Foo />
+        <FooBar />
+        <Baz />
         <Menu />
       </>
     );
     const wrapper = mount(<Test />);
-    console.log(wrapper.debug());
+    expect(wrapper.find('span#foo').text()).toBe('foo');
+    expect(wrapper.find('span#bar').text()).toBe('bar');
+    expect(wrapper.find('span#baz').text()).toBe('baz');
+    expect(wrapper.text()).toBe('foobarbaz');
   });
 
   it.skip('test mobx equality of meemoized value', () => {
@@ -173,7 +185,7 @@ describe.only('useRegisterMenuOptions', () => {
     disposer();
   });
 
-  const providerFired = jest.fn(() => console.log('provider fired'));
+  const providerFired = jest.fn();
   const Provider: FC<any> = props => {
     const { children, foo } = props;
     const options$ = [{
@@ -192,7 +204,7 @@ describe.only('useRegisterMenuOptions', () => {
     );
   };
 
-  const activatorFired = jest.fn(() => console.log('activator fired'));
+  const activatorFired = jest.fn();
   const Activator: FC = ({ children }) => {
     const context = useEditContext();
     useEffect(() => {
@@ -202,7 +214,7 @@ describe.only('useRegisterMenuOptions', () => {
     return <>{children}</>;
   };
 
-  const listenerFired = jest.fn(() => console.log('listener fired'));
+  const listenerFired = jest.fn();
   const Listener = observer(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { contextMenuOptions } = useApi();
