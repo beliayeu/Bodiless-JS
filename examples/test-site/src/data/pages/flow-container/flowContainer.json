@@ -1,0 +1,11 @@
+{
+  "items": [
+    {
+      "uuid": "6cf0d510-d5b9-11ea-918f-e18889116d08",
+      "wrapperProps": {
+        "className": " lg:w-full"
+      },
+      "type": "Test"
+    }
+  ]
+}

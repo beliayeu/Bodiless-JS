@@ -12,11 +12,14 @@
  * limitations under the License.
  */
 
+import React from 'react';
 import { flow } from 'lodash';
 import {
   withTitle,
   withFacet,
   withDesc,
+  useComponentDisplayModeContext,
+  ComponentDisplayMode,
 } from '@bodiless/layouts';
 import {
   varyDesign,
@@ -33,7 +36,20 @@ import { withType } from './Categories';
 
 const withRichText = withFacet('Rich Text');
 
+const TestComponent = () => {
+  const { mode } = useComponentDisplayModeContext();
+  return (
+    <div className='bl-text-black'>{`hey from test component ${mode}`}</div>
+  );
+}
+
 const richTextVariation = {
+  Test: flow(
+    replaceWith(TestComponent),
+    withType('Test')(),
+    withTitle('Test Component'),
+    withDesc('Test Component.\n'),
+  ),
   EditorSimple: flow(
     replaceWith(EditorSimple),
     withType('Rich Text')(),
