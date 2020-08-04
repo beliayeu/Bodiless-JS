@@ -57,12 +57,15 @@ import {
 import {
   useNotifications,
   useNotify,
+  NotificationProvider,
 } from './NotificationProvider';
 import withChild from './withChild';
 import asBodilessComponent, { withActivatorWrapper } from './asBodilessComponent';
 import type { Options as BodilessOptions, AsBodiless } from './asBodilessComponent';
 import { useUI as useFormUI } from './components/ContextMenuItem';
 import ContextSubMenu from './ContextMenu/ContextSubMenu';
+import useSwitcherButton from './useSwitcherButton';
+import useNotificationButton from './withNotificationButton';
 
 export * from './components';
 export {
@@ -117,6 +120,9 @@ export {
   useEditToggle,
   useNotifications,
   useNotify,
+  NotificationProvider,
+  useNotificationButton,
+  useSwitcherButton,
 };
 
 export type {
