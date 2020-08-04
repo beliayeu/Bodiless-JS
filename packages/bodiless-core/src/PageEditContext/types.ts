@@ -59,6 +59,7 @@ export interface CanBeActivated {
 export interface PageEditStoreInterface {
   activeContext: PageEditContextInterface | undefined;
   updateMenuOptions: (contexts: PageEditContextInterface[]) => string[];
+  deleteMenuOptions: (context: PageEditContextInterface[]) => void;
   contextMenuOptions: TMenuOption[];
   isEdit: boolean;
   isPositionToggled: boolean;
@@ -87,6 +88,7 @@ export interface PageEditContextInterface extends
   readonly peerContexts: PageEditContextInterface[];
   // store: PageEditStoreInterface;
   updateMenuOptions: () => void;
+  deleteMenuOptions: () => void;
   /**
    * Function property which gets the menu options associated with this context.
    */

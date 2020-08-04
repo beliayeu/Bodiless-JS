@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /**
  * Copyright © 2019 Johnson & Johnson
  *
@@ -12,14 +14,29 @@
  * limitations under the License.
  */
 
-import React, { useMemo, useEffect, FC } from 'react';
+import React, { useMemo, useEffect, FC, useState } from 'react';
 import { shallow, mount } from 'enzyme';
-import { observable, autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import PageContextProvider, { withMenuOptions, useRegisterMenuOptions } from '../src/PageContextProvider';
 import { useEditContext } from '../src/hooks';
 import { PageEditContextInterface } from '../src/PageEditContext/types';
 import { useApi } from '../src/PageEditContext';
+import { TMenuOption } from '../src/Types/ContextMenuTypes';
+import { log } from 'console';
+import { attempt } from 'lodash';
+
+const menuRendered = jest.fn();
+const Menu = observer(() => {
+  menuRendered();
+  const items = useApi().contextMenuOptions.map(
+    option => <span id={option.name} key={option.name}>{option.name}</span>,
+  );
+  return (
+    <>
+      {items}
+    </>
+  );
+});
 
 describe('withMenuOptions', () => {
   type Props = {
@@ -64,6 +81,148 @@ describe('withMenuOptions', () => {
 });
 
 describe('ContextProvider', () => {
+  const activatorFired = jest.fn();
+  const Activator: FC = ({ children }) => {
+    const context = useEditContext();
+    // return (
+    //   <div id="activate" onClick={() => context.activate()}>
+    //     {children}
+    //   </div>
+    // );
+    useEffect(() => {
+      context.activate();
+      activatorFired();
+    }, []);
+    return <>{children}</>;
+  };
+
+
+  const foobarRendered = jest.fn();
+  const FooBar: FC<any> = props => {
+    foobarRendered();
+    const { children, foo, bar } = props;
+    const options$: TMenuOption[] = [];
+    if (foo) {
+      options$.push({
+        name: 'foo',
+        label: foo,
+      });
+    }
+    if (bar) {
+      options$.push({
+        name: 'bar',
+        label: bar,
+      });
+    }
+    const options = useMemo(() => options$, [foo, bar]);
+    return (
+      <PageContextProvider
+        getMenuOptions={() => options}
+        name="FooBar"
+      >
+        {children}
+      </PageContextProvider>
+    );
+  };
+
+  const bazRendered = jest.fn();
+  const Baz: FC<any> = ({ children }) => {
+    bazRendered();
+    const options$ = [{
+      name: 'baz',
+    }];
+    const options = useMemo(() => options$, []);
+    return (
+      <PageContextProvider getMenuOptions={() => options} name="FooBar">
+        {children}
+      </PageContextProvider>
+    );
+  };
+
+  const ListenerTest = (props: any) => (
+    <>
+      <FooBar {...props}>
+        <Activator />
+      </FooBar>
+      <Menu />
+    </>
+  );
+
+  beforeEach(() => {
+    // useApi().resetStore();
+    foobarRendered.mockClear();
+    activatorFired.mockClear();
+    menuRendered.mockClear();
+  });
+
+  it('Re-renders a listener when options change', () => {
+    const wrapper = mount(<ListenerTest foo="fiddle" />);
+    expect(foobarRendered).toHaveBeenCalledTimes(1);
+    expect(menuRendered).toHaveBeenCalledTimes(2);
+    expect(activatorFired).toHaveBeenCalledTimes(1);
+    wrapper.setProps({ foo: 'fuddle' });
+    expect(foobarRendered).toHaveBeenCalledTimes(2);
+    expect(menuRendered).toHaveBeenCalledTimes(3);
+    expect(activatorFired).toHaveBeenCalledTimes(1);
+    // We must unmount our test component, or it will
+    wrapper.unmount();
+  });
+
+  it('Does not re-render a listener when options do not change', () => {
+    const wrapper = mount(<ListenerTest foo="fiddle" />);
+    expect(foobarRendered).toHaveBeenCalledTimes(1);
+    expect(menuRendered).toHaveBeenCalledTimes(2);
+    expect(activatorFired).toHaveBeenCalledTimes(1);
+    wrapper.setProps({ foo: 'fiddle', unusedProp: 'baz' });
+    expect(foobarRendered).toHaveBeenCalledTimes(2);
+    expect(activatorFired).toHaveBeenCalledTimes(1);
+    expect(menuRendered).toHaveBeenCalledTimes(2);
+    wrapper.unmount();
+  });
+
+  it.only('test effect', () => {
+    const ToggleBOnEffect: any = ({ withB, setShowB }) => {
+      useEffect(() => {
+        if (withB) setShowB(true);
+      });
+      return null;
+    }
+    const RenderAorB: any = ({ showB }) => (
+      <span>{showB ? 'A' : 'B'}</span>
+    );
+
+    const Wrapper: any = ({ withB }) => {
+      const [showB, setShowB] = useState<boolean>(false);
+      return (
+        <>
+          <RenderAorB showB={showB} />
+          <ToggleBOnEffect withB={withB} setShowB={setShowB} />
+        </>
+      );
+    };
+    const wrapper = mount(<Wrapper />);
+    console.log(wrapper.debug());
+    wrapper.setProps ({ withB: true });
+    wrapper.update();
+    console.log(wrapper.debug());
+  });
+
+  it('removes options when a provider is removed', () => {
+    const Test = ({ hasBaz }: any) => (
+      hasBaz
+        ? <Baz><ListenerTest foo /></Baz>
+        : <ListenerTest foo />
+    );
+    const wrapper = mount(<Test hasBaz />);
+    wrapper.find('div#activate').simulate('click');
+    expect(wrapper.text()).toBe('bazfoo');
+    wrapper.setProps({ hasBaz: false });
+    wrapper.find('div#activate').simulate('click');
+    wrapper.update();
+    console.log(wrapper.debug());
+    expect(wrapper.text()).toBe('foo');
+  });
+
   it('adds correct value prop and children to the context provider', () => {
     const option = {
       name: Math.random().toString(),
@@ -135,16 +294,6 @@ describe('useRegisterMenuOptions', () => {
       useRegisterMenuOptions({ getMenuOptions: () => bazOptions, name: 'Baz' });
       return null;
     };
-    const Menu = observer(() => {
-      const items = useApi().contextMenuOptions.map(
-        option => <span id={option.name} key={option.name}>{option.name}</span>,
-      );
-      return (
-        <>
-          {items}
-        </>
-      );
-    });
     const Test: FC = () => (
       <>
         <FooBar />
@@ -158,93 +307,22 @@ describe('useRegisterMenuOptions', () => {
     expect(wrapper.find('span#baz').text()).toBe('baz');
     expect(wrapper.text()).toBe('foobarbaz');
   });
-
-  it.skip('test mobx equality of meemoized value', () => {
-    const map = observable.map<any>();
-    const effect = jest.fn();
-    const reaction = jest.fn();
-    const disposer = autorun(reaction);
-
-    const Changer = () => {
-      const obj$ = {
-        bar: 'baz',
-      };
-      const obj = useMemo(() => obj$, []);
-      useEffect(() => {
-        effect();
-        map.set('foo', obj);
-      });
-      return null;
-    };
-    const wrapper = mount(<Changer />);
-    expect(effect).toHaveBeenCalledTimes(1);
-    expect(reaction).toHaveBeenCalledTimes(1);
-    wrapper.setProps({ foo: 'bar' });
-    expect(reaction).toHaveBeenCalledTimes(1);
-    expect(effect).toHaveBeenCalledTimes(2);
-    disposer();
-  });
-
-  const providerFired = jest.fn();
-  const Provider: FC<any> = props => {
-    const { children, foo } = props;
-    const options$ = [{
-      name: 'foo',
-      label: foo,
-    }];
-    const options = useMemo(() => options$, [foo]);
-    useEffect(providerFired);
-    return (
-      <PageContextProvider
-        getMenuOptions={() => options}
-        name="foo"
-      >
-        {children}
-      </PageContextProvider>
-    );
-  };
-
-  const activatorFired = jest.fn();
-  const Activator: FC = ({ children }) => {
-    const context = useEditContext();
-    useEffect(() => {
-      context.activate();
-      activatorFired();
-    }, []);
-    return <>{children}</>;
-  };
-
-  const listenerFired = jest.fn();
-  const Listener = observer(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { contextMenuOptions } = useApi();
-    useEffect(listenerFired);
-    return <></>;
-  });
-
-  it('Does not re-render a listener when options have not changed', () => {
-    providerFired.mockClear();
-    listenerFired.mockClear();
-    activatorFired.mockClear();
-    const Test = (props: any) => (
-      <>
-        <Provider {...props}>
-          <Activator />
-        </Provider>
-        <Listener />
-      </>
-    );
-    const wrapper = mount(<Test foo="bar" />);
-    expect(providerFired).toHaveBeenCalledTimes(1);
-    expect(listenerFired).toHaveBeenCalledTimes(2);
-    expect(activatorFired).toHaveBeenCalledTimes(1);
-    wrapper.setProps({ foo: 'baz' });
-    expect(providerFired).toHaveBeenCalledTimes(2);
-    expect(listenerFired).toHaveBeenCalledTimes(3);
-    expect(activatorFired).toHaveBeenCalledTimes(1);
-    wrapper.setProps({ bar: 'baz' });
-    expect(providerFired).toHaveBeenCalledTimes(3);
-    expect(listenerFired).toHaveBeenCalledTimes(3);
-    expect(activatorFired).toHaveBeenCalledTimes(1);
-  });
 });
+
+describe.skip('react', () => {
+  it('runs effects in depth order', () => {
+    const A = ({ children }: any) => {
+      console.log('render a');
+      useEffect(() => console.log('effect a'));
+      return <>{children}</>;
+    };
+    const B = ({ children }: any) => {
+      console.log('render b');
+      useEffect(() => console.log('b'));
+      return <>{children}</>;
+    };
+    mount(<A><B /></A>);
+  });
+
+
+})

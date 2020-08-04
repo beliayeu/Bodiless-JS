@@ -59,7 +59,10 @@ const PageContextProvider: FC<Props> = ({ children, ...rest }) => {
   const context = useEditContext();
   // eslint-disable-next-line react/destructuring-assignment
   const newValue = context.spawn(values);
-  useEffect(() => { if (newValue.isActive) newValue.updateMenuOptions(); });
+  useEffect(() => {
+    if (newValue.isActive) newValue.updateMenuOptions();
+    // return () => newValue.deleteMenuOptions();
+  });
   return (
     <PageEditContext.Provider value={newValue}>
       {children}

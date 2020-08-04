@@ -83,6 +83,24 @@ class PageEditStore implements PageEditStoreInterface {
   @observable
   optionMap = new Map<string, Map<string, TMenuOption>>();
 
+  @action reset() {
+    this.activeContext = undefined;
+    this.isEdit = getFromSessionStorage('isEdit', false);
+    this.isPositionToggled = getFromSessionStorage('isPositionToggled', false);
+    this.areLocalTooltipsDisabled = false;
+    this.optionMap.clear();
+    this.pageOverlay = {
+      data: {
+        ...defaultOverlaySettings,
+      },
+      timeoutId: 0,
+    };
+  }
+
+  constructor() {
+    this.reset();
+  }
+
   @action
   setActiveContext(context?: PageEditContextInterface) {
     if (context) this.activeContext = context;
@@ -98,6 +116,10 @@ class PageEditStore implements PageEditStoreInterface {
     this.optionMap.forEach(($, key) => {
       if (!keySet.has(key)) this.optionMap.delete(key);
     });
+  }
+
+  @action deleteMenuOptions(contexts: PageEditContextInterface[]) {
+    contexts.forEach(context => this.optionMap.delete(context.id));
   }
 
   @action
@@ -274,6 +296,10 @@ class PageEditContext implements PageEditContextInterface {
     this.store.updateMenuOptions([this, ...this.peerContexts]);
   }
 
+  deleteMenuOptions() {
+    this.store.deleteMenuOptions([this, ...this.peerContexts]);
+  }
+
   // Tests whether this context is "active" - i.e. whether it or one of its descendants is the
   // "current" context.
   get isActive() {
@@ -371,4 +397,5 @@ export default PageEditContext;
 
 export const useApi = () => ({
   contextMenuOptions: defaultStore.contextMenuOptions,
+  resetStore: () => defaultStore.reset(),
 });
