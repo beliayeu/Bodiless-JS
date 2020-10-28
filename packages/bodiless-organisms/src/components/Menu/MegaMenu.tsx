@@ -21,8 +21,8 @@ import {
 } from '@bodiless/fclasses';
 import { WithNodeKeyProps } from '@bodiless/core';
 import {
-  asBreadcrumb, withBreadcrumb, withSubListDesign,
-  asBodilessList, asChameleonSubList,
+  asBreadcrumb, withBreadcrumb,
+  asBodilessList, asChameleonSubList, withEmptySubListMarkup,
 } from '@bodiless/components';
 import type { BreadcrumbSettings } from '@bodiless/components';
 
@@ -93,15 +93,10 @@ const asMenuBase = (nodeKeys?: WithNodeKeyProps) => flow(
  * but produces no markup
  */
 const withEmptyMenuMarkup = flow(
-  withSubMenuDesign({
-    Item: replaceWith(Fragment),
-  }),
   withMenuDesign({
     Wrapper: replaceWith(Fragment),
   }),
-  withSubListDesign(1)({
-    _default: replaceWith(Fragment),
-  }),
+  withEmptySubListMarkup({ keys: ['List', 'Touts', 'Columns'] }),
 );
 
 /**

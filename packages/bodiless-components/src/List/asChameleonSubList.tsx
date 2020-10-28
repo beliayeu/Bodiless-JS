@@ -2,6 +2,7 @@ import { v1 } from 'uuid';
 import { identity, flow } from 'lodash';
 import {
   withDesign, HOC, Design, withoutProps,
+  replaceWith, Fragment,
 } from '@bodiless/fclasses';
 import { useEditContext, PageEditContextInterface } from '@bodiless/core';
 import { useCallback } from 'react';
@@ -81,6 +82,32 @@ const withSubListDesign = (depth: number) => (
     : withSubListDesign$(depth)(withDesign$, hoc)
 );
 
+type withEmptySubListMarkupParams = {
+  keys: string[],
+  depth?: number,
+};
+
+/**
+ * HOC that can be applied to a chameleon sublist based component
+ * it renders all sublist items
+ * but produces no markup
+ */
+const withEmptySubListMarkup = ({
+  keys,
+  depth = 1,
+}: withEmptySubListMarkupParams) => flow(
+  withSubListDesign(depth)({
+    _default: replaceWith(Fragment),
+    ...keys.reduce(
+      (acc: object, key: string) => ({
+        ...acc,
+        [key]: withDesign({ Item: replaceWith(Fragment)}),
+      }),
+      {},
+    ),
+  }),
+);
+
 /**
  * Attaches nested chameleon sublists of arbitrary depth to a list.
  *
@@ -96,4 +123,4 @@ const withSubLists = (depth: number) => (asSubList$: HOC|Design<any>): HOC => (
   withSubListDesign(depth)(asSubList$, asChameleonSubList)
 );
 export default asChameleonSubList;
-export { withSubLists, withSubListDesign };
+export { withSubLists, withSubListDesign, withEmptySubListMarkup };

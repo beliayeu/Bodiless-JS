@@ -2,7 +2,11 @@ import asBodilessList, {
   asSubList, withSimpleSubListDesign,
 } from './asBodilessList';
 
-import asChameleonSubList, { withSubLists, withSubListDesign } from './asChameleonSubList';
+import asChameleonSubList, {
+  withSubLists,
+  withSubListDesign,
+  withEmptySubListMarkup,
+} from './asChameleonSubList';
 
 import { asTestableList } from './List';
 
@@ -13,6 +17,7 @@ export {
   withSimpleSubListDesign,
   withSubLists,
   withSubListDesign,
+  withEmptySubListMarkup,
   asTestableList,
 };
 
