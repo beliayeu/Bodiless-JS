@@ -64,6 +64,20 @@ const BreadcrumbsClean$ = (props: BreadcrumbsProps) => {
   } = components;
   const items$ = items.map((item: BreadcrumbItemKeys, index: number) => {
     const isLastItem = index === (items.length - 1);
+    // when there is no final trail item
+    // render the last breadcrumb item without link
+    if (isLastItem && !hasFinalTrail$) {
+      return (
+        <React.Fragment key={item.uuid}>
+          <BreadcrumbItem>
+            <BreadcrumbTitle
+              nodeKey={item.title.nodeKey}
+              nodeCollection={item.title.nodeCollection}
+            />
+          </BreadcrumbItem>
+        </React.Fragment>
+      );
+    }
     return (
       <React.Fragment key={item.uuid}>
         <BreadcrumbItem>
@@ -128,29 +142,48 @@ const BreadcrumbsClean = designable(BreadcrumbStartComponents)(BreadcrumbsClean$
 // eslint-disable-next-line max-len
 const withBreadcrumbItemsFromStore = (Component: ComponentType<BreadcrumbsProps & WithNodeProps>) => {
   const WithBreadcrumbItemsFromStore = (props: BreadcrumbsProps & WithNodeProps) => {
-    const { nodeCollection, hasFinalTrail = false, ...rest } = props;
+    const {
+      nodeCollection,
+      hasStartingTrail = false,
+      hasFinalTrail = false,
+      ...rest
+    } = props;
     const store = useBreadcrumbStore();
     if (store === undefined) return <Component {...props} />;
     const { node } = useNode(nodeCollection);
     const basePath = node.path;
-    const items = store.breadcrumbTrail.map((item: BreadcrumbStoreItemType) => {
-      const linkNodePath = item.link.nodePath.replace(`${basePath}$`, '');
-      const titleNodePath = item.title.nodePath.replace(`${basePath}$`, '');
-      return {
-        uuid: item.uuid,
-        link: {
-          nodeKey: linkNodePath,
-          nodeCollection,
-        },
-        title: {
-          nodeKey: titleNodePath,
-          nodeCollection,
-        },
-      };
-    });
+    const items = store.breadcrumbTrail
+      // when there is a custom starting trail and
+      // when the first store item has frontpage path
+      // then we strip the first store item
+      // so that do not render home item twice
+      .filter((item: BreadcrumbStoreItemType) => !(hasStartingTrail && item.isFirst() && item.hasPath('/')))
+      // map items retrieved from store
+      // into items expected by base breadcrumb component
+      .map((item: BreadcrumbStoreItemType) => {
+        const linkNodePath = item.link.nodePath.replace(`${basePath}$`, '');
+        const titleNodePath = item.title.nodePath.replace(`${basePath}$`, '');
+        return {
+          uuid: item.uuid,
+          link: {
+            nodeKey: linkNodePath,
+            nodeCollection,
+          },
+          title: {
+            nodeKey: titleNodePath,
+            nodeCollection,
+          },
+        };
+      });
     const hasFinalTrail$0 = typeof hasFinalTrail === 'function' ? hasFinalTrail() : hasFinalTrail;
     const hasFinalTrail$1 = hasFinalTrail$0 && !store.hasLastItem();
-    return <Component {...rest} items={items} hasFinalTrail={hasFinalTrail$1} />;
+    const props$1 = {
+      ...rest,
+      items,
+      hasFinalTrail: hasFinalTrail$1,
+      hasStartingTrail,
+    };
+    return <Component {...props$1} />;
   };
   return WithBreadcrumbItemsFromStore;
 };

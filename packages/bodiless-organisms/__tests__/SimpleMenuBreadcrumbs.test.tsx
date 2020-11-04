@@ -16,8 +16,8 @@ import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { mount } from 'enzyme';
 import { withDefaultContent, withSidecarNodes } from '@bodiless/core';
-import { asBodilessLink } from '@bodiless/components';
-import { replaceWith, withDesign, withOnlyProps } from '@bodiless/fclasses';
+import { asBodilessLink, asEditable } from '@bodiless/components';
+import { replaceWith, withDesign } from '@bodiless/fclasses';
 import { flowRight } from 'lodash';
 
 import {
@@ -43,7 +43,9 @@ const createBreadcrumbComponent = ({
     BreadcrumbLink: replaceWith(withSidecarNodes(
       asBodilessLink(),
     ))('a'),
-    BreadcrumbTitle: replaceWith(withOnlyProps('key', 'children')(React.Fragment)),
+    BreadcrumbTitle: replaceWith(
+      asEditable()(React.Fragment),
+    ),
   }),
   asBreadcrumbsClean({
     linkNodeKey: 'title$link',
@@ -67,11 +69,20 @@ describe('asBreadcrumbsClean', () => {
         testMenu$home$title$link: {
           href: '/',
         },
+        testMenu$home$title$text: {
+          text: 'home',
+        },
         testMenu$products$title$link: {
           href: '/products',
         },
+        testMenu$products$title$text: {
+          text: 'products',
+        },
         testMenu$articles$title$link: {
           href: '/articles',
+        },
+        testMenu$articles$title$text: {
+          text: 'articles',
         },
       },
     });
@@ -92,8 +103,14 @@ describe('asBreadcrumbsClean', () => {
         testMenu$home$title$link: {
           href: '/',
         },
+        testMenu$home$title$text: {
+          text: 'home',
+        },
         testMenu$products$title$link: {
           href: '/products',
+        },
+        testMenu$products$title$text: {
+          text: 'products',
         },
         testMenu$products$sublist: {
           items: [
@@ -107,11 +124,20 @@ describe('asBreadcrumbsClean', () => {
         testMenu$products$sublist$productA$title$link: {
           href: '/products/productA',
         },
+        testMenu$products$sublist$productA$title$text: {
+          text: 'productA',
+        },
         testMenu$products$sublist$productB$title$link: {
           href: '/products/productB',
         },
+        testMenu$products$sublist$productB$title$text: {
+          text: 'productB',
+        },
         testMenu$articles$title$link: {
           href: '/articles',
+        },
+        testMenu$articles$title$text: {
+          text: 'articles',
         },
         testMenu$articles$sublist: {
           items: [
@@ -120,6 +146,9 @@ describe('asBreadcrumbsClean', () => {
         },
         testMenu$articles$sublist$articleA$title$link: {
           href: '/articles/articleA',
+        },
+        testMenu$articles$sublist$articleA$title$text: {
+          text: 'articleA',
         },
       },
     });

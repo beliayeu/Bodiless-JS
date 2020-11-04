@@ -43,6 +43,7 @@ export type BreadcrumbItemType = {
   isAncestorOf: (item: BreadcrumbItemType) => boolean;
   isDescendantOf: (item: BreadcrumbItemType) => boolean;
   isEqual: (item: BreadcrumbItemType | string) => boolean;
+  isFirst: () => boolean;
   getAncestors: () => BreadcrumbItemType[];
   parent: BreadcrumbItemType | undefined;
 };
@@ -118,6 +119,10 @@ export class BreadcrumbItem implements BreadcrumbItemType {
   isEqual(item: BreadcrumbItemType | string) {
     const uuid = typeof item === 'string' ? item : item.uuid;
     return uuid === this._uuid;
+  }
+
+  isFirst() {
+    return this.parent === undefined;
   }
 
   getAncestors() {
