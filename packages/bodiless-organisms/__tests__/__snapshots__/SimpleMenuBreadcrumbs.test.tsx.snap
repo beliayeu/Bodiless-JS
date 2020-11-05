@@ -1,5 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`asBreadcrumbsClean allows override default items reducer
+      so that do not render the first item from menu trail 1`] = `"<ul><li><span>productA</span></li></ul>"`;
+
 exports[`asBreadcrumbsClean creates breadcrumbs for basic 1-level menu 1`] = `"<ul><li><span>products</span></li></ul>"`;
 
 exports[`asBreadcrumbsClean creates breadcrumbs for basic 2-level menu 1`] = `"<ul><li><a href=\\"/products\\"><span>products</span></a></li><span></span><li><span>productA</span></li></ul>"`;
+
+exports[`asBreadcrumbsClean when starting trail enabled and
+      when menu trail starts with frontpage
+      then it does not render home link twice by default 1`] = `"<ul><li><span>home</span></li></ul>"`;

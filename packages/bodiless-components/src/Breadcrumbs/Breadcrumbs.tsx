@@ -38,13 +38,50 @@ type BreadcrumbItemKeys = {
   link: WithNodeProps;
 };
 
+/**
+ * contains breadcrumb item public properties
+*/
+type BreadcrumbItemType = Pick<BreadcrumbStoreItemType, 'uuid' | 'title' | 'link' | 'isFirst' | 'hasPath'>;
+
+/**
+ * reduces items retrieved from breadcrumb store
+ *
+ * @param items - a list of items retrieved from store
+ * @param props - props passed to breadcrumb component
+ *
+ * @returns uuids - a collection of breadcrumb item uuids
+ */
+type BreadcrumbStoreItemsReducer = (
+  items: BreadcrumbItemType[],
+  props?: Pick<BreadcrumbsProps, 'hasStartingTrail' | 'hasFinalTrail'>,
+) => string[];
+
 type BreadcrumbsProps = DesignableComponentsProps<BreadcrumbsComponents> & {
   hasStartingTrail?: boolean | (() => boolean),
   items?: BreadcrumbItemKeys[],
   hasFinalTrail?: boolean | (() => boolean),
+  itemsReducer?: BreadcrumbStoreItemsReducer,
 } & { };
 
-const BreadcrumbsClean$ = (props: BreadcrumbsProps) => {
+/**
+ * removes first item from the trail
+ * when there is a custom starting trail and
+ * when the first store item has frontpage path
+ *
+ * @param items - breadcrumb store items
+ * @param props - breadcrumb component props
+ *
+ * @returns uuids - a list of item uuids
+ */
+const firstItemHomeLinkReducer = (
+  items: BreadcrumbItemType[],
+  { hasStartingTrail }: Pick<BreadcrumbsProps, 'hasStartingTrail' | 'hasFinalTrail'>,
+) => items
+  .filter(item => !(hasStartingTrail && item.isFirst() && item.hasPath('/')))
+  .map(item => item.uuid);
+
+type CleanBreadcrumbsProps = Omit<BreadcrumbsProps, 'itemsReducer'>;
+const BreadcrumbsClean$ = (props: CleanBreadcrumbsProps) => {
   const {
     hasStartingTrail = false,
     components,
@@ -146,35 +183,42 @@ const withBreadcrumbItemsFromStore = (Component: ComponentType<BreadcrumbsProps 
       nodeCollection,
       hasStartingTrail = false,
       hasFinalTrail = false,
+      itemsReducer = firstItemHomeLinkReducer,
       ...rest
     } = props;
     const store = useBreadcrumbStore();
     if (store === undefined) return <Component {...props} />;
     const { node } = useNode(nodeCollection);
     const basePath = node.path;
-    const items = store.breadcrumbTrail
-      // when there is a custom starting trail and
-      // when the first store item has frontpage path
-      // then we strip the first store item
-      // so that do not render home item twice
-      .filter((item: BreadcrumbStoreItemType) => !(hasStartingTrail && item.isFirst() && item.hasPath('/')))
+    const items = itemsReducer(store.breadcrumbTrail, { hasStartingTrail, hasFinalTrail })
+      .map(uuid => store.getItem(uuid))
       // map items retrieved from store
       // into items expected by base breadcrumb component
-      .map((item: BreadcrumbStoreItemType) => {
-        const linkNodePath = item.link.nodePath.replace(`${basePath}$`, '');
-        const titleNodePath = item.title.nodePath.replace(`${basePath}$`, '');
-        return {
-          uuid: item.uuid,
-          link: {
-            nodeKey: linkNodePath,
-            nodeCollection,
-          },
-          title: {
-            nodeKey: titleNodePath,
-            nodeCollection,
-          },
-        };
-      });
+      /* eslint-disable @typescript-eslint/indent */
+      // eslint throws an indentation error for lines inside reduce body
+      // automatic eslint fix brings code to unreadable state
+      // probably that is an eslint plugin issue
+      // the disabled rule is enabled back after reduce
+      .reduce<BreadcrumbItemKeys[]>(
+        (prev, current) => {
+          if (current === undefined) return prev;
+          const linkNodePath = current.link.nodePath.replace(`${basePath}$`, '');
+          const titleNodePath = current.title.nodePath.replace(`${basePath}$`, '');
+          prev.push({
+            uuid: current.uuid,
+            link: {
+              nodeKey: linkNodePath,
+              nodeCollection,
+            },
+            title: {
+              nodeKey: titleNodePath,
+              nodeCollection,
+            },
+          });
+          return prev;
+        }, [],
+      );
+    /* eslint-enable @typescript-eslint/indent */
     const hasFinalTrail$0 = typeof hasFinalTrail === 'function' ? hasFinalTrail() : hasFinalTrail;
     const hasFinalTrail$1 = hasFinalTrail$0 && !store.hasLastItem();
     const props$1 = {
@@ -235,4 +279,8 @@ export {
   withoutStartingTrail as withoutBreadcrumbStartingTrail,
   withFinalTrail as withBreadcrumbFinalTrail,
   withoutFinalTrail as withoutBreadcrumbFinalTrail,
+};
+
+export type {
+  BreadcrumbStoreItemsReducer,
 };

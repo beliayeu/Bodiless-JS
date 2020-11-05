@@ -162,6 +162,7 @@ export class BreadcrumbItem implements BreadcrumbItemType {
 }
 
 export type BreadcrumbStoreType = {
+  getItem: (key: string) => BreadcrumbItemType | undefined;
   setItem: (item: BreadcrumbItemType) => BreadcrumbItemType | undefined;
   deleteItem: (item: BreadcrumbItemType | string) => boolean;
   getPagePath: () => string;
@@ -209,6 +210,10 @@ export class BreadcrumbStore implements BreadcrumbStoreType {
     return this.activeItem !== undefined
       && this.activeItem.isEqual(item)
       && !this.activeItem.hasPath(item);
+  }
+
+  getItem(key: string) {
+    return this.items.get(key);
   }
 
   @action setItem(item: BreadcrumbItemType) {
