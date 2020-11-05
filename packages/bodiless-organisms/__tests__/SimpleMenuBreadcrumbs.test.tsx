@@ -209,4 +209,20 @@ describe('asBreadcrumbsClean', () => {
     const wrapper = mount(<Breadcrumb itemsReducer={customReducer} />);
     expect(wrapper.html()).toMatchSnapshot();
   });
+  it('renders last menu trail item as link when current page item does not exist in store', () => {
+    setPagePath('/products/nonExistingProduct');
+    const Breadcrumb = createBreadcrumbComponent({
+      content: generate2LevelMenuContent(),
+    });
+    const wrapper = mount(<Breadcrumb />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+  it('allows to force rendering last breadcrumb item as link', () => {
+    setPagePath('/products/productA');
+    const Breadcrumb = createBreadcrumbComponent({
+      content: generate2LevelMenuContent(),
+    });
+    const wrapper = mount(<Breadcrumb renderLastItemWithoutLink={false} />);
+    expect(wrapper.html()).toMatchSnapshot();
+  });
 });

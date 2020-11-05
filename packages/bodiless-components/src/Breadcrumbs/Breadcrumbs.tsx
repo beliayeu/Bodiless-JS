@@ -57,10 +57,29 @@ type BreadcrumbStoreItemsReducer = (
 ) => string[];
 
 type BreadcrumbsProps = DesignableComponentsProps<BreadcrumbsComponents> & {
+  /**
+   * whether starting custom item is enabled and should be rendered
+   * default: disabled
+   */
   hasStartingTrail?: boolean | (() => boolean),
+  /**
+   * list of breadcrumb items to render
+   */
   items?: BreadcrumbItemKeys[],
+  /**
+   * whether final custom item is enabled and should be rendered
+   */
   hasFinalTrail?: boolean | (() => boolean),
+  /**
+   * allows to reduce items retrieved from breadcrumb store
+   * default: firstItemHomeLinkReducer
+   */
   itemsReducer?: BreadcrumbStoreItemsReducer,
+  /**
+   * whether the last breadcrumb item should not be rendered as a link
+   * default: false
+   */
+  renderLastItemWithoutLink?: boolean | (() => boolean),
 } & { };
 
 /**
@@ -87,9 +106,13 @@ const BreadcrumbsClean$ = (props: CleanBreadcrumbsProps) => {
     components,
     items = [],
     hasFinalTrail = false,
+    renderLastItemWithoutLink = false,
   } = props;
   const hasStartingTrail$ = typeof hasStartingTrail === 'function' ? hasStartingTrail() : hasStartingTrail;
   const hasFinalTrail$ = typeof hasFinalTrail === 'function' ? hasFinalTrail() : hasFinalTrail;
+  const renderLastItemWithoutLink$ = typeof renderLastItemWithoutLink === 'function'
+    ? renderLastItemWithoutLink()
+    : renderLastItemWithoutLink;
   const {
     StartingTrail,
     Separator,
@@ -101,9 +124,7 @@ const BreadcrumbsClean$ = (props: CleanBreadcrumbsProps) => {
   } = components;
   const items$ = items.map((item: BreadcrumbItemKeys, index: number) => {
     const isLastItem = index === (items.length - 1);
-    // when there is no final trail item
-    // render the last breadcrumb item without link
-    if (isLastItem && !hasFinalTrail$) {
+    if (isLastItem && renderLastItemWithoutLink$) {
       return (
         <React.Fragment key={item.uuid}>
           <BreadcrumbItem>
@@ -184,6 +205,7 @@ const withBreadcrumbItemsFromStore = (Component: ComponentType<BreadcrumbsProps 
       hasStartingTrail = false,
       hasFinalTrail = false,
       itemsReducer = firstItemHomeLinkReducer,
+      renderLastItemWithoutLink = true,
       ...rest
     } = props;
     const store = useBreadcrumbStore();
@@ -221,11 +243,15 @@ const withBreadcrumbItemsFromStore = (Component: ComponentType<BreadcrumbsProps 
     /* eslint-enable @typescript-eslint/indent */
     const hasFinalTrail$0 = typeof hasFinalTrail === 'function' ? hasFinalTrail() : hasFinalTrail;
     const hasFinalTrail$1 = hasFinalTrail$0 && !store.hasLastItem();
+    const lastItemWithoutLink = typeof renderLastItemWithoutLink === 'function'
+      ? renderLastItemWithoutLink()
+      : renderLastItemWithoutLink;
     const props$1 = {
       ...rest,
       items,
       hasFinalTrail: hasFinalTrail$1,
       hasStartingTrail,
+      renderLastItemWithoutLink: lastItemWithoutLink && !hasFinalTrail$1 && store.hasLastItem(),
     };
     return <Component {...props$1} />;
   };
