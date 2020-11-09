@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-import React, { HTMLProps } from 'react';
 import { flow } from 'lodash';
 import {
   WithNodeKeyProps,
   withSidecarNodes,
   withNode,
   withNodeKey,
+  withChild,
 } from '@bodiless/core';
 import {
   withBreadcrumbStartingTrail,
@@ -31,7 +31,8 @@ import {
   replaceWith,
   A,
   Span,
-  withOnlyProps,
+  addClassesIf,
+  Fragment,
 } from '@bodiless/fclasses';
 
 import { asBold, asEditable, asEditableLink } from '../Elements.token';
@@ -80,21 +81,37 @@ const withNonLinkableStartingTrail = (
   }),
 );
 
-const withStartingTrailIcon = flow(
+const withStartingTrailIcon = (
+  nodeKeys?: WithNodeKeyProps,
+) => flow(
   withBreadcrumbStartingTrail,
   withDesign({
-    StartingTrail: flow(
-      replaceWith((props: HTMLProps<HTMLSpanElement>) => <Span {...props}>home</Span>),
-      addClasses('material-icons'),
+    StartingTrail: replaceWith(
+      flow(
+        withChild(
+          flow(
+            addProps({
+              children: 'home',
+            }),
+            addClasses('material-icons'),
+          )(Span),
+        ),
+        addClasses('material-icons'),
+        withSidecarNodes(
+          asEditableLink('link'),
+        ),
+        addProps({
+          href: '/',
+        }),
+        withNode,
+        withNodeKey(nodeKeys),
+      )(A),
     ),
   }),
 );
 
 const withNonLinkableItems = withDesign({
-  BreadcrumbLink: flow(
-    replaceWith(React.Fragment),
-    withOnlyProps('key', 'children'),
-  ),
+  BreadcrumbLink: replaceWith(Fragment),
 });
 
 const withEditableFinalTrail = (
@@ -111,6 +128,7 @@ const withEditableFinalTrail = (
 );
 
 const withBoldedFinalTrail = withDesign({
+  BreadcrumbItem: addClassesIf(({isCurrentPage}: any) => isCurrentPage)('font-bold'),
   FinalTrail: asBold,
 });
 

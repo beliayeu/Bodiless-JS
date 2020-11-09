@@ -21,6 +21,7 @@ import {
   A,
   Span,
   Ul,
+  stylable,
 } from '@bodiless/fclasses';
 import {
   asSimpleMenuBase,
@@ -73,6 +74,10 @@ const withMenuBreadcrumbsStyles = flow(
       replaceWith(Ul),
       addClasses('inline-flex'),
     ),
+    // if we want to do replaceWith
+    // then we need to strip non-li (position, isCurrentPage) props ourself, see BreadcrumbStartComponents
+    // otherwise we will get runtime warning
+    BreadcrumbItem: stylable,
   }),
   withArrowSeparator,
 );
