@@ -31,7 +31,9 @@ import {
   replaceWith,
   A,
   Span,
-  withOnlyProps,
+  addClassesIf,
+  stylable,
+  Fragment,
 } from '@bodiless/fclasses';
 
 import { asBold, asEditable, asEditableLink } from '../Elements.token';
@@ -91,10 +93,7 @@ const withStartingTrailIcon = flow(
 );
 
 const withNonLinkableItems = withDesign({
-  BreadcrumbLink: flow(
-    replaceWith(React.Fragment),
-    withOnlyProps('key', 'children'),
-  ),
+  BreadcrumbLink: replaceWith(Fragment),
 });
 
 const withEditableFinalTrail = (
@@ -111,6 +110,7 @@ const withEditableFinalTrail = (
 );
 
 const withBoldedFinalTrail = withDesign({
+  BreadcrumbItem: addClassesIf(({isCurrentPage}: any) => isCurrentPage)('font-bold'),
   FinalTrail: asBold,
 });
 

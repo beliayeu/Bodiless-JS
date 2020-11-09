@@ -44,6 +44,7 @@ export type BreadcrumbItemType = {
   isDescendantOf: (item: BreadcrumbItemType) => boolean;
   isEqual: (item: BreadcrumbItemType | string) => boolean;
   isFirst: () => boolean;
+  isLast: () => boolean;
   getAncestors: () => BreadcrumbItemType[];
   parent: BreadcrumbItemType | undefined;
 };
@@ -123,6 +124,11 @@ export class BreadcrumbItem implements BreadcrumbItemType {
 
   isFirst() {
     return this.parent === undefined;
+  }
+
+  isLast(): boolean {
+    const lastTrailItem = this._store.breadcrumbTrail[this._store.breadcrumbTrail.length - 1];
+    return this._uuid === lastTrailItem.uuid;
   }
 
   getAncestors() {
