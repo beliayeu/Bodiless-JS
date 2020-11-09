@@ -75,8 +75,9 @@ const withMenuBreadcrumbsStyles = flow(
       addClasses('inline-flex'),
     ),
     // if we want to do replaceWith
-    // then we need to strip non-li (position, isCurrentPage) props ourself, see BreadcrumbStartComponents
+    // then we need to strip non-li (position, isCurrentPage) props ourself
     // otherwise we will get runtime warning
+    // see @bodiless/components BreadcrumbStartComponents
     BreadcrumbItem: stylable,
   }),
   withArrowSeparator,

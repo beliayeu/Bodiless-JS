@@ -191,7 +191,7 @@ const BreadcrumbStartComponents: BreadcrumbsComponents = {
   Separator: asComponent('span'),
   BreadcrumbWrapper: asComponent('ul'),
   BreadcrumbItem: flowRight(
-    withoutProps([ 'position', 'isCurrentPage' ]),
+    withoutProps(['position', 'isCurrentPage']),
     asComponent,
   )('li'),
   BreadcrumbLink: asComponent('a'),

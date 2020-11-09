@@ -128,7 +128,7 @@ const withEditableFinalTrail = (
 );
 
 const withBoldedFinalTrail = withDesign({
-  BreadcrumbItem: addClassesIf(({isCurrentPage}: any) => isCurrentPage)('font-bold'),
+  BreadcrumbItem: addClassesIf(({ isCurrentPage }: any) => isCurrentPage)('font-bold'),
   FinalTrail: asBold,
 });
 
