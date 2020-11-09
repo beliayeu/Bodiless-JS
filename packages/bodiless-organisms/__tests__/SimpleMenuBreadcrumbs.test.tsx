@@ -15,13 +15,12 @@
 import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { mount } from 'enzyme';
-import { withDefaultContent, withSidecarNodes } from '@bodiless/core';
+import { withDefaultContent, withSidecarNodes, ifToggledOn } from '@bodiless/core';
 import { asBodilessLink, asEditable, withBreadcrumbStartingTrail } from '@bodiless/components';
 import {
   replaceWith,
   withDesign,
-  stylable,
-  addClassesIf,
+  addProps,
 } from '@bodiless/fclasses';
 import { flowRight } from 'lodash';
 import type { BreadcrumbStoreItemsReducer } from '@bodiless/components';
@@ -237,10 +236,9 @@ describe('asBreadcrumbsClean', () => {
     });
     const Breadcrumbs = flowRight(
       withDesign({
-        BreadcrumbItem: flowRight(
-          addClassesIf(({ isCurrentPage }: any) => isCurrentPage)('font-bold'),
-          stylable,
-        ),
+        BreadcrumbItem: ifToggledOn(
+          ({ isCurrentPage }: any) => isCurrentPage,
+        )(addProps({ className: 'font-bold' })),
       }),
     )(BaseBreadcrumbs);
     const wrapper = mount(<Breadcrumbs />);
@@ -253,10 +251,9 @@ describe('asBreadcrumbsClean', () => {
     });
     const Breadcrumbs = flowRight(
       withDesign({
-        BreadcrumbItem: flowRight(
-          addClassesIf(({ isCurrentPage }: any) => isCurrentPage)('font-bold'),
-          stylable,
-        ),
+        BreadcrumbItem: ifToggledOn(
+          ({ isCurrentPage }: any) => isCurrentPage,
+        )(addProps({ className: 'font-bold' })),
       }),
     )(BaseBreadcrumbs);
     const wrapper = mount(<Breadcrumbs />);
