@@ -12,13 +12,13 @@
  * limitations under the License.
  */
 
-import React, { HTMLProps } from 'react';
 import { flow } from 'lodash';
 import {
   WithNodeKeyProps,
   withSidecarNodes,
   withNode,
   withNodeKey,
+  withChild,
 } from '@bodiless/core';
 import {
   withBreadcrumbStartingTrail,
@@ -32,7 +32,6 @@ import {
   A,
   Span,
   addClassesIf,
-  stylable,
   Fragment,
 } from '@bodiless/fclasses';
 
@@ -82,12 +81,31 @@ const withNonLinkableStartingTrail = (
   }),
 );
 
-const withStartingTrailIcon = flow(
+const withStartingTrailIcon = (
+  nodeKeys?: WithNodeKeyProps,
+) => flow(
   withBreadcrumbStartingTrail,
   withDesign({
-    StartingTrail: flow(
-      replaceWith((props: HTMLProps<HTMLSpanElement>) => <Span {...props}>home</Span>),
-      addClasses('material-icons'),
+    StartingTrail: replaceWith(
+      flow(
+        withChild(
+          flow(
+            addProps({
+              children: 'home',
+            }),
+            addClasses('material-icons'),
+          )(Span),
+        ),
+        addClasses('material-icons'),
+        withSidecarNodes(
+          asEditableLink('link'),
+        ),
+        addProps({
+          href: '/',
+        }),
+        withNode,
+        withNodeKey(nodeKeys),
+      )(A),
     ),
   }),
 );
