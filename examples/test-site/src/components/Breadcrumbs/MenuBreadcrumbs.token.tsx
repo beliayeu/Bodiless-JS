@@ -12,6 +12,7 @@
  * limitations under the License.
  */
 
+import React from 'react';
 import { flow } from 'lodash';
 import {
   WithNodeKeyProps,
@@ -24,6 +25,7 @@ import {
 import {
   withBreadcrumbStartingTrail,
   withBreadcrumbFinalTrail,
+  withoutBreadcrumbFinalTrail,
 } from '@bodiless/components';
 import {
   addClasses,
@@ -132,6 +134,15 @@ const withBoldedFinalTrail = withDesign({
   FinalTrail: asBold,
 });
 
+const withHiddenCurrentPageItem = flow(
+  withDesign({
+    BreadcrumbItem: ifToggledOn(
+      ({ isCurrentPage }: any) => isCurrentPage,
+    )(replaceWith(() => <></>)),
+  }),
+  withoutBreadcrumbFinalTrail,
+);
+
 export const withSeparator = (separator: string) => addProps({
   children: separator,
 });
@@ -158,4 +169,5 @@ export {
   withArrowSeparator,
   withVerticalBarSeparator,
   withSlashSeparator,
+  withHiddenCurrentPageItem,
 };

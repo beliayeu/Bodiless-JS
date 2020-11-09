@@ -16,7 +16,7 @@ import React from 'react';
 import { graphql } from 'gatsby';
 import { Page } from '@bodiless/gatsby-theme-bodiless';
 import {
-  addClasses, H1 as H1$, H2 as H2$,
+  addClasses, H1 as H1$, H2 as H2$, P as P$,
 } from '@bodiless/fclasses';
 import { flow } from 'lodash';
 
@@ -35,8 +35,9 @@ import {
   withBoldedFinalTrail,
   withVerticalBarSeparator,
   withSlashSeparator,
+  withHiddenCurrentPageItem,
 } from '../../../components/Breadcrumbs/MenuBreadcrumbs.token';
-import { asHeader2, asHeader1 } from '../../../components/Elements.token';
+import { asHeader2, asHeader1, asItalic } from '../../../components/Elements.token';
 
 const withLocalEditableStartingTrail = withEditableStartingTrail(
   DEFAULT_STARTING_TRAIL_NODE_KEY,
@@ -61,9 +62,11 @@ const BreadcrumbWithNonLinkableItems = flow(
 const BreadcrumbWithBoldableFinalItem = withBoldedFinalTrail(MenuBreadcrumbs);
 const BreadcrumbWithVerticalBarSeparator = withVerticalBarSeparator(MenuBreadcrumbs);
 const BreadcrumbWithSlashSeparator = withSlashSeparator(MenuBreadcrumbs);
+const BreadcrumbWithHiddenCurrentPageItem = withHiddenCurrentPageItem(MenuBreadcrumbs);
 
 const H1 = flow(addClasses('pt-5'), asHeader1)(H1$);
 const H2 = flow(addClasses('pt-5'), asHeader2)(H2$);
+const P = flow(asItalic, addClasses('text-sm'))(P$);
 
 export default (props: any) => (
   <Page {...props}>
@@ -83,6 +86,15 @@ export default (props: any) => (
       <BreadcrumbWithVerticalBarSeparator nodeKey="simplemenu" className="my-2" />
       <H2>Breadcrumbs with slash separator</H2>
       <BreadcrumbWithSlashSeparator nodeKey="simplemenu" className="my-2" />
+      <H2>Breadcrumbs with hidden current page item</H2>
+      <P>
+        {`
+          This example does not display custom final trail item and does not display current page item
+          derived from menu. For instance, when the trail derived from menu is Components -> Breadcrumb
+          and current page is /breadcrumb, then this test component will render just Home -> Components
+        `}
+      </P>
+      <BreadcrumbWithHiddenCurrentPageItem nodeKey="simplemenu" className="my-2" />
       <H2>MegaMenu</H2>
       <MegaMenu nodeKey="megamenu" className="my-2" />
       <H2>MegaMenu breadcrumbs</H2>
