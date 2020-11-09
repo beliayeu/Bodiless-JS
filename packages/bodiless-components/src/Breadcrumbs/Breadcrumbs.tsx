@@ -249,14 +249,14 @@ const withBreadcrumbItemsFromStore = (Component: ComponentType<BreadcrumbsProps 
               nodeCollection,
             },
             position: index + 1,
-            isCurrentPage: current.isLast(),
+            isCurrentPage: current.isLast() && store.hasCurrentPageItem(),
           });
           return prev;
         }, [],
       );
     /* eslint-enable @typescript-eslint/indent */
     const hasFinalTrail$0 = typeof hasFinalTrail === 'function' ? hasFinalTrail() : hasFinalTrail;
-    const hasFinalTrail$1 = hasFinalTrail$0 && !store.hasLastItem();
+    const hasFinalTrail$1 = hasFinalTrail$0 && !store.hasCurrentPageItem();
     const lastItemWithoutLink = typeof renderLastItemWithoutLink === 'function'
       ? renderLastItemWithoutLink()
       : renderLastItemWithoutLink;
@@ -265,7 +265,9 @@ const withBreadcrumbItemsFromStore = (Component: ComponentType<BreadcrumbsProps 
       items,
       hasFinalTrail: hasFinalTrail$1,
       hasStartingTrail,
-      renderLastItemWithoutLink: lastItemWithoutLink && !hasFinalTrail$1 && store.hasLastItem(),
+      renderLastItemWithoutLink: lastItemWithoutLink
+        && !hasFinalTrail$1
+        && store.hasCurrentPageItem(),
     };
     return <Component {...props$1} />;
   };

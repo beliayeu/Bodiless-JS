@@ -174,7 +174,7 @@ export type BreadcrumbStoreType = {
   getPagePath: () => string;
   breadcrumbTrail: BreadcrumbItemType[];
   export: () => BreadcrumbItemType[];
-  hasLastItem: () => boolean;
+  hasCurrentPageItem: () => boolean;
 };
 
 /**
@@ -255,7 +255,7 @@ export class BreadcrumbStore implements BreadcrumbStoreType {
     return Array.from(this.items.values());
   }
 
-  hasLastItem() {
+  hasCurrentPageItem() {
     return this.activeItem !== undefined && this.activeItem.hasPath(this.pagePath);
   }
 }
