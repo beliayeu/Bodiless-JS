@@ -23,6 +23,7 @@ import {
   Ul,
   stylable,
 } from '@bodiless/fclasses';
+import { withoutLinkWhenLinkDataEmpty } from '@bodiless/components';
 import {
   asSimpleMenuBase,
   asSimpleMenuBreadcrumbs,
@@ -31,7 +32,7 @@ import {
 } from '@bodiless/organisms';
 
 import { EditorSimple } from '../Editors';
-import { asEditableLink } from '../Elements.token';
+import { asEditableLink, asLink } from '../Elements.token';
 
 import {
   withArrowSeparator,
@@ -46,8 +47,11 @@ const withMenuBreadcrumbSchema = flow(
   withDesign({
     BreadcrumbLink: flow(
       replaceWith(
-        withSidecarNodes(
-          asEditableLink(),
+        flow(
+          withoutLinkWhenLinkDataEmpty,
+          withSidecarNodes(
+            asEditableLink(),
+          ),
         )(A),
       ),
       asReadOnly,
@@ -79,6 +83,7 @@ const withMenuBreadcrumbsStyles = flow(
     // otherwise we will get runtime warning
     // see @bodiless/components BreadcrumbStartComponents
     BreadcrumbItem: stylable,
+    BreadcrumbLink: asLink,
   }),
   withArrowSeparator,
 );

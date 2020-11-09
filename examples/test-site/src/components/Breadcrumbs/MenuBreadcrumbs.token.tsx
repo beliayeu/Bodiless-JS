@@ -37,7 +37,12 @@ import {
   Fragment,
 } from '@bodiless/fclasses';
 
-import { asBold, asEditable, asEditableLink } from '../Elements.token';
+import {
+  asBold,
+  asEditable,
+  asEditableLink,
+  asLink,
+} from '../Elements.token';
 
 const withEditableStartingTrail = (
   nodeKeys?: WithNodeKeyProps,
@@ -57,25 +62,7 @@ const withEditableStartingTrail = (
         addProps({
           href: '/',
         }),
-        withNode,
-        withNodeKey(nodeKeys),
-      )(A),
-    ),
-  }),
-);
-
-const withNonLinkableStartingTrail = (
-  nodeKeys?: WithNodeKeyProps,
-  placeholder?: string,
-) => flow(
-  withBreadcrumbStartingTrail,
-  withDesign({
-    StartingTrail: replaceWith(
-      flow(
-        asEditable('text', placeholder),
-        addProps({
-          children: 'Home',
-        }),
+        asLink,
         withNode,
         withNodeKey(nodeKeys),
       )(A),
@@ -161,7 +148,6 @@ const withSlashSeparator = withDesign({
 
 export {
   withEditableStartingTrail,
-  withNonLinkableStartingTrail,
   withStartingTrailIcon,
   withNonLinkableItems,
   withEditableFinalTrail,

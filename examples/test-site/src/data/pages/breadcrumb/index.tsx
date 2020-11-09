@@ -31,7 +31,6 @@ import {
   withEditableStartingTrail,
   withStartingTrailIcon,
   withNonLinkableItems,
-  withNonLinkableStartingTrail,
   withBoldedFinalTrail,
   withVerticalBarSeparator,
   withSlashSeparator,
@@ -55,10 +54,7 @@ const MegaMenuBreadcrumbs = flow(
 const BreadcrumbWithStartingTrailIcon = withStartingTrailIcon(
   DEFAULT_STARTING_TRAIL_NODE_KEY,
 )(MenuBreadcrumbs);
-const BreadcrumbWithNonLinkableItems = flow(
-  withNonLinkableItems,
-  withNonLinkableStartingTrail(DEFAULT_STARTING_TRAIL_NODE_KEY, 'Enter item'),
-)(MenuBreadcrumbs);
+const BreadcrumbWithNonLinkableItems = withNonLinkableItems(MenuBreadcrumbs);
 const BreadcrumbWithBoldableFinalItem = withBoldedFinalTrail(MenuBreadcrumbs);
 const BreadcrumbWithVerticalBarSeparator = withVerticalBarSeparator(MenuBreadcrumbs);
 const BreadcrumbWithSlashSeparator = withSlashSeparator(MenuBreadcrumbs);
