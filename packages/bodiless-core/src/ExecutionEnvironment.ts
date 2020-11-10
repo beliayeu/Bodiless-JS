@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-const canUseDOM = () => (
+const canUseDOM = () => !!(
   typeof window !== 'undefined'
   && window.document
   && window.document.createElement
