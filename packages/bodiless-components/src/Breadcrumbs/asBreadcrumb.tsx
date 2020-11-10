@@ -14,9 +14,9 @@
 
 import React, {
   createContext, useContext, ComponentType, useRef, useEffect,
-  useState,
+  useLayoutEffect,
 } from 'react';
-import { useNode } from '@bodiless/core';
+import { useNode, isServerSideRendering } from '@bodiless/core';
 import { v4 } from 'uuid';
 import { observer } from 'mobx-react-lite';
 import { BreadcrumbItem } from './BreadcrumbStore';
@@ -32,19 +32,6 @@ export const BreadcrumbContextProvider = breadcrumbContext.Provider;
 export type BreadcrumbSettings = {
   linkNodeKey: string,
   titleNodeKey: string,
-};
-
-/**
- * hook that checks whether the component is rendered the first time
- *
- * @returns true when the component is rendered the first time, otherwise false
- */
-const useIsFirstRender = () => {
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-  return !isMounted;
 };
 
 /**
@@ -82,13 +69,14 @@ const asBreadcrumb = ({
       parent: current,
       store,
     });
-    const isFirstRender = useIsFirstRender();
-    // hit breadcrumb store during first render
-    // so that get breadcrumbs generated during server-side rendering
-    if (isFirstRender) {
+    // hit store on render during ssr
+    // so that breadcrumb store is populated with data
+    // before rendering of breadcrumbs component that retrieves data from the store
+    if (isServerSideRendering()) {
       store.setItem(item);
     }
-    useEffect(() => {
+    // useLayoutEffect instead of useEffect to avoid flicking during hydration phase
+    useLayoutEffect(() => {
       store.setItem(item);
     }, [titleNode.data, linkNode.data]);
     // deleting item from store on unmount
