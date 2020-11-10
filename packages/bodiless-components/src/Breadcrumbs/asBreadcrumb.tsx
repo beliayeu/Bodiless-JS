@@ -14,6 +14,7 @@
 
 import React, {
   createContext, useContext, ComponentType, useRef, useEffect,
+  useState,
 } from 'react';
 import { useNode } from '@bodiless/core';
 import { v4 } from 'uuid';
@@ -31,6 +32,19 @@ export const BreadcrumbContextProvider = breadcrumbContext.Provider;
 export type BreadcrumbSettings = {
   linkNodeKey: string,
   titleNodeKey: string,
+};
+
+/**
+ * hook that checks whether the component is rendered the first time
+ *
+ * @returns true when the component is rendered the first time, otherwise false
+ */
+const useIsFirstRender = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  return !isMounted;
 };
 
 /**
@@ -68,7 +82,15 @@ const asBreadcrumb = ({
       parent: current,
       store,
     });
-    store.setItem(item);
+    const isFirstRender = useIsFirstRender();
+    // hit breadcrumb store during first render
+    // so that get breadcrumbs generated during server-side rendering
+    if (isFirstRender) {
+      store.setItem(item);
+    }
+    useEffect(() => {
+      store.setItem(item);
+    }, [titleNode.data, linkNode.data]);
     // deleting item from store on unmount
     useEffect(() => () => {
       store.deleteItem(contextUuidRef.current);
