@@ -14,7 +14,6 @@
 
 import React, {
   createContext, useContext, ComponentType, useRef, useEffect,
-  useState,
 } from 'react';
 import { useNode } from '@bodiless/core';
 import { v4 } from 'uuid';
@@ -40,11 +39,11 @@ export type BreadcrumbSettings = {
  * @returns true when the component is rendered the first time, otherwise false
  */
 const useIsFirstRender = () => {
-  const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useRef(false);
   useEffect(() => {
-    setIsMounted(true);
+    isMounted.current = true;
   }, []);
-  return !isMounted;
+  return !isMounted.current;
 };
 
 /**

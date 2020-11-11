@@ -12,11 +12,14 @@
  * limitations under the License.
  */
 
+/* eslint max-len: 0 */
+
 import React from 'react';
 import { graphql } from 'gatsby';
 import { Page } from '@bodiless/gatsby-theme-bodiless';
+import { asReadOnly } from '@bodiless/core';
 import {
-  addClasses, H1 as H1$, H2 as H2$, P as P$,
+  addClasses, H1 as H1$, H2 as H2$, P as P$, withDesign,
 } from '@bodiless/fclasses';
 import { flow } from 'lodash';
 
@@ -38,27 +41,74 @@ import {
 } from '../../../components/Breadcrumbs/MenuBreadcrumbs.token';
 import { asHeader2, asHeader1, asItalic } from '../../../components/Elements.token';
 
-const withLocalEditableStartingTrail = withEditableStartingTrail(
-  DEFAULT_STARTING_TRAIL_NODE_KEY,
-  'Enter item',
-);
-
 const MenuBreadcrumbs = flow(
-  withLocalEditableStartingTrail,
+  withEditableStartingTrail(
+    `${DEFAULT_STARTING_TRAIL_NODE_KEY}Default`,
+    'Enter item',
+  ),
+)(BaseMenuBreadcrumbs);
+
+const BreadcrumbWithStartingTrailIcon = withStartingTrailIcon(
+  `${DEFAULT_STARTING_TRAIL_NODE_KEY}Icon`,
+)(BaseMenuBreadcrumbs);
+
+const BreadcrumbWithNonLinkableItems = flow(
+  withEditableStartingTrail(
+    `${DEFAULT_STARTING_TRAIL_NODE_KEY}NonLinkable`,
+    'Enter item',
+  ),
+  withNonLinkableItems,
+)(BaseMenuBreadcrumbs);
+
+const BreadcrumbWithBoldableFinalItem = flow(
+  withEditableStartingTrail(
+    `${DEFAULT_STARTING_TRAIL_NODE_KEY}BoldedFinal`,
+    'Enter item',
+  ),
+  withBoldedFinalTrail,
+)(BaseMenuBreadcrumbs);
+
+const BreadcrumbWithVerticalBarSeparator = flow(
+  withEditableStartingTrail(
+    `${DEFAULT_STARTING_TRAIL_NODE_KEY}VerticalBar`,
+    'Enter item',
+  ),
+  withVerticalBarSeparator,
+)(BaseMenuBreadcrumbs);
+
+const BreadcrumbWithSlashSeparator = flow(
+  withEditableStartingTrail(
+    `${DEFAULT_STARTING_TRAIL_NODE_KEY}SlashSeparator`,
+    'Enter item',
+  ),
+  withSlashSeparator,
+)(BaseMenuBreadcrumbs);
+
+const BreadcrumbWithHiddenCurrentPageItem = flow(
+  withEditableStartingTrail(
+    `${DEFAULT_STARTING_TRAIL_NODE_KEY}CurrentPage`,
+    'Enter item',
+  ),
+  withHiddenCurrentPageItem,
 )(BaseMenuBreadcrumbs);
 
 const MegaMenuBreadcrumbs = flow(
-  withLocalEditableStartingTrail,
+  withEditableStartingTrail(
+    `${DEFAULT_STARTING_TRAIL_NODE_KEY}MegaMenu`,
+    'Enter item',
+  ),
 )(BaseMegaMenuBreadcrumbs);
 
-const BreadcrumbWithStartingTrailIcon = withStartingTrailIcon(
-  DEFAULT_STARTING_TRAIL_NODE_KEY,
-)(MenuBreadcrumbs);
-const BreadcrumbWithNonLinkableItems = withNonLinkableItems(MenuBreadcrumbs);
-const BreadcrumbWithBoldableFinalItem = withBoldedFinalTrail(MenuBreadcrumbs);
-const BreadcrumbWithVerticalBarSeparator = withVerticalBarSeparator(MenuBreadcrumbs);
-const BreadcrumbWithSlashSeparator = withSlashSeparator(MenuBreadcrumbs);
-const BreadcrumbWithHiddenCurrentPageItem = withHiddenCurrentPageItem(MenuBreadcrumbs);
+const MegaMenuBreadcrumbWithNonLinkableItems = flow(
+  withEditableStartingTrail(
+    `${DEFAULT_STARTING_TRAIL_NODE_KEY}MegaMenuNonLinkable`,
+    'Enter item',
+  ),
+  withDesign({
+    StartingTrail: asReadOnly,
+  }),
+  withNonLinkableItems,
+)(BaseMegaMenuBreadcrumbs);
 
 const H1 = flow(addClasses('pt-5'), asHeader1)(H1$);
 const H2 = flow(addClasses('pt-5'), asHeader2)(H2$);
@@ -74,7 +124,7 @@ export default (props: any) => (
       <MenuBreadcrumbs nodeKey="simplemenu" className="my-2" />
       <H2>Breadcrumbs with starting trail icon</H2>
       <BreadcrumbWithStartingTrailIcon nodeKey="simplemenu" className="my-2" />
-      <H2>Breadcrumbs with non-linkable items</H2>
+      <H2>Breadcrumbs with non-linkable Middle Trail group</H2>
       <BreadcrumbWithNonLinkableItems nodeKey="simplemenu" className="my-2" />
       <H2>Breadcrumbs with boldable final trail item</H2>
       <BreadcrumbWithBoldableFinalItem nodeKey="simplemenu" className="my-2" />
@@ -95,6 +145,8 @@ export default (props: any) => (
       <MegaMenu nodeKey="megamenu" className="my-2" />
       <H2>MegaMenu breadcrumbs</H2>
       <MegaMenuBreadcrumbs nodeKey="megamenu" className="my-2" />
+      <H2>MegaMenu breadcrumbs with non-editable starting trail and non-linkable Middle Trail group</H2>
+      <MegaMenuBreadcrumbWithNonLinkableItems nodeKey="megamenu" className="my-2" />
     </Layout>
   </Page>
 );
