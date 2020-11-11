@@ -73,10 +73,6 @@ import { useMenuOptionUI } from './components/ContextMenuContext';
 import ContextSubMenu from './ContextMenu/ContextSubMenu';
 import withSwitcherButton from './withSwitcherButton';
 import OnNodeErrorNotification from './OnNodeErrorNotification';
-import {
-  isClientSideRendering,
-  isServerSideRendering,
-} from './ExecutionEnvironment';
 
 export * from './components';
 export {
@@ -140,8 +136,6 @@ export {
   withNotificationButton,
   withSwitcherButton,
   OnNodeErrorNotification,
-  isClientSideRendering,
-  isServerSideRendering,
 };
 
 export type {
