@@ -12,7 +12,10 @@
  * limitations under the License.
  */
 
+import React, { ComponentType } from 'react';
 import { flow } from 'lodash';
+
+import ReactDOMServer from 'react-dom/server';
 
 import {
   withDesign,
@@ -22,17 +25,19 @@ import {
   Fragment,
 } from '@bodiless/fclasses';
 import {
-  WithNodeKeyProps,
+  WithNodeKeyProps, useNode, NodeProvider,
 } from '@bodiless/core';
 import {
   asBodilessList,
   withSubListDesign, withSubLists, asSubList, withDeleteNodeOnUnwrap,
   asBreadcrumb, withBreadcrumbs,
+  BreadcrumbStoreProvider, useBreadcrumbStore,
 } from '@bodiless/components';
 import type { BreadcrumbSettings } from '@bodiless/components';
 
 import { asStylableList } from './SimpleMenu.token';
 import withMenuContext from './withMenuContext';
+import { observer } from 'mobx-react-lite';
 
 /**
  * Creates a stylable sublist which deletes it's data when the last item is removed.
@@ -83,6 +88,21 @@ const asMenuBase = (nodeKeys?: WithNodeKeyProps) => flow(
   withMenuContext,
 );
 
+export const withEmptyMarkup = (Component: ComponentType<any>) => observer((props: any) => {
+  const store = useBreadcrumbStore();
+  const { node } = useNode();
+  console.log('withEmptyMarkup useNode');
+  console.log(node.path);
+  ReactDOMServer.renderToString(
+    <NodeProvider node={node}>
+      <BreadcrumbStoreProvider store={store}>
+        <Component {...props} />
+      </BreadcrumbStoreProvider>
+    </NodeProvider>
+  );
+  return null;
+})
+
 /**
  * HOC that can be applied to a menu based component,
  * it renders all list and sublist items but produces no markup.
@@ -112,6 +132,7 @@ const withEmptyMenuMarkup = flow(
  */
 const asBreadcrumbsClean = (settings: BreadcrumbSettings) => flow(
   withEmptyMenuMarkup,
+  //withEmptyMarkup,
   withMenuDesign({
     Item: flow(
       asBreadcrumb(settings),
