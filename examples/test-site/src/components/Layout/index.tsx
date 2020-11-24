@@ -43,7 +43,6 @@ const BaseLayout = ({ children, components }) => {
       <SocialShareHelmet />
       <SiteHeader />
       <Container>
-        { Breadcrumbs && <Breadcrumbs />}
         {children}
       </Container>
       <SiteFooter />

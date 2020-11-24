@@ -206,6 +206,24 @@ const BasicRichText = <P extends object, D extends object>(props: P & RichTextPr
   const { HoverMenu } = getUI(ui);
   const finalUI = getUI(ui);
   const selectorButtons = getSelectorButtons(finalComponents).map(C => <C key={useUUID()} />);
+  
+  const TestHoverMenu = () => {
+    return (
+      <EditOnlyHoverMenu HoverMenu={HoverMenu}>
+        {
+          getHoverButtons(finalComponents).map(C => <C key={useUUID()} />)
+        }
+        {
+          selectorButtons.length > 0
+          && (
+            <TextSelectorButton>{selectorButtons}</TextSelectorButton>
+          )
+        }
+      </EditOnlyHoverMenu>
+    )
+  }
+
+  return (<Content /> );
   return (
     <uiContext.Provider value={finalUI}>
       <RichTextProvider
@@ -215,17 +233,6 @@ const BasicRichText = <P extends object, D extends object>(props: P & RichTextPr
         globalButtons={globalButtons}
         schema={schema}
       >
-        <EditOnlyHoverMenu HoverMenu={HoverMenu}>
-          {
-            getHoverButtons(finalComponents).map(C => <C key={useUUID()} />)
-          }
-          {
-            selectorButtons.length > 0
-            && (
-              <TextSelectorButton>{ selectorButtons }</TextSelectorButton>
-            )
-          }
-        </EditOnlyHoverMenu>
         <Content />
       </RichTextProvider>
     </uiContext.Provider>

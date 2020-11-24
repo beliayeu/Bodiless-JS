@@ -33,32 +33,7 @@ const RichTextPage = (props: any) => (
           <EditorSimple className="border-solid border-4 border-gray-600 p-5" nodeKey="simpleRTE" placeholder="Type something here..." />
         </div>
       </div>
-
-      <div className="flex flex-col w-full py-5">
-        <h3 className="p-5 font-bold">Basic Rich Text:</h3>
-        <div className="p-5 pt-0">
-          <EditorBasic className="border-solid border-4 border-gray-600 p-5" nodeKey="basicRTE" placeholder="Type something here..." />
-        </div>
-      </div>
-
-      <div className="flex flex-col w-full py-5">
-        <h3 className="p-5 font-bold">Full Rich Text:</h3>
-        <div className="p-5 pt-0">
-          <EditorFullFeatured className="border-solid border-4 border-gray-600 p-5" nodeKey="fullRTE" placeholder="Type something here..." />
-        </div>
-      </div>
-
-      <div className="flex flex-col w-full py-5">
-        <h3 className="p-5 font-bold">Component Picker with Rich Text:</h3>
-        <div className="p-5 pt-0">
-          <div className="border-solid border-4 border-gray-600 p-5">
-            <FlowContainerDefault nodeKey="richtext" />
-          </div>
-        </div>
-      </div>
-
-      <h3 className="text-lg font-bold py-5 pt-10">This shows the json content of the grid:</h3>
-      <NodeViewer nodeKey="richtext" />
+      
     </Layout>
   </Page>
 );
