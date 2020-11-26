@@ -19,36 +19,32 @@ type Props<P> = {
   Component: React.ComponentType<P>,
   type: string,
 };
-const createNodeRenderPlugin = <P extends object> ({
+
+const createElementRenderPlugin = <P extends object> ({
   Component,
   type,
 }:Props<P>) => {
-  const plugin: Plugin = {
-    renderNode: (props, editor, next) => {
-      switch (props.node.type) {
-        case type:
-          return <Component {...props as P & RenderNodeProps} />;
-        default:
-          return next();
-      }
+  const plugin = {
+    renderElement: (props) => {
+      return <Component {...props as P & RenderNodeProps} />;
     },
   };
   return plugin;
 };
-const createMarkRenderPlugin = <P extends object> ({
+
+const createLeafRenderPlugin = <P extends object> ({
   Component,
   type,
 }:Props<P>) => {
-  const plugin: Plugin = {
-    renderMark: (props, editor, next) => {
-      switch (props.mark.type) {
-        case type:
-          return <Component {...props as unknown as P & RenderNodeProps} />;
-        default:
-          return next();
-      }
+  const plugin = {
+    renderLeaf: (props) => {
+      console.log('hey from leaf render');
+      console.log(props);
+      return <Component {...props as P & RenderNodeProps} />;
     },
   };
   return plugin;
 };
-export { createNodeRenderPlugin, createMarkRenderPlugin };
+
+
+export { createElementRenderPlugin, createLeafRenderPlugin };

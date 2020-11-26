@@ -28,8 +28,8 @@ import {
   createBlockButton,
   createInlineButton,
   createMarkButton,
-  createNodeRenderPlugin,
-  createMarkRenderPlugin,
+  createElementRenderPlugin,
+  createLeafRenderPlugin,
   createKeyboardPlugin,
   blockUtils,
   hasInline,
@@ -104,15 +104,15 @@ const getRenderPlugin = <P extends object> (Component: RenderPluginComponent) =>
   } = Component;
   const { creates, WrappedComponent } = {
     [RichTextItemType.block]: {
-      creates: createNodeRenderPlugin,
+      creates: createElementRenderPlugin,
       WrappedComponent: SlateComponentProvider(blockUtils.updateBlock)(Component),
     },
     [RichTextItemType.inline]: {
-      creates: createNodeRenderPlugin,
+      creates: createElementRenderPlugin,
       WrappedComponent: SlateComponentProvider(updateInline)(Component),
     },
     [RichTextItemType.mark]: {
-      creates: createMarkRenderPlugin,
+      creates: createLeafRenderPlugin,
       WrappedComponent: Component,
     },
   }[type];
@@ -128,6 +128,8 @@ const getRenderPlugin = <P extends object> (Component: RenderPluginComponent) =>
     type: id,
   });
 };
+
+
 const getShortcutPlugin = <P extends object> (Component: RichTextComponent) => {
   const {
     type,
@@ -148,6 +150,8 @@ const getShortcutPlugin = <P extends object> (Component: RichTextComponent) => {
     key: keyboardKey,
   });
 };
+
+
 /*
   getPlugins takes an array of data items and pass them though to getPlugin
 */

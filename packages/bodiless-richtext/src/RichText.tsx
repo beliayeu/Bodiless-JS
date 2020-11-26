@@ -12,8 +12,15 @@
  * limitations under the License.
  */
 
-import React, { ComponentType, useMemo, FC } from 'react';
+import React, {
+  ComponentType,
+  useMemo,
+  FC,
+  useState,
+} from 'react';
 import { flowRight, pick, flow } from 'lodash';
+import { createEditor } from 'slate';
+import { Slate, withReact } from 'slate-react';
 import type { Plugin } from 'slate-react';
 import type { SchemaProperties } from 'slate';
 import { observer } from 'mobx-react-lite';
@@ -206,24 +213,36 @@ const BasicRichText = <P extends object, D extends object>(props: P & RichTextPr
   const { HoverMenu } = getUI(ui);
   const finalUI = getUI(ui);
   const selectorButtons = getSelectorButtons(finalComponents).map(C => <C key={useUUID()} />);
-  
-  const TestHoverMenu = () => {
-    return (
-      <EditOnlyHoverMenu HoverMenu={HoverMenu}>
-        {
-          getHoverButtons(finalComponents).map(C => <C key={useUUID()} />)
-        }
-        {
-          selectorButtons.length > 0
-          && (
-            <TextSelectorButton>{selectorButtons}</TextSelectorButton>
-          )
-        }
-      </EditOnlyHoverMenu>
-    )
-  }
 
-  return (<Content /> );
+  const [value, setValue] = useState<Node[]>(defaultValue)
+  const editor = useMemo(() => withReact(createEditor()), []);
+
+  return (
+    <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+      <uiContext.Provider value={finalUI}>
+        <RichTextProvider
+          {...rest}
+          initialValue={initialValue || { ...defaultValue }}
+          plugins={plugins}
+          globalButtons={globalButtons}
+          schema={schema}
+        >
+          <EditOnlyHoverMenu HoverMenu={HoverMenu}>
+            {
+              getHoverButtons(finalComponents).map(C => <C key={useUUID()} />)
+            }
+            {
+              selectorButtons.length > 0
+              && (
+                <TextSelectorButton>{selectorButtons}</TextSelectorButton>
+               )
+            }
+          </EditOnlyHoverMenu>
+          <Content />
+        </RichTextProvider>
+      </uiContext.Provider>
+    </Slate>
+  );
   return (
     <uiContext.Provider value={finalUI}>
       <RichTextProvider

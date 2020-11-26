@@ -19,7 +19,7 @@ import React, {
   Fragment,
   ComponentType,
 } from 'react';
-import { Editor, Value } from 'slate';
+import { Editor } from 'slate';
 import { Editor as ReactEditor, EditorProps, Plugin } from 'slate-react';
 // @ts-ignore
 import PlaceholderPlugin from 'slate-react-placeholder';
@@ -41,9 +41,8 @@ const withSlateEditor = <P extends object> (Component:ComponentType<P>) => (prop
   // It is important to keep track of internal activeValue
   // state in case outer activeValue is not provided.
   // Value is used in plugins and buttons before Content is mounted and its activeValue is obtained.
-  const [localValueState, setLocalValue] = useState<Value>(
-    value
-    || Value.fromJSON(initialValue),
+  const [localValueState, setLocalValue] = useState<object>(
+    value || initialValue
   );
   const internalOnChange: EditorOnChange = change => {
     const { value: valueFromChange } = change;
