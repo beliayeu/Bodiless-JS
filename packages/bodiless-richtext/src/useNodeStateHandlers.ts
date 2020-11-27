@@ -13,7 +13,7 @@
  */
 
 import React from 'react';
-import { isObservable, toJS } from 'mobx';
+import { toJS } from 'mobx';
 //import { Value, ValueJSON } from 'slate';
 import isEqual from 'react-fast-compare';
 import { useNode, useUUID } from '@bodiless/core';
@@ -67,51 +67,18 @@ const useOnChange: TUseOnChange = ({ onChange, key, initialValue }) => {
   const { setState } = useStateContainer();
   const { node } = useNode<Data>();
 
-  return change => {
-    const { value } = change;
-    const jsonValue = value.toJSON();
-    let { document } = node.data;
-
-    if (isObservable(document)) {
-      document = toJS(document);
-    }
-    // Set the editor state.  We use the node path as a key.
-    const newState = {
-      [key]: value,
-    };
-
-    // If Document has changed
-    const isDocumentChanged = !isEqual(document, jsonValue.document);
-
-    // If the value is initial value
-    const isNewValueInitial = isEqual(initialValue.document, jsonValue.document);
-
-    // If New Value is Empty
-    const isNewValueEmpty = isNewValueInitial && document && isDocumentChanged;
-
-    // If New Value Has Changes
-    const isNewValueChanged = !isNewValueInitial && (!document || isDocumentChanged);
-
-    if (isNewValueEmpty || isNewValueChanged) {
-      node.setData({ document: jsonValue.document! });
-    }
+  return value => {
     if (onChange) {
       onChange(change);
     }
-    setState(newState);
+    node.setData(value);
   };
 };
 
 // Create the value prop (gets current editor value from state).
 const useValue: TUseValue = ({ initialValue, key }) => {
-  const { get: getValue } = useStateContainer();
   const { node } = useNode<Data>();
-  let oldValue = getValue(key);
-  if (!oldValue) {
-    oldValue = node.data.document ? { document: node.data.document } : initialValue;
-  }
-  if (!node.data.document) return oldValue;
-  return node.data.document;
+  return toJS(node.data);
 };
 
 const useNodeStateHandlers: TUseNodeStateHandlers = ({

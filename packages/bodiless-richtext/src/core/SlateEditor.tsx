@@ -13,7 +13,6 @@
  */
 
 import React, {
-  useRef,
   useState,
   useMemo,
   Fragment,
@@ -35,9 +34,6 @@ const withSlateEditor = <P extends object> (Component:ComponentType<P>) => (prop
   const {
     initialValue, value, onChange, placeholder, plugins = [], ...rest
   } = props;
-  // A reference to 'slate-react/Content' instance that allows to manipulate the editor
-  const editorRef = useRef<ReactEditor>(null);
-
   // It is important to keep track of internal activeValue
   // state in case outer activeValue is not provided.
   // Value is used in plugins and buttons before Content is mounted and its activeValue is obtained.
@@ -76,13 +72,6 @@ const withSlateEditor = <P extends object> (Component:ComponentType<P>) => (prop
   ], [plugins]) as Plugin[] : plugins;
 
   const editorContextValue = {
-    editorRef,
-    // for some reason current.controller doesn't return what it's supposed to
-    // but editorRef.current!.controller.controller does.
-    editor:
-      editorRef.current!
-      // @ts-ignore
-      && (editorRef.current!.controller.controller as Editor),
     value: value || localValueState,
     editorProps: {
       ...rest,

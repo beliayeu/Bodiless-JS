@@ -13,7 +13,6 @@
  */
 
 import React from 'react';
-import { Plugin, RenderNodeProps } from 'slate-react';
 
 type Props<P> = {
   Component: React.ComponentType<P>,
@@ -25,8 +24,9 @@ const createElementRenderPlugin = <P extends object> ({
   type,
 }:Props<P>) => {
   const plugin = {
-    renderElement: (props) => {
-      return <Component {...props as P & RenderNodeProps} />;
+    type,
+    renderElement: ({attributes, children}) => {
+      return <Component {...attributes}>{children}</Component>;
     },
   };
   return plugin;
@@ -37,10 +37,9 @@ const createLeafRenderPlugin = <P extends object> ({
   type,
 }:Props<P>) => {
   const plugin = {
-    renderLeaf: (props) => {
-      console.log('hey from leaf render');
-      console.log(props);
-      return <Component {...props as P & RenderNodeProps} />;
+    type,
+    renderLeaf: ({attributes, children}) => {
+      return <Component {...attributes}>{children}</Component>;
     },
   };
   return plugin;

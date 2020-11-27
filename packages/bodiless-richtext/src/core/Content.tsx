@@ -13,8 +13,43 @@
  */
 
 import React from 'react';
-import { Editable } from 'slate-react';
+import { flow } from 'lodash';
+import { Editable, DefaultElement, DefaultLeaf } from 'slate-react';
 import { useSlateContext } from './SlateEditorContext';
+
+
+const withWrapper = WrapperComponent => Component => ({children, ...rest}) => (
+  <WrapperComponent {...rest}>
+    <Component>{children}</Component>
+  </WrapperComponent>
+)
+
+
+const renderLeaf = (props) => {
+  const { leaf } = props;
+  const editorContext = useSlateContext();
+  const plugins = editorContext?.editorProps!.plugins;
+  let renderLeaf$ = DefaultLeaf;
+  plugins.forEach(plugin => {
+    if (plugin.hasOwnProperty('renderLeaf') && leaf[plugin.type]) {
+      renderLeaf$ = withWrapper(plugin.renderLeaf)(renderLeaf$);
+    }
+  });
+  return renderLeaf$(props);
+}
+
+const renderElement = (props) => {
+  const { element } = props;
+  const editorContext = useSlateContext();
+  const plugins = editorContext?.editorProps!.plugins;
+  let renderElement$ = DefaultElement;
+  plugins.forEach(plugin => {
+    if (plugin.hasOwnProperty('renderElement') && element.type === plugin.type) {
+      renderElement$ = plugin.renderElement;
+    }
+  });
+  return renderElement$(props);
+}
 
 const Content = () => {
   const editorContext = useSlateContext();
@@ -22,6 +57,8 @@ const Content = () => {
     <Editable
       { ...editorContext!.editorProps}
       placeholder="Enter some rich text…"
+      renderLeaf={renderLeaf}
+      renderElement={renderElement}
     />
   );
 };

@@ -82,6 +82,7 @@ import {
 } from './meta';
 import withDefaults from './withDefaults';
 import { withPreview } from './RichTextPreview';
+import withDataMigrator from './withDataMigrator';
 import type { RichTextProps } from './Type';
 
 type WithSlateSchemaTypeProps = {
@@ -169,8 +170,6 @@ type RichTextProviderProps = {
 } & UseMenuOptionsProps;
 type RichTextProviderType = ComponentType<RichTextProviderProps>;
 const RichTextProvider = flowRight(
-  withNode,
-  withNodeStateHandlers,
   withSlateEditor,
   ifMenuOptions(
     withMenuOptions({ useMenuOptions, name: 'editor' }),
@@ -197,6 +196,8 @@ const BasicRichText = <P extends object, D extends object>(props: P & RichTextPr
     initialValue,
     components,
     ui,
+    onChange,
+    value,
     ...rest
   } = props;
   const {
@@ -214,11 +215,10 @@ const BasicRichText = <P extends object, D extends object>(props: P & RichTextPr
   const finalUI = getUI(ui);
   const selectorButtons = getSelectorButtons(finalComponents).map(C => <C key={useUUID()} />);
 
-  const [value, setValue] = useState<Node[]>(defaultValue)
   const editor = useMemo(() => withReact(createEditor()), []);
 
   return (
-    <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+    <Slate editor={editor} value={value} onChange={onChange}>
       <uiContext.Provider value={finalUI}>
         <RichTextProvider
           {...rest}
@@ -242,19 +242,6 @@ const BasicRichText = <P extends object, D extends object>(props: P & RichTextPr
         </RichTextProvider>
       </uiContext.Provider>
     </Slate>
-  );
-  return (
-    <uiContext.Provider value={finalUI}>
-      <RichTextProvider
-        {...rest}
-        initialValue={initialValue || { ...defaultValue }}
-        plugins={plugins}
-        globalButtons={globalButtons}
-        schema={schema}
-      >
-        <Content />
-      </RichTextProvider>
-    </uiContext.Provider>
   );
 };
 const defaults = {
@@ -306,6 +293,9 @@ const apply = (design: Design<DesignableComponents>) => {
 };
 
 const RichText = flow(
+  withDataMigrator,
+  withNodeStateHandlers,
+  withNode,
   withPreview,
   designable(apply, 'RichText'),
 )(BasicRichText);

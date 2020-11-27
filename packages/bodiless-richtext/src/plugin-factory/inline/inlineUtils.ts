@@ -12,12 +12,19 @@
  * limitations under the License.
  */
 
-import { Value, Inline, Editor } from 'slate';
+import { Editor, Transforms } from 'slate';
 import { DataJSON } from '../../Type';
 
-export const hasInline = (value: Value, inlineType: string) => (
-  value.inlines.some(inline => Boolean(inline && inline.type === inlineType))
-);
+
+const isInlineActive = (editor: Editor, format: string) => {
+  const [match] = Editor.nodes(editor, {
+    match: n => n.type === format,
+  })
+  return !!match
+};
+
+export const hasInline = (format: string, editor: Editor) => isInlineActive(editor, format);
+
 export const getInline = (value: Value, inlineType: string) => value.inlines
   .filter(inline => Boolean(inline && inline.type === inlineType))
   .first();
@@ -100,23 +107,27 @@ export const insertInline = ({
 
   return editor;
 };
+
 export const toggleInline = ({
   editor,
-  value,
-  inlineType,
-}: InsertInlineOptions) => {
-  if (hasInline(value, inlineType)) {
-    removeInline(editor, inlineType);
-  } else {
-    insertInline({ editor, value, inlineType });
-  }
+  blockType,
+}: any) => {
+  const isActive = isBlockActive(editor, blockType)
+
+  Transforms.unwrapNodes(editor, {
+    split: true,
+  })
+
+  Transforms.setNodes(editor, {
+    type: isActive ? 'paragraph' : blockType,
+  })
 };
+
 export const createToggleInline = (inlineType: string) => (
-  { editor, value }:createToggleInlineOptions,
+  { editor }:createToggleInlineOptions,
 ) => (
   toggleInline({
     editor,
-    value,
     inlineType,
   })
 );

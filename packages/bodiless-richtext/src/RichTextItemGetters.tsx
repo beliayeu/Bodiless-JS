@@ -105,7 +105,8 @@ const getRenderPlugin = <P extends object> (Component: RenderPluginComponent) =>
   const { creates, WrappedComponent } = {
     [RichTextItemType.block]: {
       creates: createElementRenderPlugin,
-      WrappedComponent: SlateComponentProvider(blockUtils.updateBlock)(Component),
+      //WrappedComponent: SlateComponentProvider(blockUtils.updateBlock)(Component),
+      WrappedComponent: Component,
     },
     [RichTextItemType.inline]: {
       creates: createElementRenderPlugin,

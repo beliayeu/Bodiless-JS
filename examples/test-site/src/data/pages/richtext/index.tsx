@@ -30,7 +30,7 @@ const RichTextPage = (props: any) => (
       <div className="flex flex-col w-full py-5">
         <h3 className="p-5 font-bold">Simple Rich Text:</h3>
         <div className="p-5 pt-0">
-          <EditorSimple className="border-solid border-4 border-gray-600 p-5" nodeKey="simpleRTE" placeholder="Type something here..." />
+          <EditorFullFeatured className="border-solid border-4 border-gray-600 p-5" nodeKey="fullRTE" placeholder="Type something here..." />
         </div>
       </div>
       
