@@ -13,7 +13,7 @@
  */
 
 import { ComponentType } from 'react';
-import { Value, Editor, Operation } from 'slate';
+import { Node, Editor, Operation } from 'slate';
 import Immutable from 'immutable';
 import {
   Editor as ReactEditor,
@@ -37,6 +37,8 @@ export type FormProps = {
   closeForm(): void;
   unwrap(): void;
 };
+
+export type Value = Node[];
 
 export type NodeEditForm = ComponentType<FormProps>;
 
@@ -94,4 +96,6 @@ export type RichTextProps<P> = {
   ui?: UI,
   initialValue?: object,
   nodeKey?: string,
+  value?: Value;
+  onChange?: (value: Value) => void;
 };

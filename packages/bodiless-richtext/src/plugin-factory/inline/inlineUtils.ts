@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-import { Editor, Transforms } from 'slate';
+import { Editor, Transforms, Range } from 'slate';
 import { DataJSON } from '../../Type';
 
 
@@ -22,6 +22,8 @@ const isInlineActive = (editor: Editor, format: string) => {
   })
   return !!match
 };
+
+export const createIsActive = (format: string) => (editor: Editor) => isInlineActive(editor, format);
 
 export const hasInline = (format: string, editor: Editor) => isInlineActive(editor, format);
 
@@ -33,9 +35,13 @@ export const createInline = (inlineType: string, data: DataJSON) => ({
   type: inlineType,
 });
 export const hasMultiBlocks = (value: Value) => value.blocks.size > 1;
-export const removeInline = (editor: Editor, inlineType: string) => (
-  editor.unwrapInline(inlineType).focus()
-);
+
+export const removeInline = (
+  editor: Editor,
+  inlineType: string,
+  // ToDo: check if we need to focus
+) => Transforms.unwrapNodes(editor, { match: n => n.type === inlineType });
+
 export const removeInlineByNode = (editor: Editor, node: Inline) => {
   editor.moveToRangeOfNode(node);
   editor.unwrapInline(node.type).focus();
@@ -110,17 +116,28 @@ export const insertInline = ({
 
 export const toggleInline = ({
   editor,
-  blockType,
+  inlineType,
+  data: any
 }: any) => {
-  const isActive = isBlockActive(editor, blockType)
+  const isActive = isInlineActive(editor, inlineType);
 
-  Transforms.unwrapNodes(editor, {
-    split: true,
-  })
+  if (isActive) {
+    removeInline(editor, inlineType)
+  }
 
-  Transforms.setNodes(editor, {
-    type: isActive ? 'paragraph' : blockType,
-  })
+  const { selection } = editor
+  const isCollapsed = selection && Range.isCollapsed(selection)
+  const inline = {
+    type: inlineType,
+    children: isCollapsed ? [data] : [],
+  }
+
+  if (isCollapsed) {
+    Transforms.insertNodes(editor, inline)
+  } else {
+    Transforms.wrapNodes(editor, inline, { split: true })
+    Transforms.collapse(editor, { edge: 'end' })
+  }
 };
 
 export const createToggleInline = (inlineType: string) => (

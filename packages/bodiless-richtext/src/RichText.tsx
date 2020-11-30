@@ -18,7 +18,7 @@ import React, {
   FC,
   useState,
 } from 'react';
-import { flowRight, pick, flow } from 'lodash';
+import { flowRight, pick, flow, isEmpty } from 'lodash';
 import { createEditor } from 'slate';
 import { Slate, withReact } from 'slate-react';
 import type { Plugin } from 'slate-react';
@@ -216,13 +216,15 @@ const BasicRichText = <P extends object, D extends object>(props: P & RichTextPr
   const selectorButtons = getSelectorButtons(finalComponents).map(C => <C key={useUUID()} />);
 
   const editor = useMemo(() => withReact(createEditor()), []);
+  const initialValue$ = initialValue || [ ...defaultValue ];
+  const value$ = !isEmpty(value) ? value : initialValue$;
 
   return (
-    <Slate editor={editor} value={value} onChange={onChange}>
+    <Slate editor={editor} value={value$} onChange={onChange}>
       <uiContext.Provider value={finalUI}>
         <RichTextProvider
           {...rest}
-          initialValue={initialValue || { ...defaultValue }}
+          initialValue={initialValue$}
           plugins={plugins}
           globalButtons={globalButtons}
           schema={schema}
