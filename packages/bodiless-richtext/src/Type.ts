@@ -53,7 +53,6 @@ export type EditorContext = {
 
 export type ToggleProps = {
   editor: Editor;
-  value: Value;
 };
 
 export type EditorButtonProps = {

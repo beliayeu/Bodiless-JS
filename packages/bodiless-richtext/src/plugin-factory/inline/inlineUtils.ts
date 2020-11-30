@@ -15,13 +15,15 @@
 import { Editor, Transforms, Range } from 'slate';
 import { DataJSON } from '../../Type';
 
-
+// leveraging https://github.com/ianstormtaylor/slate/issues/3481#issuecomment-581670722
 const isInlineActive = (editor: Editor, format: string) => {
-  const nodes = Editor.nodes(editor);
-  console.log(nodes);
-  const [match] = Editor.nodes(editor, {
+  let match = false
+  for (const [node, paths] of Editor.nodes(editor, {
     match: n => n.type === format,
-  })
+  })) {
+    if (node.type === format) match = true
+    break
+  }
   return !!match
 };
 
@@ -109,7 +111,6 @@ export const insertInline = ({
 export const toggleInline = ({
   editor,
   inlineType,
-  data: any
 }: any) => {
   const isActive = isInlineActive(editor, inlineType);
 
@@ -121,7 +122,7 @@ export const toggleInline = ({
   const isCollapsed = selection && Range.isCollapsed(selection)
   const inline = {
     type: inlineType,
-    children: isCollapsed ? [data] : [],
+    children: [],
   }
 
   if (isCollapsed) {

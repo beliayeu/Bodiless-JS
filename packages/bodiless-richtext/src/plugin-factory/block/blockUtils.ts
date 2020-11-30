@@ -15,11 +15,15 @@
 import { Editor, Transforms } from 'slate';
 import { DataJSON } from '../../Type';
 
+// leveraging https://github.com/ianstormtaylor/slate/issues/3481#issuecomment-581670722
 const isBlockActive = (editor: Editor, format: string) => {
-  const [match] = Editor.nodes(editor, {
+  let match = false
+  for (const [node, paths] of Editor.nodes(editor, {
     match: n => n.type === format,
-  })
-
+  })) {
+    if (node.type === format) match = true
+    break
+  }
   return !!match
 }
 
