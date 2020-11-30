@@ -115,7 +115,8 @@ export const toggleInline = ({
   const isActive = isInlineActive(editor, inlineType);
 
   if (isActive) {
-    removeInline(editor, inlineType)
+    removeInline(editor, inlineType);
+    return;
   }
 
   const { selection } = editor

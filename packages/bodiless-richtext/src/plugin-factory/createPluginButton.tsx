@@ -43,7 +43,6 @@ const withToggle = <P extends requiredProps> (opts:Opts) => (
     const { toggle, isActive, icon } = opts;
     const { children, className = '' } = props;
     const editor = useSlate();
-    const editorContext: EditorContext = useSlateContext();
     const componentName = Component.defaultProps ? Component.defaultProps.name : undefined;
     return (
       <PluginButton
@@ -51,7 +50,6 @@ const withToggle = <P extends requiredProps> (opts:Opts) => (
         onMouseDown={
           () => toggle({
             editor,
-            value: editorContext!.value,
           })
         }
         className={`${

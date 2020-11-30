@@ -64,14 +64,17 @@ const preserveAll = {
 // Create the onChange prop.
 // @TODO Should be memoized with useCallback.
 const useOnChange: TUseOnChange = ({ onChange, key, initialValue }) => {
-  const { setState } = useStateContainer();
   const { node } = useNode<Data>();
+  const nodeData = toJS(node.data);
 
   return value => {
     if (onChange) {
       onChange(change);
     }
-    node.setData(value);
+    // ToDo: ensure previous logic including saving initial value is not lost
+    if (!isEqual(value, nodeData)) {
+      node.setData(value);
+    }
   };
 };
 
