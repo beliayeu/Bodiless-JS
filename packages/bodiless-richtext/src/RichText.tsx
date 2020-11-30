@@ -48,6 +48,7 @@ import {
   extendDesign,
   Design,
   DesignableComponents,
+  withDisplayName,
 } from '@bodiless/fclasses';
 import {
   withSlateEditor,
@@ -170,6 +171,7 @@ type RichTextProviderProps = {
 } & UseMenuOptionsProps;
 type RichTextProviderType = ComponentType<RichTextProviderProps>;
 const RichTextProvider = flowRight(
+  withDisplayName('RichTextProvider'),
   withSlateEditor,
   ifMenuOptions(
     withMenuOptions({ useMenuOptions, name: 'editor' }),

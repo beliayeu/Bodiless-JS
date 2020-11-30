@@ -22,7 +22,7 @@ import {
 import {
   NodeProvider, DefaultContentNode, withoutProps, useNode,
 } from '@bodiless/core';
-import { RenderNodeProps } from 'slate-react';
+import { RenderNodeProps, useSlate } from 'slate-react';
 import { flow } from 'lodash';
 import {
   createBlockButton,
@@ -54,13 +54,17 @@ const addAttributes = <P extends object> (Component:ComponentType<P>) => (
     return <Component {...props} {...attributes} />;
   }
 );
-const SlateComponentProvider = (update:Function) => (
+const SlateComponentProvider = (update: Function, type: string) => (
   <P extends object, D extends object>(Component:ComponentType<P>) => (
     (props:P & RenderNodeProps) => {
       const { node: bodilessNode } = useNode();
-      const { editor, node } = props;
+      const { node } = props;
+      const editor = useSlate();
       const getters = {
-        getNode: (path: string[]) => node.data.toJS()[path.join('$')],
+        getNode: (path: string[]) => {
+          return '/test';
+          //node.data.toJS()[path.join('$')]
+        },
         getKeys: () => ['slatenode'],
         hasError: () => bodilessNode.hasError(),
         getPagePath: () => bodilessNode.pagePath,
@@ -69,9 +73,9 @@ const SlateComponentProvider = (update:Function) => (
       const actions = {
         // tslint: disable-next-line:no-unused-vars
         setNode: (path: string[], componentData: any) => update({
-          node,
           editor,
-          componentData: {
+          type,
+          data: {
             ...node.data.toJS(),
             [path.join('$')]: { ...componentData },
           },
@@ -110,7 +114,7 @@ const getRenderPlugin = <P extends object> (Component: RenderPluginComponent) =>
     },
     [RichTextItemType.inline]: {
       creates: createElementRenderPlugin,
-      WrappedComponent: SlateComponentProvider(updateInline)(Component),
+      WrappedComponent: SlateComponentProvider(updateInline, type)(Component),
     },
     [RichTextItemType.mark]: {
       creates: createLeafRenderPlugin,

@@ -17,6 +17,8 @@ import { DataJSON } from '../../Type';
 
 
 const isInlineActive = (editor: Editor, format: string) => {
+  const nodes = Editor.nodes(editor);
+  console.log(nodes);
   const [match] = Editor.nodes(editor, {
     match: n => n.type === format,
   })
@@ -73,22 +75,12 @@ export type createToggleInlineOptions = {
 
 export const updateInline = ({
   editor,
-  componentData,
-  node,
+  type,
+  data,
 }: UpdateInlineOptions) => {
-  const { value } = editor;
-  const { selection, fragment } = value;
-  const { text } = fragment;
-  if (selection.isCollapsed) {
-    editor.moveFocusBackward(text.length);
+  if (editor.selection) {
+    toggleInline({ editor, type, data })
   }
-
-  editor.moveToRangeOfNode(node).setInlines({
-    type: node.type,
-    data: { ...componentData, openModal: false },
-  });
-
-  return editor;
 };
 
 export const insertInline = ({
