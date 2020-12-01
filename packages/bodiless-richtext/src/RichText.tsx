@@ -202,6 +202,9 @@ const BasicRichText = <P extends object, D extends object>(props: P & RichTextPr
     value,
     ...rest
   } = props;
+
+  console.log('===============BasicRichText render======================');
+
   const {
     finalComponents, plugins, schema, globalButtons,
   } = useMemo(() => {

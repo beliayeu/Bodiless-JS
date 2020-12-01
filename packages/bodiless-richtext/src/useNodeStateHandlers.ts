@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { toJS } from 'mobx';
 //import { Value, ValueJSON } from 'slate';
 import isEqual from 'react-fast-compare';
@@ -67,7 +67,7 @@ const useOnChange: TUseOnChange = ({ onChange, key, initialValue }) => {
   const { node } = useNode<Data>();
   const nodeData = toJS(node.data);
 
-  return value => {
+  return useCallback(value => {
     if (onChange) {
       onChange(change);
     }
@@ -75,7 +75,7 @@ const useOnChange: TUseOnChange = ({ onChange, key, initialValue }) => {
     if (!isEqual(value, nodeData)) {
       node.setData(value);
     }
-  };
+  }, []);
 };
 
 // Create the value prop (gets current editor value from state).

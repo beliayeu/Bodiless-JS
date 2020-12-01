@@ -56,7 +56,21 @@ export const wrapInline = (
   inlineType: string,
   data: DataJSON,
 ) => {
-  editor.wrapInline(createInline(inlineType, data));
+  if (isInlineActive(editor, inlineType)) {
+    removeInline(editor, inlineType);
+  }
+
+  const { selection } = editor
+  const isCollapsed = selection && Range.isCollapsed(selection)
+
+  const inlineNode = createInline(inlineType, data);
+
+  if (isCollapsed) {
+    Transforms.insertNodes(editor, inlineNode)
+  } else {
+    Transforms.wrapNodes(editor, inlineNode, { split: true })
+    Transforms.collapse(editor, { edge: 'end' })
+  }
 };
 
 export type UpdateInlineOptions = {
@@ -81,7 +95,11 @@ export const updateInline = ({
   data,
 }: UpdateInlineOptions) => {
   if (editor.selection) {
-    toggleInline({ editor, type, data })
+    const isActive = isInlineActive(editor, type);
+    console.log(isActive);
+    Transforms.unwrapNodes(editor, { match: n => n.type === type })
+    //wrapInline(editor, type, data);
+    //toggleInline({ editor, type, data })
   }
 };
 
@@ -90,22 +108,15 @@ export const insertInline = ({
   value,
   inlineType,
 }: InsertInlineOptions) => {
-  const { selection } = value;
-  if (hasInline(value, inlineType)) {
-    removeInline(editor, inlineType);
-  } else if (selection.isExpanded) {
-    wrapInline(editor, inlineType, { openModal: true });
-  } else if (hasMultiBlocks(value)) {
-    // eslint-disable-next-line no-console
-    console.info('[SlateJS][ImagePlugin] has multiple blocks on selection');
-  } else if (selection.isCollapsed && !hasInline(value, inlineType)) {
-    // eslint-disable-next-line no-console
-    console.info(
-      '[SlateJS][ImagePlugin] selection collapsed, w/o links on selection',
-    );
-  }
 
-  return editor;
+  const { selection } = editor;
+  const isExpanded = selection && Range.isExpanded(selection)
+
+  if (hasInline(inlineType, editor)) {
+    removeInline(editor, inlineType);
+  } else if (isExpanded) {
+    wrapInline(editor, inlineType, { openModal: true });
+  } 
 };
 
 export const toggleInline = ({
@@ -116,21 +127,12 @@ export const toggleInline = ({
 
   if (isActive) {
     removeInline(editor, inlineType);
-    return;
-  }
-
-  const { selection } = editor
-  const isCollapsed = selection && Range.isCollapsed(selection)
-  const inline = {
-    type: inlineType,
-    children: [],
-  }
-
-  if (isCollapsed) {
-    Transforms.insertNodes(editor, inline)
   } else {
-    Transforms.wrapNodes(editor, inline, { split: true })
-    Transforms.collapse(editor, { edge: 'end' })
+    insertInline({
+      editor,
+      inlineType,
+      value: {}
+    });
   }
 };
 
