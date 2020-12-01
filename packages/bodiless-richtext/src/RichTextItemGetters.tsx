@@ -23,7 +23,7 @@ import {
 import {
   NodeProvider, DefaultContentNode, withoutProps, useNode,
 } from '@bodiless/core';
-import { RenderNodeProps, useSlate, useSelected } from 'slate-react';
+import { RenderNodeProps, useSlate } from 'slate-react';
 import { flow } from 'lodash';
 import {
   createBlockButton,
@@ -64,33 +64,14 @@ const SlateComponentProvider = (update: Function, type: string) => (
       const fragment = editor.getFragment();
       // when the editor looses focus and selection becomes null
       // see https://github.com/ianstormtaylor/slate/issues/3412
-      const lastSelection = useRef(null);
+      const lastSelection = useRef<Range>(null);
       const lastFragment = useRef([]);
       if (selection !== null) lastSelection.current = selection;
-      if (fragment.length > 0) lastFragment.current = fragment;
-
-
-      if (lastSelection.current !== null) {
-        console.log('lastSelection.current');
-        console.log(lastSelection.current);
-        const [match] = Editor.nodes(editor, {
-         // at: selection,
-          match: n => {
-            console.log('inside match');
-            console.log(match);
-            return n.type === type
-          },
-        });
-        console.log(match);
-      }
-
+      if (lastFragment !== null) lastFragment.current = fragment;
       const getters = {
+        //getNode: (path: string[]) => fragment[0].data[path.join('$')],
         getNode: (path: string[]) => {
-          console.log('hey from getNode');
-          console.log(lastSelection.current);
-          console.log(lastFragment.current);
           return '/test';
-          //node.data.toJS()[path.join('$')]
         },
         getKeys: () => ['slatenode'],
         hasError: () => bodilessNode.hasError(),
@@ -104,43 +85,11 @@ const SlateComponentProvider = (update: Function, type: string) => (
             ...lastFragment.current[0].data,
             [path.join('$')]: { ...componentData },
           };
-          console.log(newData);
-          //Transforms.select(editor, lastSelection.current);
-          Transforms.setNodes(
-            editor,
-            {
-              testProp: true,
-              data: newData,
-              type: type,
-            },
-            {
-              at: lastSelection.current,
-              match: n => {
-                let matchx = false
-                for (const [node, paths] of Editor.nodes(editor, {
-                  match: n => n.type === format,
-                })) {
-                  if (node.type === format) match = true
-                  break
-                }
-                return !!matchx
-              },
-            }
-          )
-
-          console.log(match);
-
-          /*return update({
+          return update({
             editor,
             type,
-            data: {
-              ...lastFragment.current[0],
-              data: {
-                ...lastFragment.current[0].data,
-                [path.join('$')]: { ...componentData },
-              }
-            },
-          });*/
+            data: newData,
+          });
         },
         deleteNode: () => {},
       };
@@ -176,7 +125,7 @@ const getRenderPlugin = <P extends object> (Component: RenderPluginComponent) =>
     },
     [RichTextItemType.inline]: {
       creates: createElementRenderPlugin,
-      WrappedComponent: SlateComponentProvider(updateInline, type)(Component),
+      WrappedComponent: SlateComponentProvider(updateInline, id)(Component),
     },
     [RichTextItemType.mark]: {
       creates: createLeafRenderPlugin,

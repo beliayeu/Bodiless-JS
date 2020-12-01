@@ -19,7 +19,7 @@ import React, {
   ComponentType,
 } from 'react';
 import { Editor } from 'slate';
-import { Editor as ReactEditor, EditorProps, Plugin } from 'slate-react';
+import { EditorProps, Plugin } from 'slate-react';
 // @ts-ignore
 import PlaceholderPlugin from 'slate-react-placeholder';
 import SlateEditorContext from './SlateEditorContext';

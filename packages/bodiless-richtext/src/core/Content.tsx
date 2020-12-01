@@ -13,7 +13,6 @@
  */
 
 import React from 'react';
-import { flow } from 'lodash';
 import { Editable, DefaultElement, DefaultLeaf } from 'slate-react';
 import { useSlateContext } from './SlateEditorContext';
 
@@ -56,7 +55,6 @@ const Content = () => {
   return (
     <Editable
       { ...editorContext!.editorProps}
-      placeholder="Enter some rich text…"
       renderLeaf={renderLeaf}
       renderElement={renderElement}
     />

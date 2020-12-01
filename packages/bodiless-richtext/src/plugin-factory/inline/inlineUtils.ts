@@ -93,14 +93,19 @@ export const updateInline = ({
   editor,
   type,
   data,
+  at,
 }: UpdateInlineOptions) => {
-  if (editor.selection) {
-    const isActive = isInlineActive(editor, type);
-    console.log(isActive);
-    Transforms.unwrapNodes(editor, { match: n => n.type === type })
-    //wrapInline(editor, type, data);
-    //toggleInline({ editor, type, data })
-  }
+  Transforms.setNodes(
+    editor,
+    {
+      data,
+      type,
+    },
+    {
+      at: at || editor.selection,
+      match: n => n.type === type,
+    }
+  )
 };
 
 export const insertInline = ({
