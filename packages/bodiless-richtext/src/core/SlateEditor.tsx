@@ -14,14 +14,9 @@
 
 import React, {
   useState,
-  useMemo,
   Fragment,
   ComponentType,
 } from 'react';
-import { Editor } from 'slate';
-import { EditorProps, Plugin } from 'slate-react';
-// @ts-ignore
-import PlaceholderPlugin from 'slate-react-placeholder';
 import SlateEditorContext from './SlateEditorContext';
 import '@material/react-material-icon/dist/material-icon.css';
 import { EditorOnChange } from '../Type';
@@ -51,31 +46,11 @@ const withSlateEditor = <P extends object> (Component:ComponentType<P>) => (prop
     return change;
   };
 
-  const pluginWithPlaceholder = (placeholder) ? useMemo(() => [...plugins,
-    [
-      {
-        queries: {
-          isEmpty: (editor:Editor) => editor.value.document.text === '',
-        },
-      },
-      PlaceholderPlugin({
-        placeholder,
-        when: 'isEmpty',
-        style: {
-          width: '100%',
-          display: 'inline',
-          height: '0',
-          overflow: 'visible',
-        },
-      }),
-    ],
-  ], [plugins]) as Plugin[] : plugins;
-
   const editorContextValue = {
     value: value || localValueState,
     editorProps: {
       ...rest,
-      plugins: pluginWithPlaceholder,
+      plugins,
       onChange: internalOnChange,
       value: value || localValueState,
     },

@@ -15,7 +15,9 @@
 import React from 'react';
 import { Editable, DefaultElement, DefaultLeaf } from 'slate-react';
 import { useSlateContext } from './SlateEditorContext';
+import type { EditorContext } from '../Type';
 
+type EditableProps = EditorContext['editorProps'];
 
 const withWrapper = WrapperComponent => Component => ({children, ...rest}) => (
   <WrapperComponent {...rest}>
@@ -50,10 +52,11 @@ const renderElement = (props) => {
   return renderElement$(props);
 }
 
-const Content = () => {
+const Content = (props: EditableProps) => {
   const editorContext = useSlateContext();
   return (
     <Editable
+      {...props}
       { ...editorContext!.editorProps}
       renderLeaf={renderLeaf}
       renderElement={renderElement}

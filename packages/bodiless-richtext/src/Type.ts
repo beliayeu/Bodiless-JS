@@ -15,11 +15,7 @@
 import { ComponentType } from 'react';
 import { Node, Editor, Operation } from 'slate';
 import Immutable from 'immutable';
-import {
-  Editor as ReactEditor,
-  BasicEditorProps,
-  EditorProps,
-} from 'slate-react';
+import type { EditableProps } from 'slate-react/dist/components/editable';
 import type { DesignableComponents } from '@bodiless/fclasses';
 import type { UI } from './RichTextContext';
 
@@ -42,13 +38,10 @@ export type Value = Node[];
 
 export type NodeEditForm = ComponentType<FormProps>;
 
-export type EditorOnChange = BasicEditorProps['onChange'];
+export type EditorOnChange = (value: Node[]) => void;
 
 export type EditorContext = {
-  editor: Editor;
-  value: Value;
-  editorProps: EditorProps;
-  editorRef: React.RefObject<ReactEditor>;
+  editorProps: EditableProps;
 } | null;
 
 export type ToggleProps = {
@@ -90,11 +83,11 @@ export type RichTextComponents = {
   [key:string]: RichTextComponent,
 };
 
-export type RichTextProps<P> = {
+export type RichTextProps = {
   components: DesignableComponents,
   ui?: UI,
-  initialValue?: object,
+  initialValue?: Value,
   nodeKey?: string,
   value?: Value;
-  onChange?: (value: Value) => void;
-};
+  onChange: (value: Value) => void;
+} & EditableProps;

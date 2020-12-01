@@ -16,11 +16,10 @@ import React, {
   ComponentType,
   useMemo,
   FC,
-  useState,
 } from 'react';
 import { flowRight, pick, flow, isEmpty } from 'lodash';
 import { createEditor } from 'slate';
-import { Slate, withReact } from 'slate-react';
+import { Slate, withReact, useSlate } from 'slate-react';
 import type { Plugin } from 'slate-react';
 import type { SchemaProperties } from 'slate';
 import { observer } from 'mobx-react-lite';
@@ -152,8 +151,7 @@ type UseMenuOptionsProps = {
 };
 // This is a call back that goes to withMenuOptions so that we can add button to the global menu
 const useMenuOptions = (props: UseMenuOptionsProps) => {
-  const slateContext = useSlateContext();
-  const { editor } = slateContext!;
+  const editor = useSlate();
   return useMemo(
     () => (props.globalButtons ? props.globalButtons(editor) : []),
     [props.globalButtons],
@@ -193,7 +191,7 @@ const EditOnlyHoverMenu$: FC<Pick<Required<UI>, 'HoverMenu'>> = ({ HoverMenu, ch
 };
 const EditOnlyHoverMenu = observer(EditOnlyHoverMenu$);
 
-const BasicRichText = <P extends object, D extends object>(props: P & RichTextProps<D>) => {
+const BasicRichText = <P extends object>(props: P & RichTextProps) => {
   const {
     initialValue,
     components,
@@ -220,7 +218,7 @@ const BasicRichText = <P extends object, D extends object>(props: P & RichTextPr
 
   const editor = useMemo(() => withReact(createEditor()), []);
   const initialValue$ = initialValue || [ ...defaultValue ];
-  const value$ = !isEmpty(value) ? value : initialValue$;
+  const value$ = value !== undefined && !isEmpty(value) ? value : initialValue$;
 
   return (
     <Slate editor={editor} value={value$} onChange={onChange}>
@@ -243,7 +241,7 @@ const BasicRichText = <P extends object, D extends object>(props: P & RichTextPr
                )
             }
           </EditOnlyHoverMenu>
-          <Content />
+          <Content {...rest} />
         </RichTextProvider>
       </uiContext.Provider>
     </Slate>
