@@ -18,7 +18,7 @@ import React, {
   FC,
 } from 'react';
 import { flowRight, pick, flow, isEmpty } from 'lodash';
-import { createEditor } from 'slate';
+import { createEditor, Editor } from 'slate';
 import { Slate, withReact, useSlate } from 'slate-react';
 import type { Plugin } from 'slate-react';
 import type { SchemaProperties } from 'slate';
@@ -63,6 +63,7 @@ import {
   getSchema,
   getSelectorButtons,
 } from './RichTextItemGetters';
+import { useKeyBoardShortcuts } from './useKeyBoardShortcuts';
 import TextSelectorButton from './components/TextSelectorButton';
 import { uiContext, getUI, UI } from './RichTextContext';
 import defaultValue from './default-value';
@@ -135,9 +136,7 @@ const withSlateActivator = <P extends object>(Component: ComponentType<P>) => (p
 
   const slateContext = {
     editorProps,
-    editorRef: previousSlateContext!.editorRef,
     value: previousSlateContext!.value,
-    editor: previousSlateContext!.editor,
   };
   return (
     <SlateEditorContext.Provider value={slateContext}>
@@ -241,7 +240,13 @@ const BasicRichText = <P extends object>(props: P & RichTextProps) => {
                )
             }
           </EditOnlyHoverMenu>
-          <Content {...rest} />
+          <Content
+            {...useKeyBoardShortcuts({
+              editor,
+              components: finalComponents,
+            })}
+            {...rest }
+          />
         </RichTextProvider>
       </uiContext.Provider>
     </Slate>

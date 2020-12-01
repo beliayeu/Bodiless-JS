@@ -12,6 +12,16 @@
  * limitations under the License.
  */
 
+import isHotkey from 'is-hotkey'
+import { Editor } from 'slate';
+import type { RichTextProps } from './Type';
+import { RichTextItemType, RichTextComponent } from './Type';
+import {
+  createToggleBlock,
+  createToggleMark,
+  createToggleInline,
+} from './plugin-factory';
+
 const useKeyBoardShortcut = (Component: RichTextComponent) => {
   const {
     type,
@@ -32,14 +42,19 @@ const useKeyBoardShortcut = (Component: RichTextComponent) => {
   };
 };
 
-export const useKeyBoardShortcuts = (props) => {
+type UseKeyBoardShortcuts = {
+  components: RichTextProps['components'],
+  editor: Editor,
+}
+
+export const useKeyBoardShortcuts = (props: UseKeyBoardShortcuts) => {
   const { editor, components } = props;
   const hotKeys = Object.values(components)
     // eslint-disable-next-line no-prototype-builtins
     .filter(Component => Component.hasOwnProperty('keyboardKey'))
-    .map(Component => useKeyBoardShortcut(Component));
+    .map(Component => useKeyBoardShortcut(Component as RichTextComponent));
   return {
-    onKeyDown: (event) => {
+    onKeyDown: (event: KeyboardEvent) => {
       hotKeys.forEach(hotkey => {
         if (isHotkey(hotkey.key, event as any)) {
           event.preventDefault();

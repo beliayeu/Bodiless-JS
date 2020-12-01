@@ -86,7 +86,6 @@ export type InsertInlineOptions = {
 };
 export type createToggleInlineOptions = {
   editor: Editor;
-  value: Value;
 };
 
 export const updateInline = ({

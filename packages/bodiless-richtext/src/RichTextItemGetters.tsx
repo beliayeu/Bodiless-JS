@@ -13,17 +13,12 @@
  */
 
 import React, { useRef, ComponentType } from 'react';
-import {
-  Value,
-  Editor,
-  SchemaProperties,
-  Transforms,
-} from 'slate';
+import { Editor } from 'slate';
 
 import {
   NodeProvider, DefaultContentNode, withoutProps, useNode,
 } from '@bodiless/core';
-import { RenderNodeProps, useSlate } from 'slate-react';
+import { useSlate } from 'slate-react';
 import { flow } from 'lodash';
 import {
   createBlockButton,
@@ -31,14 +26,12 @@ import {
   createMarkButton,
   createElementRenderPlugin,
   createLeafRenderPlugin,
-  createKeyboardPlugin,
-  blockUtils,
+  hasBlock,
   hasInline,
   hasMark,
+  toggleBlock,
   toggleInline,
   toggleMark,
-  createToggleMark,
-  createToggleInline,
   withToggle,
   updateInline,
 } from './plugin-factory';
@@ -145,29 +138,6 @@ const getRenderPlugin = <P extends object> (Component: RenderPluginComponent) =>
   });
 };
 
-
-const getShortcutPlugin = <P extends object> (Component: RichTextComponent) => {
-  const {
-    type,
-    id,
-    keyboardKey,
-  } = Component;
-  if (!keyboardKey) {
-    throw Error('keyboardKey need to get ShortcutPlugin');
-  }
-  const toggle = {
-    [RichTextItemType.block]: blockUtils.createToggleBlock(id),
-    [RichTextItemType.mark]: createToggleMark(id),
-    [RichTextItemType.inline]: createToggleInline(id),
-
-  }[type];
-  return createKeyboardPlugin({
-    toggle,
-    key: keyboardKey,
-  });
-};
-
-
 /*
   getPlugins takes an array of data items and pass them though to getPlugin
 */
@@ -175,10 +145,6 @@ const getPlugins = (components: RichTextComponents) => [
   ...Object.values(components).map(Component => (
     getRenderPlugin(Component)
   )),
-  ...Object.values(components)
-    // eslint-disable-next-line no-prototype-builtins
-    .filter(Component => Component.hasOwnProperty('keyboardKey'))
-    .map(Component => getShortcutPlugin(Component)),
 ];
 /*
   get HoverButton takes a Item and convert it
@@ -212,7 +178,7 @@ const getGlobalButton = (Component: RichTextComponentWithGlobalButton) => (edito
   icon: Component.globalButton.icon,
   name: Component.id,
   global: true,
-  isActive: () => blockUtils.hasBlock(editor.value, Component.id),
+  isActive: () => hasBlock(editor.value, Component.id),
   handler: () => {
     const options = {
       editor,
@@ -220,9 +186,9 @@ const getGlobalButton = (Component: RichTextComponentWithGlobalButton) => (edito
       value: editor.value,
     };
     if (Component.isAtomicBlock) {
-      blockUtils.insertBlock(options);
+      insertBlock(options);
     } else {
-      blockUtils.toggleBlock(options);
+      toggleBlock(options);
     }
   },
 });

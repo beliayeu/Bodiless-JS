@@ -71,28 +71,7 @@ export type ToggleBlockOptions = {
 
 export type createToggleBlockOptions = {
   editor: Editor,
-  value: Value,
 };
-
-/*
-export const updateBlock = ({
-  editor,
-  componentData,
-  node,
-}: UpdateBlockOptions) => {
-  const { value } = editor;
-  const { selection, fragment } = value;
-  const { text } = fragment;
-  if (selection.isCollapsed) {
-    editor.moveFocusBackward(text.length);
-  }
-
-  editor
-    .moveToRangeOfNode(node)
-    .setBlocks({ type: node.type, data: { ...componentData } });
-
-  return editor;
-};*/
 
 export const toggleBlock = ({
   editor,
@@ -113,13 +92,3 @@ export const createToggleBlock = (blockType: string) => (
     blockType,
   })
 );
-
-/*
-export const insertBlock = ({
-  editor,
-  value,
-  blockType,
-}: ToggleBlockOptions) => {
-  editor.insertBlock(createBlock(blockType, value));
-  return editor;
-};*/
