@@ -50,6 +50,7 @@ const deserializeElement: DeserializeElement = ({
 }) => {
   if (element.nodeType === NODE_TEXT_NODE) return element.textContent;
   if (element.nodeType !== NODE_ELEMENT_NODE) return [];
+  if (element.nodeName === 'BR') return jsx(TagName.Element, { type: 'paragraph' }, [{ text: '' }]);
 
   const children = Array.from(element.childNodes)
     .map((element$: ChildNode) => deserializeElement({

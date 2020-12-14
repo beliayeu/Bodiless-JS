@@ -12,11 +12,37 @@
  * limitations under the License.
  */
 
-import { Transforms } from 'slate';
+import { Transforms, Editor, Text } from 'slate';
 import { ReactEditor } from 'slate-react';
+import { jsx } from 'slate-hyperscript';
 import { getDeserializers } from './RichTextItemGetters';
 import type { RichTextComponents } from './Type';
 import { deserializeHtml } from './serializers';
+
+
+const wrapTopLevelInlineNodesInParagraphs = (editor, fragment) => {
+  let inlineNodes = []
+  const newFragments = []
+
+  const maybePushInlineNodeParagraph = () => {
+    if (inlineNodes.length > 0) {
+      newFragments.push(jsx("element", { type: "paragraph" }, inlineNodes))
+      inlineNodes = []
+    }
+  }
+
+  fragment.forEach(node => {
+    if (Text.isText(node) || Editor.isInline(editor, node)) {
+      inlineNodes.push(node)
+    } else {
+      maybePushInlineNodeParagraph()
+      newFragments.push(node)
+    }
+  })
+  maybePushInlineNodeParagraph()
+
+  return newFragments
+}
 
 const withHtmlPaste = (components: RichTextComponents) => (editor: ReactEditor) => {
   const { insertData } = editor;
@@ -28,7 +54,14 @@ const withHtmlPaste = (components: RichTextComponents) => (editor: ReactEditor) 
 
     if (html) {
       const fragment = deserializeHtml(html, deserializers);
-      Transforms.insertFragment(editor, fragment);
+      let fragmentWithOnlyBlocks = fragment
+      if (Array.isArray(fragment)) {
+        fragmentWithOnlyBlocks = wrapTopLevelInlineNodesInParagraphs(
+          editor,
+          fragment
+        )
+      }
+      Transforms.insertFragment(editor, fragmentWithOnlyBlocks)
       return;
     }
 
