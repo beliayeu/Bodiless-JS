@@ -21,6 +21,7 @@ import {
   TPreview,
 } from './types';
 import LunrSearch from './LunrSearch';
+import { TokenSet } from 'lunr';
 
 type SearchIndex = {
   idx: object,
@@ -45,6 +46,13 @@ class SearchClient implements SearchClientInterface {
     const filtered = this.filter(queryString);
     return this.searchEngine.search(filtered);
   };
+
+  searchAhead = (queryString: string) => {
+    const { index } = this.searchEngine;
+    return index.tokenSet.intersect(
+      TokenSet.fromString(`${queryString}*`)
+    ).toArray();
+  }
 
   // Remove the search engine specific charactors on customize search.
   private filter = (qs: string) => qs.replace(/:|\$|#|@|!|\^|\*|\+|-|~|%/g, ' ');

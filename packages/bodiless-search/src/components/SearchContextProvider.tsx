@@ -13,7 +13,7 @@
  */
 
 import React, {
-  ComponentType, useContext, useState, FC, useRef, useEffect,
+  ComponentType, useContext, useState, FC, useRef, useEffect, useCallback,
 } from 'react';
 import querystring from 'query-string';
 import SearchClient from '../SearchClient';
@@ -24,6 +24,7 @@ type TSearchResultContextValue = {
   setResult: React.Dispatch<React.SetStateAction<TSearchResults>>,
   searchTerm: string,
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>,
+  searchAhead: () => string[],
 };
 
 const searchClient = new SearchClient();
@@ -36,6 +37,7 @@ const defaultSearchResults: TSearchResultContextValue = {
   setResult: () => {},
   searchTerm: '',
   setSearchTerm: () => '',
+  searchAhead: () => [],
 };
 const searchResultContext = React.createContext<TSearchResultContextValue>(defaultSearchResults);
 export const useSearchResultContext = () => useContext(searchResultContext);
@@ -68,11 +70,14 @@ export const SearchResultProvider: FC = ({ children }) => {
     }
   });
 
+  const searchAhead = useCallback((queryString: string) => searchClient.searchAhead(queryString), []);
+
   const contextValue = {
     results,
     setResult,
     searchTerm,
     setSearchTerm,
+    searchAhead,
   };
 
   return (

@@ -158,11 +158,14 @@ const SearchResultBase: FC<SearchResultProps> = ({
 
 const SearchBoxBase: FC<SearchProps> = ({ components, ...props }) => {
   const [queryString, setQueryString] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
   const searchResultContext = useSearchResultContext();
   const searchPagePath = process.env.BODILESS_SEARCH_PAGE || 'search';
   const onChangeHandler = useCallback((event: any) => {
     event.preventDefault();
-    setQueryString(event.target.value);
+    const queryString = event.target.value;
+    setQueryString(queryString);
+    setSuggestions(searchResultContext.searchAhead(queryString));
   }, []);
 
   /**
@@ -202,6 +205,8 @@ const SearchBoxBase: FC<SearchProps> = ({ components, ...props }) => {
   const { placeholder = 'Search' } = props;
 
   const { SearchWrapper, SearchInput, SearchButton } = components;
+
+  const suggestionItems = suggestions.map(suggestion => <li key={suggestion}>{suggestion}</li>);
   return (
     <SearchWrapper>
       <SearchInput
@@ -211,6 +216,20 @@ const SearchBoxBase: FC<SearchProps> = ({ components, ...props }) => {
         placeholder={placeholder}
       />
       <SearchButton onClick={onClickHandler} />
+      {
+        suggestionItems.length > 0
+        && queryString !== ''
+        &&
+        <ul>{
+          suggestions
+            .slice(0, 9)
+            .map(suggestion =>
+              <li key={suggestion}>
+                <a href={`/search/#${suggestion}`}>{suggestion}</a>
+              </li>
+            )
+        }</ul>
+      }
     </SearchWrapper>
   );
 };
