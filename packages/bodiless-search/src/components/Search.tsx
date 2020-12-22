@@ -12,6 +12,8 @@
  * limitations under the License.
  */
 
+// @ts-nocheck
+
 import { flow } from 'lodash';
 import React, {
   FunctionComponent as FC,

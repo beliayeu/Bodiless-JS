@@ -12,6 +12,8 @@
  * limitations under the License.
  */
 
+ // @ts-nocheck
+
 import axios from 'axios';
 import {
   SearchEngineInterface,

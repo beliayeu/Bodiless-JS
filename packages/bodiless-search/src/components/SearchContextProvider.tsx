@@ -12,6 +12,8 @@
  * limitations under the License.
  */
 
+// @ts-nocheck
+
 import React, {
   ComponentType, useContext, useState, FC, useRef, useEffect, useCallback,
 } from 'react';
