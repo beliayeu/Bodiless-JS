@@ -14,3 +14,5 @@
 
 export { default as createDefaultContentPlugins } from './createPlugins';
 export { default as getSampleDefaultContentConfig } from './getSampleConfig';
+export { default as discoverDefaultContent } from './discoverDefaultContent';
+
