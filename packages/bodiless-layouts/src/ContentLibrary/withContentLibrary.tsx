@@ -1,7 +1,7 @@
 import React, { ComponentType } from 'react';
 import {
   useNode, ContentNode, useContextMenuForm,
-  createMenuOptionGroup, withMenuOptions, NodeProvider,
+  createMenuOptionGroup, withMenuOptions, NodeProvider, MenuOptionsDefinition,
 } from '@bodiless/core';
 import type { OptionGroupDefinition } from '@bodiless/core';
 import type { ComponentOrTag } from '@bodiless/fclasses';
@@ -10,33 +10,20 @@ import { flow } from 'lodash';
 import ComponentSelector from '../ComponentSelector';
 import type { ComponentSelectorProps, Meta, ComponentWithMeta } from '../ComponentSelector/types';
 
-export type ContentLibraryOptions = {
+export type ContentLibraryOptions<P = any> = {
   useLibraryNode: (props: any) => { node: ContentNode<any> },
   DisplayComponent?: ComponentType<any>,
   Selector?: ComponentType<ComponentSelectorProps>,
   useMeta?: (node: ContentNode<any>) => Partial<Meta>|null,
   useOverrides?: (props: any) => Partial<OptionGroupDefinition>,
-};
+} & Omit<MenuOptionsDefinition<P>, 'useMenuOptions'>;
 
-const childKeys = (node: ContentNode<any>) => {
-  const aParent = node.path;
-  const aCandidates = node.keys.map(key => key.split('$'));
-  return Object.keys(aCandidates.reduce(
-    (acc, next) => {
-      if (next.length <= aParent.length) return acc;
-      for (let i = 0; i < aParent.length; i += 1) {
-        if (aParent[i] !== next[i]) return acc;
-      }
-      return { ...acc, [next[aParent.length]]: true };
-    },
-    {},
-  ));
-};
-
-const copyNode = (source: ContentNode<any>, dest: ContentNode<any>, copyChildren: boolean) => {
+export const copyNode = (
+  source: ContentNode<any>, dest: ContentNode<any>, copyChildren: boolean,
+) => {
   dest.setData(source.data);
   if (copyChildren) {
-    childKeys(source).forEach(key => copyNode(source.child(key), dest.child(key), true));
+    source.childKeys.forEach(key => copyNode(source.child(key), dest.child(key), true));
   }
 };
 
@@ -54,7 +41,7 @@ const withContentLibrary = (options: ContentLibraryOptions) => <P extends object
   const useMenuOptions = (props: any) => {
     const { node: targetNode } = useNode();
     const { node: libraryNode } = useLibraryNode(props);
-    const keys = childKeys(libraryNode);
+    const keys = libraryNode.childKeys;
 
     const components = keys.map(key => {
       const node = libraryNode.child(key);
@@ -112,8 +99,13 @@ const withContentLibrary = (options: ContentLibraryOptions) => <P extends object
     };
     return createMenuOptionGroup(finalOption);
   };
+  const {
+    name = 'Content Library', id, type, peer = false,
+  } = options;
   return flow(
-    withMenuOptions({ useMenuOptions, name: 'Content Library' }),
+    withMenuOptions({
+      useMenuOptions, name, peer, id, type,
+    }),
     observer,
   )(Component);
 };

@@ -94,4 +94,24 @@ describe('ContentNode', () => {
     expect(actions.setNode.mock.calls[0][0]).toEqual([peerKey, childKey]);
     expect(actions.setNode.mock.calls[0][1]).toEqual(data);
   });
+
+  describe('childKeys', () => {
+    const { getters, actions } = mockStore();
+    getters.getKeys.mockReturnValue([
+      'foo', 'foo$bar', 'foo$baz$bing', 'bang',
+    ]);
+
+    it('Returns child keys properly for a node with children', () => {
+      const node = new DefaultContentNode(actions, getters, 'foo');
+      const { childKeys } = node;
+      expect(childKeys).toHaveLength(2);
+      expect(childKeys.sort()).toEqual(['bar', 'baz']);
+    });
+
+    it('Returns child keys properly for a node without children', () => {
+      const node = new DefaultContentNode(actions, getters, 'bang');
+      const { childKeys } = node;
+      expect(childKeys).toHaveLength(0);
+    });
+  });
 });

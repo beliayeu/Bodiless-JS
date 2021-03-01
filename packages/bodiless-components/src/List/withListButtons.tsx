@@ -83,19 +83,17 @@ const useMenuOptions = (useOverrides: UseListOverrides = () => ({})) => (props: 
 /**
  * HOC which adds list edit buttons (Add and Delete Item).
  */
-const withListButtons = (useOverrides?: UseListOverrides) => ifEditable(
-  withFinalDesign({
-    Item: flow(
-      withContextActivator('onClick'),
-      withLocalContextMenu,
-      withMenuOptions({
-        useMenuOptions: useMenuOptions(useOverrides),
-        name: 'List Item',
-        type: 'list-item',
-      }),
-    ),
-  }),
-);
+const withListButtons = (useOverrides?: UseListOverrides) => withFinalDesign({
+  Item: ifEditable(flow(
+    withContextActivator('onClick'),
+    withLocalContextMenu,
+    withMenuOptions({
+      useMenuOptions: useMenuOptions(useOverrides),
+      name: 'List Item',
+      type: 'list-item',
+    }),
+  )),
+});
 
 export default withListButtons;
 export { hasChildSubList };

@@ -115,10 +115,12 @@ const useCloneButton = (
 
 const useDeleteButton = (
   handlers: Handlers,
+  props: EditFlowContainerProps,
   item: FlowContainerItem,
 ) => {
+  const { minComponents = 0 } = props;
   const context = useEditContext();
-  const { deleteFlowContainerItem } = handlers;
+  const { deleteFlowContainerItem, getItems } = handlers;
   const { setId } = useActivateOnEffect();
 
   const handler = () => {
@@ -136,7 +138,10 @@ const useDeleteButton = (
     global: false,
     local: true,
     handler,
-    isHidden: useCallback(() => !context.isEdit, []),
+    isHidden: useCallback(
+      () => !context.isEdit || getItems().length <= minComponents,
+      [minComponents],
+    ),
   };
 };
 
@@ -231,7 +236,7 @@ const useGetItemUseGetMenuOptions = (props: EditFlowContainerProps) => {
       useAddButton(handlers, props$, item),
       useCloneButton(handlers, props$, item),
       useSwapButton(handlers, props$, item),
-      useDeleteButton(handlers, item),
+      useDeleteButton(handlers, props$, item),
     ];
     return useGetter(buttons);
   };

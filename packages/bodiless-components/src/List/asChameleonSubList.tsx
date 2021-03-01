@@ -1,6 +1,6 @@
 import { v1 } from 'uuid';
 import { identity, flow } from 'lodash';
-import type { EditButtonOptions, UseBodilessOverrides } from '@bodiless/core';
+import { EditButtonOptions, UseBodilessOverrides, ifEditable } from '@bodiless/core';
 import {
   withDesign, HOC, Design, withoutProps,
 } from '@bodiless/fclasses';
@@ -46,8 +46,10 @@ const getUseOverrides = (
 const asChameleonSubList = (useOverrides?: UseBodilessOverrides) => flow(
   applyChameleon,
   withoutProps('onSubmit'),
-  withChameleonComponentFormControls,
-  withChameleonButton(getUseOverrides(useOverrides)),
+  ifEditable(flow(
+    withChameleonComponentFormControls,
+    withChameleonButton(getUseOverrides(useOverrides)),
+  )),
   withChameleonContext('cham-sublist'),
 );
 
