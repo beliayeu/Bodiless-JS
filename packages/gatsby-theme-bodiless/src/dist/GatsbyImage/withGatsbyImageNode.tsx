@@ -17,8 +17,16 @@ import {
   NodeProvider,
   useNode,
 } from '@bodiless/core';
-import type { WithNodeProps } from '@bodiless/core';
+import type {
+  WithNodeProps,
+  ContentNodeProxyContext,
+} from '@bodiless/core';
+import type { ImageData as BaseImageData } from '@bodiless/components';
+import type { GatsbyImageData } from './asGatsbyImage';
 import GatsbyImagePresets from './GatsbyImagePresets';
+
+// taking image data and making src as optional
+type ImageData = Omit<BaseImageData, 'src'> & { src?: string; };
 
 const withGatsbyImageNode = (
   preset: GatsbyImagePresets,
@@ -30,13 +38,39 @@ const withGatsbyImageNode = (
   }: P & WithNodeProps) => {
     if (!nodeKey) return <Component {...rest as P} />;
     const { node } = useNode(nodeCollection);
-    const childNode = node.child(nodeKey);
+    const childNode = node.child<ImageData>(nodeKey);
     const gatsbyImgNode = childNode.proxy({
-      setData: (data: any) => ({
-        ...data,
-        preset,
-        gatsbyImg: undefined,
-      }),
+      getData: (data: ImageData, context: ContentNodeProxyContext) => {
+        let defaultContent;
+        if (context.defaultContent !== undefined) {
+          defaultContent = context.defaultContent as GatsbyImageData;
+        }
+        return {
+          ...data,
+          // when there is node data, but node data src does not exist
+          // then take src and gatsbyImg from default content
+          ...(
+            data.src === undefined && defaultContent && defaultContent.src !== undefined ? {
+              src: defaultContent.src,
+              gatsbyImg: defaultContent.gatsbyImg,
+            } : {}
+          ),
+        };
+      },
+      setData: (data: ImageData, context: ContentNodeProxyContext) => {
+        let defaultContent;
+        if (context.defaultContent !== undefined) {
+          defaultContent = context.defaultContent as GatsbyImageData;
+        }
+        return {
+          ...data,
+          preset,
+          gatsbyImg: undefined,
+          // when node data src is equal to default content src
+          // then we strip src so that do not save compiled data
+          src: defaultContent && defaultContent.src === data.src ? undefined : data.src,
+        };
+      },
     });
     return (
       <NodeProvider node={gatsbyImgNode} collection={nodeCollection}>

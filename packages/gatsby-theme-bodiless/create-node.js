@@ -93,7 +93,7 @@ const addSlugField = ({ node, getNode, actions }) => {
   });
 };
 
-const generateJsonContentDigest = content => crypto
+const generateStringDigest = content => crypto
   .createHash('md5')
   .update(content)
   .digest('hex');
@@ -377,6 +377,9 @@ const createImageNode = ({ node, content }) => {
   const absolutePath = pathUtil.isAbsolute(imgSrc)
     ? pathUtil.join(process.cwd(), 'static', imgSrc)
     : pathUtil.join(node.dir, imgSrc);
+  const contentDigest = fs.existsSync(absolutePath)
+    ? generateFileDigest(absolutePath)
+    : generateStringDigest(absolutePath);
   const imageNode = {
     id: `${node.id} >>> ImageNode`,
     parent: node.id,
@@ -388,7 +391,7 @@ const createImageNode = ({ node, content }) => {
     absolutePath,
     internal: {
       type: 'ImageNode',
-      contentDigest: generateFileDigest(absolutePath),
+      contentDigest,
     },
   };
   return imageNode;
@@ -427,7 +430,7 @@ const createBodilessNode = async ({
 
     imageContent = {
       ...(gatsbyImgData ? { gatsbyImg: gatsbyImgData } : {}),
-      ...(publicUrl ? { publicUrl } : {}),
+      ...(publicUrl ? { src: publicUrl } : {}),
     };
   }
   const content = imageContent ? JSON.stringify({
@@ -449,7 +452,7 @@ const createBodilessNode = async ({
     instanceName: node.sourceInstanceName,
     content,
     internal: {
-      contentDigest: generateJsonContentDigest(nodeContent),
+      contentDigest: generateStringDigest(nodeContent),
       type: BODILESS_NODE_TYPE,
     },
   };

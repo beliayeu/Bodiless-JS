@@ -43,6 +43,16 @@ export type Getters = {
 
 export type Path = string | string[];
 
+export type ProxyContext = {
+  [key: string]: object,
+};
+
+type Processors<D> = {
+  getData?: (data: D, context: ProxyContext) => D,
+  setData?: (data: D, context: ProxyContext) => D,
+  getKeys?: (keys: string[], context: ProxyContext) => string,
+};
+
 export type ContentNode<D> = {
   data: D;
   setData: (data: D) => void;
@@ -55,12 +65,7 @@ export type ContentNode<D> = {
   peer<E extends object>(path: Path): ContentNode<E>;
   hasError: () => boolean;
   proxy: (processors: Processors<D>) => ContentNode<D>;
-};
-
-type Processors<D> = {
-  getData?: (data: D) => D,
-  setData?: (data: D) => D,
-  getKeys?: (keys: string[]) => string,
+  proxyContext(): ProxyContext;
 };
 
 // @ts-ignore
@@ -78,11 +83,11 @@ class ContentNodeProxy<D> implements ContentNode<D> {
       get: function get(target: ContentNode<D>, prop: keyof ContentNode<D>, receiver: any) {
         switch (prop) {
           case 'data':
-            return getData(target.data);
+            return getData(target.data, target.proxyContext());
           case 'keys':
-            return getKeys(target.keys);
+            return getKeys(target.keys, target.proxyContext());
           case 'setData':
-            return (data: D) => target.setData(setData(data));
+            return (data: D) => target.setData(setData(data, target.proxyContext()));
           case 'peer':
             return (path: Path) => target.peer<any>(path).proxy(processors);
           default:
@@ -158,6 +163,11 @@ export class DefaultContentNode<D extends object> implements ContentNode<D> {
   proxy(processors: Processors<D>): ContentNode<D> {
     // @ts-ignore
     return new ContentNodeProxy<D>(this, processors);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  proxyContext() {
+    return {};
   }
 
   getGetters() {
