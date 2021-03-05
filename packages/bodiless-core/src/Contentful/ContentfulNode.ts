@@ -12,7 +12,8 @@
  * limitations under the License.
  */
 
-import { union } from 'lodash';
+import union from 'lodash/union';
+import identity from 'lodash/identity';
 import { DefaultContentNode, Path } from '../ContentNode';
 
 type Content = {
@@ -90,5 +91,11 @@ export default class ContentfulNode<D extends object> extends DefaultContentNode
     peerNode.setContent(this.content);
     peerNode.setBaseContentPath(this.baseContentPath);
     return peerNode;
+  }
+
+  proxyContext() {
+    return {
+      defaultContent: this.getDefaultContent()
+    };
   }
 }

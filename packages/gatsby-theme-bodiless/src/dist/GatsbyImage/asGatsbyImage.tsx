@@ -47,7 +47,7 @@ const asDesignableGatsbyImage = (Component: CT<any>) => {
   };
   const AsDesignableGatsbyImage = (props: GasbyImageProps) => {
     const {
-      components, gatsbyImg, preset, publicUrl, src, ...rest
+      components, gatsbyImg, preset, ...rest
     } = props;
     const {
       GatsbyImage,
@@ -58,9 +58,8 @@ const asDesignableGatsbyImage = (Component: CT<any>) => {
         <GatsbyImage {...rest} {...gatsbyImg} />
       );
     }
-    const publicUrl$ = publicUrl || src;
     return (
-      <Image {...rest} src={publicUrl$} />
+      <Image {...rest} />
     );
   };
   const applyDesign = extendDesignable(design => omit(design, ['GatsbyImage', 'Image']));

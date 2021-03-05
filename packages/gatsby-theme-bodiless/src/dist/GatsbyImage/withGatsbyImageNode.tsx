@@ -32,11 +32,30 @@ const withGatsbyImageNode = (
     const { node } = useNode(nodeCollection);
     const childNode = node.child(nodeKey);
     const gatsbyImgNode = childNode.proxy({
-      setData: (data: any) => ({
-        ...data,
-        preset,
-        gatsbyImg: undefined,
-      }),
+      getData: (data: any, context: any) => {
+        let defaultContent = undefined;
+        if (context.defaultContent !== undefined) defaultContent = context.defaultContent;
+        return {
+          ...data,
+          // merge default content
+          ...(
+            data.src === undefined && defaultContent ? {
+              src: defaultContent.src,
+              gatsbyImg: defaultContent.gatsbyImg,
+            } : {}
+          )
+        };
+      },
+      setData: (data: any, context: any) => {
+        let defaultContent = undefined;
+        if (context.defaultContent !== undefined) defaultContent = context.defaultContent;
+        return {
+          ...data,
+          preset,
+          gatsbyImg: undefined,
+          src: defaultContent !== undefined && defaultContent.src === data.src ? undefined : data.src,
+        };
+      },
     });
     return (
       <NodeProvider node={gatsbyImgNode} collection={nodeCollection}>
