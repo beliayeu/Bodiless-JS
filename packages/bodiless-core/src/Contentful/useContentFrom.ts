@@ -12,7 +12,16 @@
  * limitations under the License.
  */
 
+/* eslint-disable no-underscore-dangle */
+
 import type { Path, ContentNode } from '../ContentNode';
 
-const useContentFrom = (path: Path) => (node: ContentNode<any>) => node.peer(path).data;
+const useContentFrom = (path: Path) => (node: ContentNode<any>) => {
+  const { data } = node.peer(path);
+  const _defaultContentNodePath = Array.isArray(path) ? path.join('$') : path;
+  return {
+    ...data,
+    _defaultContentNodePath,
+  };
+};
 export default useContentFrom;

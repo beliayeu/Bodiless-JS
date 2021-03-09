@@ -12,6 +12,8 @@
  * limitations under the License.
  */
 
+/* eslint-disable no-underscore-dangle */
+
 import union from 'lodash/union';
 import { DefaultContentNode, Path } from '../ContentNode';
 
@@ -54,9 +56,14 @@ export default class ContentfulNode<D extends object> extends DefaultContentNode
 
   private getDefaultContent() {
     const contentKey = this.getContentKey();
-    const contentValue = (this.content as any)[contentKey];
+    const contentValue = this.content[contentKey];
     if (typeof contentValue === 'function') return contentValue(this);
     return contentValue || {};
+  }
+
+  private getDefaultContentFromNode(path: string) {
+    const { getNode } = this.getters;
+    return getNode(path.split('$'));
   }
 
   public setContent(content: Content) {
@@ -76,6 +83,15 @@ export default class ContentfulNode<D extends object> extends DefaultContentNode
     return !isNodeDataEmpty ? nodeData : this.getDefaultContent();
   }
 
+  setData(dataObj: D) {
+    const { setNode } = this.actions;
+    const { _defaultContentNodePath } = this.data;
+    setNode(this.path, {
+      _defaultContentNodePath,
+      ...dataObj,
+    });
+  }
+
   get keys() {
     const { getKeys } = this.getters;
     return union(
@@ -93,8 +109,11 @@ export default class ContentfulNode<D extends object> extends DefaultContentNode
   }
 
   proxyContext() {
+    const defaultContent = this.data._defaultContentNodePath !== undefined
+      ? this.getDefaultContentFromNode(this.data._defaultContentNodePath)
+      : undefined;
     return {
-      defaultContent: this.getDefaultContent(),
+      defaultContent: defaultContent || this.getDefaultContent(),
     };
   }
 }

@@ -12,21 +12,29 @@
  * limitations under the License.
  */
 
+/* eslint-disable no-underscore-dangle */
+
 import React, { ComponentType as CT } from 'react';
 import {
   NodeProvider,
   useNode,
 } from '@bodiless/core';
-import type {
-  WithNodeProps,
-  ContentNodeProxyContext,
-} from '@bodiless/core';
+import type { WithNodeProps } from '@bodiless/core';
 import type { ImageData as BaseImageData } from '@bodiless/components';
 import type { GatsbyImageData } from './asGatsbyImage';
 import GatsbyImagePresets from './GatsbyImagePresets';
 
 // taking image data and making src as optional
-type ImageData = Omit<BaseImageData, 'src'> & { src?: string; };
+type ImageData = Omit<BaseImageData, 'src'> & { src?: string; } & {
+  /**
+   * @todo move to bodiless/core
+   */
+  _defaultContentNodePath?: string,
+};
+
+type DefaultContentProxyContext = {
+  defaultContent?: GatsbyImageData,
+};
 
 const withGatsbyImageNode = (
   preset: GatsbyImagePresets,
@@ -40,11 +48,8 @@ const withGatsbyImageNode = (
     const { node } = useNode(nodeCollection);
     const childNode = node.child<ImageData>(nodeKey);
     const gatsbyImgNode = childNode.proxy({
-      getData: (data: ImageData, context: ContentNodeProxyContext) => {
-        let defaultContent;
-        if (context.defaultContent !== undefined) {
-          defaultContent = context.defaultContent as GatsbyImageData;
-        }
+      getData: (data: ImageData, context: DefaultContentProxyContext) => {
+        const { defaultContent } = context;
         return {
           ...data,
           // when there is node data, but node data src does not exist
@@ -57,18 +62,24 @@ const withGatsbyImageNode = (
           ),
         };
       },
-      setData: (data: ImageData, context: ContentNodeProxyContext) => {
-        let defaultContent;
-        if (context.defaultContent !== undefined) {
-          defaultContent = context.defaultContent as GatsbyImageData;
+      setData: (data: ImageData, context: DefaultContentProxyContext) => {
+        const { defaultContent } = context;
+        let defaultNodeData;
+        /**
+         * @todo try encapsulating the logic into core
+         */
+        if (data._defaultContentNodePath !== undefined) {
+          defaultNodeData = node.peer<GatsbyImageData>(data._defaultContentNodePath).data;
         }
+        const isSrcEqualToDefault = (defaultContent && defaultContent.src === data.src)
+         || (defaultNodeData && defaultNodeData.src === data.src);
         return {
           ...data,
           preset,
           gatsbyImg: undefined,
           // when node data src is equal to default content src
           // then we strip src so that do not save compiled data
-          src: defaultContent && defaultContent.src === data.src ? undefined : data.src,
+          src: isSrcEqualToDefault ? undefined : data.src,
         };
       },
     });

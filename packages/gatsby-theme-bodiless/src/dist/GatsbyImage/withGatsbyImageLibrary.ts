@@ -17,6 +17,7 @@ import type { HOC } from '@bodiless/fclasses';
 import { withNodeKey } from '@bodiless/core';
 import { withImageLibrary } from '@bodiless/components';
 import type { AsBodilessImage } from '@bodiless/components';
+import { observer } from 'mobx-react-lite';
 import withGatsbyImageNode from './withGatsbyImageNode';
 import GatsbyImagePresets from './GatsbyImagePresets';
 
@@ -33,6 +34,7 @@ const withGatsbyImageLibrary = (preset: GatsbyImagePresets) => (
     asImageHoc,
     withImageLibrary(asEditableImage)(libraryNodeKey)(undefined, placeholder, useOverrides),
     withGatsbyImageNode(preset) as HOC,
+    observer as HOC,
     withNodeKey(nodeKey),
   );
 };
