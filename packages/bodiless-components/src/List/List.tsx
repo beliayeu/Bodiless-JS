@@ -119,4 +119,4 @@ const List = flow(
 List.displayName = 'List';
 
 export default List;
-export { asTestableList, useListContext };
+export { asTestableList, useListContext, ListContext };

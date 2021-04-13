@@ -20,6 +20,7 @@ import { withDesign, replaceWith } from '@bodiless/fclasses';
 import { Slide } from 'pure-react-carousel';
 import withTotalSlides from './withTotalSlides';
 import { withIntrinsicHeight, withNoDragIfEditable } from './token';
+import withMoveToNewSlideOnAdd from './withMoveToNewSlideOnAdd';
 
 const asEditableCarousel = (nodeKeys?: WithNodeKeyProps) => flow(
   withNode,
@@ -34,6 +35,7 @@ const asEditableCarousel = (nodeKeys?: WithNodeKeyProps) => flow(
   }),
   withIntrinsicHeight,
   withNoDragIfEditable,
+  withMoveToNewSlideOnAdd,
 );
 
 export default asEditableCarousel;
