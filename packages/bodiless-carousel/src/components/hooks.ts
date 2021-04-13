@@ -34,6 +34,9 @@ const useCarouselState = () => {
 };
 
 const useCarouselCurrentSlide = () => useCarouselState().currentSlide;
+
+const useCarouselSetState = () => useContext(CarouselContext).setStoreState;
+
 /**
  * type gap in the contrib library
  * @todo suggest a patch to the contrib library
@@ -51,4 +54,5 @@ export {
   useCarouselCurrentSlide,
   useIsCarouselItemActive,
   useCarouselIsPlaying,
+  useCarouselSetState,
 };
