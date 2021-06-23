@@ -14,9 +14,16 @@
 
 import FilterByGroupClean from './FilterByGroupClean';
 import { TestableFilterByGroup, asTestableFilterByGroup } from './FilterByGroupTestable';
-import { useFilterByGroupContext, withFBGSuggestions, withTagProps } from './FilterByGroupContext';
+import {
+  useFilterByGroupContext,
+  useIsFilterTagSelected,
+  withFBGSuggestions,
+  withTagProps,
+} from './FilterByGroupContext';
 import asFilterableByGroup from './asFilterableByGroup';
 import { Tag } from './FilterByGroupStore';
+import type { FilterByGroupComponents } from './types';
+import { asResponsiveFilter } from './Filter';
 
 export {
   FilterByGroupClean,
@@ -25,8 +32,14 @@ export {
   asFilterableByGroup,
   withFBGSuggestions,
   useFilterByGroupContext,
+  useIsFilterTagSelected,
   withTagProps,
   Tag,
+  asResponsiveFilter,
+};
+
+export type {
+  FilterByGroupComponents,
 };
 
 export * from './token';
