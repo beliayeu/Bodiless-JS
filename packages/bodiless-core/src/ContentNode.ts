@@ -27,6 +27,11 @@ class DummyContentNodeStore {
   }
 }
 
+export enum Status {
+  Error,
+  Success,
+}
+
 export type Actions = {
   setNode(path: string[], data: any): void;
   deleteNode(path: string[]): void;
@@ -34,6 +39,7 @@ export type Actions = {
 
 export type Getters = {
   getNode(path: string[]): any;
+  getNodeStatus(path: string[]): Status;
   getKeys(): string[];
 };
 
@@ -41,6 +47,7 @@ export type Path = string | string[];
 
 export type ContentNode<D> = {
   data: D;
+  status: Status;
   setData: (data: D) => void;
   delete: (path?: Path) => void;
   keys: string[];
@@ -75,6 +82,11 @@ export class DefaultContentNode<D extends object> implements ContentNode<D> {
   get data() {
     const { getNode } = this.getters;
     return getNode(this.path) as D;
+  }
+
+  get status() {
+    const { getNodeStatus } = this.getters;
+    return getNodeStatus(this.path);
   }
 
   setData(dataObj: D) {
