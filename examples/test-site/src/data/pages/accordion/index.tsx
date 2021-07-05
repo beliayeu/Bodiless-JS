@@ -16,12 +16,15 @@ import React from 'react';
 import { graphql } from 'gatsby';
 import { Page } from '@bodiless/gatsby-theme-bodiless';
 import Layout from '../../../components/Layout';
-import SingleAccordion from '../../../components/SingleAccordion';
+import SingleAccordion, { TestSingleAccordion } from '../../../components/SingleAccordion';
 
 export default props => (
   <Page {...props}>
     <Layout>
       <div style={{ margin: 100 }}>
+        
+        <TestSingleAccordion nodeKey="accordion-test" id="accordion-test" />
+
         <SingleAccordion expanded nodeKey="accordion-1" id="accordion-1" />
         <SingleAccordion nodeKey="accordion-2" id="accordion-2" />
         <SingleAccordion nodeKey="accordion-3" id="accordion-3" />

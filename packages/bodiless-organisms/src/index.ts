@@ -19,6 +19,7 @@ import {
 } from './components/BurgerMenu';
 
 export {
+  createSingleAccordion,
   SingleAccordion,
   SingleAccordionClean,
   asSingleAccordion,

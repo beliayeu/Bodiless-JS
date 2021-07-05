@@ -14,13 +14,14 @@
 
 import { flow } from 'lodash';
 import {
+  createSingleAccordion,
   SingleAccordionClean,
   asTestableAccordion,
 } from '@bodiless/organisms';
 import {
   withNode, withContextActivator, ifEditable,
 } from '@bodiless/core';
-import { withDesign } from '@bodiless/fclasses';
+import { withDesign, addClassesIf, addClasses } from '@bodiless/fclasses';
 import asSingleAccordionDefaultStyle from './token';
 import { withEditorSimple, withEditorBasic } from '../Editors';
 
@@ -47,4 +48,21 @@ const asSingleAccordion = flow(
 
 const SingleAccordion = asSingleAccordion(SingleAccordionClean);
 
+const { Accordion: TestCleanAccordion, isExpanded, isCollapsed } = createSingleAccordion();
+
+const asTestSingleAccordionDefaultStyle = flow(
+  withDesign({
+    TitleWrapper: flow(
+      addClassesIf(isExpanded)('bg-blue-700'),
+      addClassesIf(isCollapsed)('bg-red-700'),
+    ),
+  }),
+);
+
+const TestSingleAccordion = flow(
+  asSingleAccordion,
+  asTestSingleAccordionDefaultStyle,
+)(TestCleanAccordion);
+
 export default SingleAccordion;
+export { TestSingleAccordion };
