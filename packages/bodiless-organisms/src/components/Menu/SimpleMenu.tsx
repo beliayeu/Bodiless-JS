@@ -31,7 +31,7 @@ import {
 } from '@bodiless/components';
 import type { BreadcrumbSettings } from '@bodiless/components';
 
-import asStylableList from './asStylableList';
+import { asStylableList } from './SimpleMenu.token';
 import withMenuContext from './withMenuContext';
 
 /**
@@ -39,7 +39,7 @@ import withMenuContext from './withMenuContext';
  * Suitable for use for all menus.
  */
 const asMenuSubList = flow(
-  asSubList,
+  asSubList(() => ({ groupLabel: 'Sub-Menu Item' })),
   asStylableList,
   withDesign({
     Wrapper: withDesign({
@@ -77,7 +77,7 @@ const withMenuDesign = (design: Design<any>) => {
  * @return HOC which creates a basic mega menu list.
  */
 const asMenuBase = (nodeKeys?: WithNodeKeyProps) => flow(
-  asBodilessList(nodeKeys),
+  asBodilessList(nodeKeys, undefined, () => ({ groupLabel: 'Menu Item' })),
   asStylableList,
   withSubLists(1)({ SubMenu: asMenuSubList }),
   withMenuContext,
@@ -119,12 +119,6 @@ const asBreadcrumbsClean = (settings: BreadcrumbSettings) => flow(
   }),
   withBreadcrumbs,
 );
-
-// @TODO Add a similar HOC for BurgerMenu, something like:
-// const asMegaMenuClean = withMenuDesign({
-//   WrapperItem: asAccodionTitle,
-//   List: asAccordionBody,
-// });
 
 export {
   asMenuBase, asBreadcrumbsClean, withMenuDesign, asMenuSubList,

@@ -27,7 +27,7 @@ import {
 import type { BreadcrumbSettings } from '@bodiless/components';
 
 import { asMenuSubList } from './SimpleMenu';
-import asStylableList from './asStylableList';
+import { asStylableList } from './SimpleMenu.token';
 import withMenuContext from './withMenuContext';
 
 /**
@@ -72,14 +72,14 @@ const withMenuDesign = (design: any) => {
  * a site's main menu, a burger menu and breadcrumbs.
  *
  * @param nodeKeys The optional nodekeys specifying where the data should be stored.
- *
+
  * @return HOC which creates a basic mega menu list.
  */
 const asMenuBase = (nodeKeys?: WithNodeKeyProps) => flow(
-  asBodilessList(nodeKeys),
+  asBodilessList(nodeKeys, undefined, () => ({ groupLabel: 'Menu Item' })),
   asStylableList,
   withDesign({
-    Item: asChameleonSubList,
+    Item: asChameleonSubList(() => ({ formTitle: 'Sub-Menu Type' })),
   }),
   withSubMenuDesign(asMenuSubList),
   withMenuContext,
@@ -92,8 +92,23 @@ const asMenuBase = (nodeKeys?: WithNodeKeyProps) => flow(
  * it renders all list and sublist items but produces no markup.
  */
 const withEmptyMenuMarkup = flow(
-  withSubMenuDesign({
-    Item: replaceWith(Fragment),
+  // can not use withSubMenuDesign({ Item: replaceWith(Fragment) }) here
+  // as far as we will break Columns sublist items
+  // due to design prop removal from Columns.Item element
+  withDesign({
+    Item: withDesign({
+      List: withDesign({
+        Item: replaceWith(Fragment),
+      }),
+      Touts: withDesign({
+        Item: replaceWith(Fragment),
+      }),
+      Columns: withDesign({
+        Item: withDesign({
+          Item: replaceWith(Fragment),
+        }),
+      }),
+    }),
   }),
   withMenuDesign({
     Wrapper: replaceWith(Fragment),
@@ -119,12 +134,6 @@ const asBreadcrumbsClean = (settings: BreadcrumbSettings) => flow(
   }),
   withBreadcrumbs,
 );
-
-// @TODO Add a similar HOC for BurgerMenu, something like:
-// const asMegaMenuClean = withMenuDesign({
-//   WrapperItem: asAccodionTitle,
-//   List: asAccordionBody,
-// });
 
 export {
   asMenuSubList, asMenuBase, withMenuDesign,
